@@ -1,0 +1,21 @@
+Object Proposals:
+
+Function ~~~ Model
+(glow)		Donut
+(Lighting)	Sun
+(Reflection)	Mirror
+(Textures)	Cube
+(Translation)
+(Rotation)
+(Skew)
+(Scale)
+
+
+Features:
+Fog
+On walls: Lighting, Texture
+EXPLOSIONS!!
+Keyboard Movement control
+Mouse cameraview control
+Pickup bonuses
+Death collision with posible animations
