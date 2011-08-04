@@ -25,7 +25,6 @@ class Obstacle
 
     public:
         Obstacle();
-        Obstacle(Obstacle* prev);
         // ~Obstacle(); // Using default
         
         void setNext(Obstacle* next) { this->next = next; }

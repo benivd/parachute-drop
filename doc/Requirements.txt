@@ -1,0 +1,40 @@
+Items required to be submitted with your project report:
+
+1. all source codes,
+2. all data files, and 
+3. an executable that will run on the computers in the ENCS labs.
+
+Your report itself should include:
+1. Title.
+2. List of team members and their ID numbers.
+3. Description of the objective of your game.
+4. Description of the user-interface for your game (i.e. how
+   does the user control the playing).
+5. A list of OpenGL features that you have implemented.
+6. Highlights of the innovative features of your project that you think
+   deserves extra marks.
+7. Conclusions.
+8. References, as appropriate.
+
+Marking Scheme:
+
+A. Demo (10 marks):
+ - visual aspects of the graphics (5 marks)
+ - the game (3 marks)
+ - presentation (2 marks)
+
+B. Report (20 marks):
+ - having all required components (2 marks)
+ - visual aspects of the graphics (4 marks)
+ - quality of the game (2 marks)
+ - OpenGL features implemented (8 marks)
+ - quality of the code, e.g. structure, readability, efficiency (2 marks)
+ - quality of the report, e.g. organization, clarity, grammar (2 marks)
+
+Notes:
+1. Marks for OpenGL features implemented will be based on a list provided
+in your report, and verified by the marker when running your program.
+
+2. Please make sure that your executable will run when another team member
+is the login user. Marks may be taken off if I have to recompile
+your program before running it on an ENCS lab computer.

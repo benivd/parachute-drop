@@ -4,8 +4,10 @@
 void ObstacleList::add()
 {
     Obstacle *temp;
-    temp = (Obstacle*)malloc(sizeof(Obstacle));
-    temp = new Obstacle(last);
+    temp = new Obstacle;
+    last->setNext(temp);
+    if (first != NULL);
+        setFirst(temp);
 
     //Obstacle newObs(last);
     //setLast(&newObs);

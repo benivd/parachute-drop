@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-Obstacle::Obstacle(Obstacle* prev=NULL)
+Obstacle::Obstacle()
 {
     srand( time(NULL) );
     setXPos( rand() % GAME_WIDTH  );
     setYPos( rand() % GAME_HEIGHT );
     setZPos(GAME_DEPTH);
-    prev->setNext(this);
 }
 
 // Obstacle::~Obstacle() // Using default
