@@ -1,39 +1,158 @@
-#include "ObstacleList.h"
+#include"ObstacleList.h"
 
-// Add a random obstacle at the head
-void ObstacleList::add()
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Default constructor
+ObstacleList::ObstacleList() 
 {
-    Obstacle *temp;
-    temp = new Obstacle;
-    last->setNext(temp);
-    if (first != NULL);
-        setFirst(temp);
+	first = 0;
+	last = 0;
 
-    //Obstacle newObs(last);
-    //setLast(&newObs);
-    //if (first != NULL)
-    //    setFirst(&newObs);
 }
 
-// Remove the tail
+/*
+//Destructor
+ObstacleList::~ObstacleList()
+{
+
+}
+*/
+
+Obstacle* ObstacleList::getFirst()
+{
+    return first;
+}
+
+//Boolean function returns tru id the link list is empty
+bool ObstacleList::isEmpty()
+{
+	if(first == 0)
+		return true;
+	else
+		return false;
+}
+
+
+// Returns the number of elements in this LList
+int ObstacleList::size()
+{
+	Obstacle* temp;
+	int i = 1;
+	
+	if(isEmpty())
+		return 0;
+	
+	else
+	{
+		for(temp = first; temp != last ; temp = temp->getNext() )
+			i++;
+		return i;
+	}
+
+}
+
+// Insert an element at the end of the ObstacleList 
+void ObstacleList::insert(float xPos, float yPos, float zPos)
+{
+	Obstacle* MyNode = new Obstacle;
+	MyNode->setXPos(xPos);
+	MyNode->setYPos(yPos);
+	MyNode->setZPos(zPos);
+
+	if(last != 0)
+	{
+		last->setNext(MyNode);
+		last = MyNode;
+	}
+	else								//if first element to add to link list, set the first node = to last node
+	{
+		last = MyNode;				//address of the first and last node = newly created node
+		first = last;
+	}
+}
+
+
 void ObstacleList::remove()
 {
-    //setFirst( first->getNext() );
-
-    Obstacle *temp;
-    temp = (Obstacle*)malloc(sizeof(Obstacle));
-    temp = first;
-    first = temp->getNext();
-    free(temp);
+    if (isEmpty)
+    {
+        return;
+    }
+    else if (first == last)
+	{
+		first = 0;
+		last = 0;
+	}
+	else
+	{
+		first = first->getNext();
+	}
 }
 
-// Draw all obstacles
-void ObstacleList::draw()
+
+void ObstacleList::moveAll()
 {
-    Obstacle* temp = first;
-    while (temp != NULL)
-    {
-        temp->draw();
-        temp = temp->getNext();
-    }
+	float zparameter = 0;
+
+	if (first!=0)			//Verify first if the link list is not empty
+	{
+
+		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
+		{
+			zparameter=first->getZPos(); 
+			zparameter= zparameter +1;
+			first->setZPos(zparameter);
+		}
+		else						//If multiple obstacle in the link List then loop through the link list		
+		{
+			Obstacle * temp = first;
+
+			do{
+			zparameter=temp->getZPos(); 
+			zparameter= zparameter +1;
+			temp->setZPos(zparameter);
+
+			temp = temp->getNext();
+
+			}while(temp!= last);
+
+			//For the last node in the link list
+			zparameter=last->getZPos(); 
+			zparameter= zparameter +1;
+			last->setZPos(zparameter);
+
+		}
+	}
+
+}
+
+void ObstacleList::drawAll()
+{
+	if (first!=0)			//Verify first if the link list is not empty
+	{
+
+		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
+		{
+            first->draw();
+		}
+		else						//If multiple obstacle in the link List then loop through the link list		
+		{
+			Obstacle * temp = first;
+
+			do{
+                temp->draw();
+			temp = temp->getNext();
+
+			}while(temp!= last);
+
+			//For the last node in the link list
+            last->draw();
+
+		}
+	}
+
 }

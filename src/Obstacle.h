@@ -7,37 +7,38 @@
  * Last Modified:   11/07/22
  * Changelog:       11/07/22 - Constructor, Accessors, Mutators
  *                  11/08/02 - Adapted for helicopter
+ *                  11/08/06 - Implemented as Linked List Node
  */
 
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
-#include <GL/glut.h>
-#include "global.h"
-
 class Obstacle
 {
-    private:
-        Obstacle* next;
-        float xPos;
-        float yPos;
-        float zPos;
 
-    public:
-        Obstacle();
-        // ~Obstacle(); // Using default
-        
-        void setNext(Obstacle* next) { this->next = next; }
-        void setXPos(float x)        { this->xPos = x; }
-        void setYPos(float y)        { this->yPos = y; }
-        void setZPos(float z)        { this->zPos = z; }
-        
-        Obstacle* getNext() { return this->next; }
-        float getXPos()     { return this->xPos; }
-        float getYPos()     { return this->yPos; }
-        float getZPos()     { return this->zPos; }
+	private:
+		float xPos, yPos, zPos;                 // Object coordinates
+		Obstacle* next;                         // A pointer to the next node
+
+	public:
+		Obstacle();                             //default constructor is added
+		Obstacle(float,float,float,Obstacle*);  // Regular constructor
+		//~Obstacle();                          // Destructor
+
+		void setXPos(float);
+		float getXPos();
+
+		void setYPos(float);
+		float getYPos();
+
+		void setZPos(float);
+		float getZPos();
+
+		void setNext(Obstacle*); // Changes next
+		Obstacle* getNext();     // Returns next
 
         void draw();
+
 };
 
 #endif

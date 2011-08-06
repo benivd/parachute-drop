@@ -15,7 +15,7 @@
 
 class Camera
 {
-    private:
+    public:
         // Perspective
         float fov;
         float zNear;
@@ -26,7 +26,6 @@ class Camera
         float yAt;
         float zAt;
         
-    public:
         Camera();
         // ~Camera(); // Using default
 

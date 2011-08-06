@@ -2,39 +2,45 @@
  * ObstacleList.h
  *
  * Description:
- * Singly Linked List of Obstacles.
+ * Linked List of Obstacles Nodes.
  *
- * Last Modified:   11/07/22
+ * Last Modified:   11/08/06
  * Changelog:       11/07/22 - Constructor, Accessors, Mutators
- *                  11/08/02 - Adapted for helicopter
+ *                  11/08/06 - Implemented as linked list
  */
 
 #ifndef OBSTACLE_LIST_H
 #define OBSTACLE_LIST_H
 
-#include <GL/glut.h>
 #include "Obstacle.h"
-#include "global.h"
 
 class ObstacleList
 {
-    private:
-        Obstacle* first;
-        Obstacle* last;
+	private:
+		Obstacle* first;
+		Obstacle* last;
 
-    public:
-        ObstacleList() {}
-        // ~ObstacleList(); // Using default
+	public:
+		ObstacleList();       //Default constructor
+		//~ObstacleList();
         
-        void setFirst(Obstacle* first) { this->first = first; }
-        void setLast(Obstacle* last)   { this->last = last; }
-        Obstacle* getFirst() { return this->first; }
-        Obstacle* getLast()  { return this->last; }
+        Obstacle* getFirst();
+		
+        // Returns true if this list contains no elements.
+		bool isEmpty();
 
-        void add();
+		// Returns the number of elements in this LList.
+		int size();
+
+		// Insert new element at the end of this LList
+		void insert(float xPos, float yPos, float zPos);
+		
+        // Remove the first element in this LList
         void remove();
+			
+		void moveAll();
 
-        void draw();
+        void drawAll();
 };
 
 #endif
