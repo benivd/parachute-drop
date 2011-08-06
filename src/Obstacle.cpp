@@ -74,3 +74,8 @@ void Obstacle::draw()
     glutSolidTeapot(5.0);
     glPopMatrix();    
 }
+
+void Obstacle::move()
+{
+    zPos += 5;
+}

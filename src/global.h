@@ -24,7 +24,7 @@
 // Game World
 #define GAME_WIDTH      200     // X
 #define GAME_HEIGHT     200     // Y
-#define GAME_DEPTH     -200     // Z
+#define GAME_DEPTH     -1000     // Z
 
 #define R   0
 #define G   1

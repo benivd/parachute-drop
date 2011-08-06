@@ -212,11 +212,11 @@ void moveTimer(int value)
         // Remove Obstacles that exit world
         if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 0 )
         {
-            obstacles.remove();
-
             // Detect collisions
             float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();
             float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
+            
+            obstacles.remove();
 
             if (xDiff < 5 || yDiff < 5) {
                 // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE

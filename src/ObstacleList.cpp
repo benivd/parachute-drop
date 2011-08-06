@@ -78,7 +78,7 @@ void ObstacleList::insert(float xPos, float yPos, float zPos)
 
 void ObstacleList::remove()
 {
-    if (isEmpty)
+    if (isEmpty())
     {
         return;
     }
@@ -98,32 +98,26 @@ void ObstacleList::moveAll()
 {
 	float zparameter = 0;
 
+    if (isEmpty()) return;
 	if (first!=0)			//Verify first if the link list is not empty
 	{
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-			zparameter=first->getZPos(); 
-			zparameter= zparameter +1;
-			first->setZPos(zparameter);
+            first->move();
 		}
 		else						//If multiple obstacle in the link List then loop through the link list		
 		{
 			Obstacle * temp = first;
 
 			do{
-			zparameter=temp->getZPos(); 
-			zparameter= zparameter +1;
-			temp->setZPos(zparameter);
-
-			temp = temp->getNext();
+                temp->move();
+       			temp = temp->getNext();
 
 			}while(temp!= last);
 
 			//For the last node in the link list
-			zparameter=last->getZPos(); 
-			zparameter= zparameter +1;
-			last->setZPos(zparameter);
+            last->move();
 
 		}
 	}
@@ -132,6 +126,7 @@ void ObstacleList::moveAll()
 
 void ObstacleList::drawAll()
 {
+    if (isEmpty()) return;
 	if (first!=0)			//Verify first if the link list is not empty
 	{
 

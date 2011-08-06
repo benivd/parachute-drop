@@ -38,6 +38,7 @@ class Obstacle
 		Obstacle* getNext();     // Returns next
 
         void draw();
+        void move();
 
 };
 
