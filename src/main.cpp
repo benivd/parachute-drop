@@ -7,14 +7,16 @@
  *
  * Last Modified:   11/07/19
  * Changelog:       11/07/19 - Basic GLUT functions
+ *                  11/08/02 - Tested basic classes
+ *                  11/08/05 - Started level design
+ *                  11/08/06 - Integrated ObstacleList
+ *                           - Timer functions create/delete obstacles
  */
 
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
 #include <GL/glut.h>
-#include <math.h>
-#include <time.h>
-#include <stdlib.h>
-
-using namespace std;
 
 #include "global.h"       // Global variables and constants
 #include "Camera.h"       // Camera movement
@@ -128,7 +130,8 @@ void display(void)
 
         break;
         case LEVEL:
-            glTranslatef(-player.getXPos(), -player.getYPos(), 0);
+            cam.view();
+            // TODO: draw Player;
             drawWorld();
             obstacles.drawAll();
 

@@ -6,15 +6,18 @@
  *
  * Last Modified:   11/07/22
  * Changelog:       11/07/22 - window height & width
- *                  11/08/02 - game world
+ *                  11/08/02 - Game world
+ *                  11/08/06 - M_PI/NULL
  */
 
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
 #ifndef M_PI
-#define M_PI              3.14159265f
-#define NULL              0
+#define M_PI            3.14159265f
+#endif
+#ifndef NULL
+#define NULL            0
 #endif
 
 // Window
