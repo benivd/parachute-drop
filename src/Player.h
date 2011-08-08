@@ -39,6 +39,7 @@ class Player
         float getYPos() { return this->yPos; }
 
         void draw();
+		void Player::Move(float stepX, float stepY);
 };
 
 #endif

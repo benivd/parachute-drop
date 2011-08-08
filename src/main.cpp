@@ -133,6 +133,8 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
 
+	player.draw();
+
     switch (state)
     {
         case MENU:
@@ -199,19 +201,19 @@ void specialKey(int key, int x, int y)
     // Player movement (allows simultaneous key presses)
     if (key == GLUT_KEY_UP)
     {
-        // TODO: MOVE PLAYER UP
+		player.Move(0,PLAYER_STEP);
     }
     if (key == GLUT_KEY_DOWN)
     {
-        // TODO: MOVE PLAYER DOWN
+        player.Move(0,-PLAYER_STEP);
     }
     if (key == GLUT_KEY_LEFT)
     {
-        // TODO: MOVE PLAYER LEFT
+        player.Move(-PLAYER_STEP,0);
     }
     if (key == GLUT_KEY_RIGHT)
     {
-        // TODO: MOVE PLAYER RIGHT
+        player.Move(PLAYER_STEP,0);
     }
     glutPostRedisplay();
 }
