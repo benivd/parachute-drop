@@ -8,7 +8,7 @@
 
 // Constructor, initializes a camera to default values
 Camera::Camera(void) {
-	cx = 0.0, cy = 0.0, cz = 0.0;
+	cx = GAME_WIDTH/2, cy = GAME_HEIGHT/2, cz = 0.0;
 	dx = 0.0, dy = 0.0, dz = -1.0;
 	ux = 0.0, uy = 1.0, uz = 0.0;
 	rx = 1.0, ry = 0.0, rz = 0.0;

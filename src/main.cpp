@@ -40,11 +40,20 @@ float fogEnd   = 0.0;
 
 // Game speed (milliseconds)
 int speedMove   = 100;
-int speedCreate = 0;
+int speedCreate = 1000;
 
 Camera cam;
 Player player;
 ObstacleList obstacles;
+
+// TESTING 
+float xRot = 0.0;
+float yRot = 0.0;
+float xPrev = 0.0;
+float yPrev = 0.0;
+
+// Mouse
+float sensitivity = 0.2;
 
 // Game values for Level 1
 void setLevel1()
@@ -102,15 +111,13 @@ void drawWorld()
     // Draw Background to cover field of view at GAME_DEPTH
     glDisable(GL_FOG);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) );
-    glPushMatrix();
-        glColor3f(fogColor[R], fogColor[G], fogColor[B]);
-        glBegin(GL_QUADS);
-        glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-        glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-        glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-        glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-        glEnd();
-    glPopMatrix();
+    glColor3f(fogColor[R], fogColor[G], fogColor[B]);
+    glBegin(GL_QUADS);
+    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glEnd();
     
     // Set Fog
     glEnable(GL_FOG);
@@ -125,7 +132,7 @@ void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
-    
+
     switch (state)
     {
         case MENU:
@@ -133,7 +140,9 @@ void display(void)
 
         break;
         case LEVEL:
-            cam.view();
+            
+            glRotatef(xRot/10, 1.0, 0.0, 0.0);
+            glRotatef(yRot/10, 0.0, 1.0, 0.0);
             // TODO: draw Player;
             drawWorld();
             obstacles.drawAll(level);
@@ -207,6 +216,18 @@ void specialKey(int key, int x, int y)
     glutPostRedisplay();
 }
 
+// GLUT mouse Function
+void mouse(int x, int y)
+{
+    int xDiff = x - xPrev;
+    int yDiff = y - yPrev;
+    xPrev = x;
+    yPrev = y;
+    //if (xRot >= xMouseMax && )
+    xRot += (float) yDiff * sensitivity;
+    yRot += (float) xDiff * sensitivity;
+}
+
 // GLUT Timer Function for obstacles
 void moveTimer(int value)
 {
@@ -276,10 +297,14 @@ int main(int argc, char** argv)
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKey);
+    glutPassiveMotionFunc(mouse);
+
     glutTimerFunc(speedMove, moveTimer, 0);
     glutTimerFunc(speedCreate, createTimer, 0);
+
     glutMainLoop();
 
     exit(0);

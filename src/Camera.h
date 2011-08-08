@@ -15,7 +15,6 @@
 
 class Camera {
 public:
-    float zNear, zFar, fov;
 	Camera(void);
 	virtual ~Camera(void);
 	void view();
@@ -29,9 +28,10 @@ public:
 	void crossProduct(float x1, float y1, float z1, float x2, float y2, float z2, float &xr, float &yr, float &zr);
 	float magnitude(float x, float y, float z);
 	void normalizeVector(float &x, float &y, float &z);
-private:
+    float zNear, zFar, fov;
 	float cx, cy, cz;	// Camera position
 	float dx, dy, dz;	// Line of sight vector
+private:
 	float ux, uy, uz;	// Up vector
 	float rx, ry, rz;	// Right vector
 	float camYaw, camPitch, camRoll;
