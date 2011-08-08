@@ -17,6 +17,7 @@
 #include <cmath>
 #include <ctime>
 #include <GL/glut.h>
+#include <iostream>
 
 #include "global.h"       // Global variables and constants
 #include "Camera.h"       // Camera movement
@@ -50,6 +51,10 @@ float xRot = 0.0;
 float yRot = 0.0;
 float xPrev = 0.0;
 float yPrev = 0.0;
+
+//keyboard
+bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)  
+
 
 // Mouse
 float sensitivity = 0.5;
@@ -128,9 +133,36 @@ void drawWorld()
     glFogi( GL_FOG_END, fogEnd);
 }
 
+void keyOperations (void) 
+	{  
+		std::cout<<"harro"<<std::endl;
+	   if (keyStates['s']) 
+	   { // If the 'a' key has been pressed  
+		   player.Move(0,-PLAYER_STEP); 
+	   }  
+  	   if (keyStates['w']) 
+	   { // If the 'a' key has been pressed  
+		   player.Move(0,PLAYER_STEP); 
+	   }  
+	   if (keyStates['d']) 
+	   { // If the 'a' key has been pressed  
+		   player.Move(PLAYER_STEP,0); 
+	   }  
+	   if (keyStates['a']) 
+	   { // If the 'a' key has been pressed  
+		   player.Move(-PLAYER_STEP,0); 
+	   }  
+	   if(keyStates[27])
+	   {
+		    exit(0);
+	   }
+   }  
+
+ 
 // GLUT Display Function
 void display(void)
 {
+	keyOperations(); 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
 
@@ -173,19 +205,10 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-// GLUT Keyboard Function
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-        case 27: // <ESC> to quit
-            exit(0);
-    }
-}
-
 // GLUT Special Keyboard Function
 void specialKey(int key, int x, int y)
 {
+	std::cout<<"HI3"<<std::endl;
     switch (key)
     {
         case GLUT_KEY_F1:
@@ -197,27 +220,20 @@ void specialKey(int key, int x, int y)
         case GLUT_KEY_F3:
             setLevel3();
         break;
-    }
-
-    // Player movement (allows simultaneous key presses)
-    if (key == GLUT_KEY_UP)
-    {
-		player.Move(0,PLAYER_STEP);
-    }
-    if (key == GLUT_KEY_DOWN)
-    {
-        player.Move(0,-PLAYER_STEP);
-    }
-    if (key == GLUT_KEY_LEFT)
-    {
-        player.Move(-PLAYER_STEP,0);
-    }
-    if (key == GLUT_KEY_RIGHT)
-    {
-        player.Move(PLAYER_STEP,0);
-    }
+    }	
     glutPostRedisplay();
 }
+
+void keyPressed (unsigned char key, int x, int y) 
+	{  
+		 keyStates[key] = true; // Set the state of the current key to pressed  
+	}  
+
+void keyUp (unsigned char key, int x, int y) 
+	{
+		keyStates[key] = false; // Set the state of the current key to not pressed  
+	}  
+
 
 // GLUT mouse Function
 void mouse(int x, int y)
@@ -270,6 +286,10 @@ void createTimer(int value)
 // OpenGL Initialisation
 void init(void)
 {
+	for(int key =0; key!=256; key++){
+		keyStates[key] = false; // Set the state of the current key to not pressed  
+	}
+
     srand( time(NULL) );
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
@@ -300,7 +320,9 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 
-    glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyUp);
+	glutKeyboardFunc(keyPressed);
+
     glutSpecialFunc(specialKey);
     glutPassiveMotionFunc(mouse);
 

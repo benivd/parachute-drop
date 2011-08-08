@@ -42,6 +42,6 @@
 #define B   2
 
 // Player
-#define PLAYER_STEP     0.5
+#define PLAYER_STEP     0.1
 
 #endif
