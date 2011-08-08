@@ -9,8 +9,8 @@ Player::Player()
     setLives(3);
     setLives(3);
     setPoints(0);
-    //setXPos( GAME_WIDTH  /2 );
-   // setYPos( GAME_HEIGHT /2 );
+    setXPos( GAME_WIDTH  /2 );
+    setYPos( GAME_HEIGHT /2 );
 
 }
 
@@ -21,7 +21,6 @@ void Player::draw()
     glPushMatrix();
     glColor3f(1.0, 1.0, 1.0);
 	glTranslated(xPos, yPos,-5);
-	glTranslated(0, 0,-5);
     glutWireCube(1.0);
     glPopMatrix();
 }

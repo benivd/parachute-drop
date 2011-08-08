@@ -141,12 +141,13 @@ void display(void)
 
         break;
         case LEVEL:
-
-            cam.view();
+			cam.view();
+			glTranslatef(player.getXPos(),player.getYPos(),-5);
             glRotatef(xRot/10, 1.0, 0.0, 0.0);
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
-            // TODO: draw Player;
+			glTranslatef(-player.getXPos(),-player.getYPos(),5);
             drawWorld();
+			player.draw();
             obstacles.drawAll(level);
 
         break;
@@ -201,19 +202,19 @@ void specialKey(int key, int x, int y)
     // Player movement (allows simultaneous key presses)
     if (key == GLUT_KEY_UP)
     {
-        // TODO: MOVE PLAYER UP
+		player.Move(0,PLAYER_STEP);
     }
     if (key == GLUT_KEY_DOWN)
     {
-        // TODO: MOVE PLAYER DOWN
+        player.Move(0,-PLAYER_STEP);
     }
     if (key == GLUT_KEY_LEFT)
     {
-        // TODO: MOVE PLAYER LEFT
+        player.Move(-PLAYER_STEP,0);
     }
     if (key == GLUT_KEY_RIGHT)
     {
-        // TODO: MOVE PLAYER RIGHT
+        player.Move(PLAYER_STEP,0);
     }
     glutPostRedisplay();
 }
