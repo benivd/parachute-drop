@@ -41,4 +41,7 @@
 #define G   1
 #define B   2
 
+// Player
+#define PLAYER_STEP     0.5
+
 #endif

@@ -25,7 +25,7 @@ void Player::draw()
     glPopMatrix();
 }
 
-void Player::move(float stepX, float stepY) {
+void Player::Move(float stepX, float stepY) {
 	xPos += stepX;
 	yPos += stepY;
 }
