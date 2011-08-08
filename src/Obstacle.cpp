@@ -1,10 +1,11 @@
 #include "Obstacle.h"
 
-#include "global.h"
 
 #include <iostream>
-
 #include <GL/glut.h>
+
+#include "global.h"
+
 
 // default constructor added
 Obstacle::Obstacle()

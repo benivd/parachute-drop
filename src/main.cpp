@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <ctime>
+#include <iostream>
 #include <GL/glut.h>
 #include <iostream>
 
@@ -23,6 +24,8 @@
 #include "Camera.h"       // Camera movement
 #include "Player.h"       // Player drawing and x/y movement
 #include "ObstacleList.h" // Linked List of obstacles and z movement
+
+#include "imageloader.h"  // BMP loader for textures
 
 int width  = WIDTH;       // Current window width
 int height = HEIGHT;      // Current window height
@@ -43,21 +46,25 @@ float fogEnd   = 0.0;
 int speedMove   = 100;
 int speedCreate = 1000;
 
-Camera cam;
-Player player;
-ObstacleList obstacles;
+// Mouse
+float sensitivity = 0.5;
 
 float xRot = 0.0;
 float yRot = 0.0;
-float xPrev = 0.0;
-float yPrev = 0.0;
+float xPrev = width/2;
+float yPrev = height/2;
+
+
+// Texture
+GLuint worldTexId;
 
 //keyboard
 bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)  
 
 
-// Mouse
-float sensitivity = 0.5;
+Camera cam;
+Player player;
+ObstacleList obstacles;
 
 // Game values for Level 1
 void setLevel1()
@@ -105,14 +112,19 @@ void drawWorld()
     // Draw Background to cover field of view at GAME_DEPTH
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
+
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
     glColor3f(fogColor[R], fogColor[G], fogColor[B]);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, worldTexId );
     glBegin(GL_QUADS);
-    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glTexCoord2f( 0, 0 ); glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glTexCoord2f( 0, 1 ); glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glTexCoord2f( 1, 1 ); glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glTexCoord2f( 1, 0 ); glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
     glEnd();
+    glDisable(GL_TEXTURE_2D);
     
     // Light
     glEnable(GL_LIGHTING);
@@ -174,10 +186,10 @@ void display(void)
         break;
         case LEVEL:
 			cam.view();
-            glTranslatef(player.getXPos(), player.getYPos(), 0.0);
+            glTranslatef(player.getXPos(), player.getYPos(), 5.0);
             glRotatef(xRot/10, 1.0, 0.0, 0.0);
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
-            glTranslatef(-player.getXPos(), -player.getYPos(), 0.0);
+            glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
             drawWorld();
 			player.draw();
             obstacles.drawAll(level);
@@ -221,6 +233,7 @@ void specialKey(int key, int x, int y)
             setLevel3();
         break;
     }	
+
     glutPostRedisplay();
 }
 
@@ -291,7 +304,7 @@ void init(void)
 	}
 
     srand( time(NULL) );
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(fogColor[R], fogColor[G], fogColor[B], 0.0);
 
     glShadeModel(GL_SMOOTH);
 
@@ -306,6 +319,13 @@ void init(void)
 
     glEnable(GL_BLEND);
     glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    // Load world texture
+    Image* image = loadBMP("tex/star.bmp");
+    glGenTextures( 1, &worldTexId);
+    glBindTexture( GL_TEXTURE_2D, worldTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+    delete image;
 }
 
 int main(int argc, char** argv)
