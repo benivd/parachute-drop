@@ -142,10 +142,10 @@ void display(void)
         break;
         case LEVEL:
 			cam.view();
-			glTranslatef(player.getXPos(),player.getYPos(),-5);
+            glTranslatef(player.getXPos(), player.getYPos(), 0.0);
             glRotatef(xRot/10, 1.0, 0.0, 0.0);
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
-			glTranslatef(-player.getXPos(),-player.getYPos(),5);
+            glTranslatef(-player.getXPos(), -player.getYPos(), 0.0);
             drawWorld();
 			player.draw();
             obstacles.drawAll(level);
