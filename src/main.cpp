@@ -46,14 +46,13 @@ Camera cam;
 Player player;
 ObstacleList obstacles;
 
-// TESTING 
 float xRot = 0.0;
 float yRot = 0.0;
 float xPrev = 0.0;
 float yPrev = 0.0;
 
 // Mouse
-float sensitivity = 0.2;
+float sensitivity = 0.5;
 
 // Game values for Level 1
 void setLevel1()
@@ -62,7 +61,7 @@ void setLevel1()
     level = 1;
     
     // Start fog at 3/4 of play field for Level 1
-    fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
+    //fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
     fogStart = -(GAME_DEPTH) * FOGEND_L1*0.75;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
@@ -76,7 +75,7 @@ void setLevel2()
     level = 2;
     
     // Start fog at 3/4 of play field for Level 2
-    fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
+    //fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
     fogStart = -(GAME_DEPTH) * FOGEND_L2*0.75;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
@@ -89,7 +88,7 @@ void setLevel3()
     level = 3;
 
     // Start fog at 3/4 of play field for Level 3
-    fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
+    //fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
     fogStart = -(GAME_DEPTH) * FOGEND_L3*0.75;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
@@ -98,7 +97,20 @@ void setLevel3()
 
 void drawWorld()
 {
+    // Draw Background to cover field of view at GAME_DEPTH
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
+    glColor3f(fogColor[R], fogColor[G], fogColor[B]);
+    glBegin(GL_QUADS);
+    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
+    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
+    glEnd();
+    
     // Light
+    glEnable(GL_LIGHTING);
     GLfloat ambientLight[] = { 0.2, 0.2, 0.2, 1 };
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambientLight );
 
@@ -107,17 +119,6 @@ void drawWorld()
     GLfloat lightPos0[] = { -0.5, 1, 0.25, 0.0 };
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
-
-    // Draw Background to cover field of view at GAME_DEPTH
-    glDisable(GL_FOG);
-    bgSize = ( GAME_DEPTH / cos(cam.fov/2) );
-    glColor3f(fogColor[R], fogColor[G], fogColor[B]);
-    glBegin(GL_QUADS);
-    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-    glEnd();
     
     // Set Fog
     glEnable(GL_FOG);
@@ -133,8 +134,6 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
 
-	player.draw();
-
     switch (state)
     {
         case MENU:
@@ -142,7 +141,8 @@ void display(void)
 
         break;
         case LEVEL:
-            
+
+            cam.view();
             glRotatef(xRot/10, 1.0, 0.0, 0.0);
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
             // TODO: draw Player;
@@ -201,19 +201,19 @@ void specialKey(int key, int x, int y)
     // Player movement (allows simultaneous key presses)
     if (key == GLUT_KEY_UP)
     {
-		player.Move(0,PLAYER_STEP);
+        // TODO: MOVE PLAYER UP
     }
     if (key == GLUT_KEY_DOWN)
     {
-        player.Move(0,-PLAYER_STEP);
+        // TODO: MOVE PLAYER DOWN
     }
     if (key == GLUT_KEY_LEFT)
     {
-        player.Move(-PLAYER_STEP,0);
+        // TODO: MOVE PLAYER LEFT
     }
     if (key == GLUT_KEY_RIGHT)
     {
-        player.Move(PLAYER_STEP,0);
+        // TODO: MOVE PLAYER RIGHT
     }
     glutPostRedisplay();
 }
@@ -225,7 +225,6 @@ void mouse(int x, int y)
     int yDiff = y - yPrev;
     xPrev = x;
     yPrev = y;
-    //if (xRot >= xMouseMax && )
     xRot += (float) yDiff * sensitivity;
     yRot += (float) xDiff * sensitivity;
 }
