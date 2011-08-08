@@ -37,8 +37,8 @@ class Obstacle
 		void setNext(Obstacle*); // Changes next
 		Obstacle* getNext();     // Returns next
 
-        void draw();
-        void move();
+        void draw(int level);
+        void move(int level);
 
 };
 

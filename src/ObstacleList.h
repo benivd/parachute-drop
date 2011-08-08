@@ -38,9 +38,9 @@ class ObstacleList
         // Remove the first element in this LList
         void remove();
 			
-		void moveAll();
+		void moveAll(int level);
 
-        void drawAll();
+        void drawAll(int level);
 };
 
 #endif

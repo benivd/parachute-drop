@@ -94,7 +94,7 @@ void ObstacleList::remove()
 }
 
 
-void ObstacleList::moveAll()
+void ObstacleList::moveAll(int level)
 {
 	float zparameter = 0;
 
@@ -104,48 +104,50 @@ void ObstacleList::moveAll()
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-            first->move();
+            first->move(level);
 		}
 		else						//If multiple obstacle in the link List then loop through the link list		
 		{
 			Obstacle * temp = first;
 
 			do{
-                temp->move();
+                temp->move(level);
        			temp = temp->getNext();
 
 			}while(temp!= last);
 
 			//For the last node in the link list
-            last->move();
+            last->move(level);
 
 		}
 	}
 
 }
 
-void ObstacleList::drawAll()
+void ObstacleList::drawAll(int level)
 {
+    
+
     if (isEmpty()) return;
 	if (first!=0)			//Verify first if the link list is not empty
 	{
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-            first->draw();
+            first->draw(level);
 		}
 		else						//If multiple obstacle in the link List then loop through the link list		
 		{
 			Obstacle * temp = first;
 
 			do{
-                temp->draw();
+                temp->draw(level);
 			temp = temp->getNext();
 
 			}while(temp!= last);
 
 			//For the last node in the link list
-            last->draw();
+            last->draw(level);
 
 		}
 	}

@@ -1,8 +1,9 @@
 #include "Obstacle.h"
 
-#include <string>
-#include <iostream>
 #include <GL/glut.h>
+
+#include "global.h"
+
 using namespace std;
 
 // default constructor added
@@ -66,16 +67,18 @@ Obstacle* Obstacle::getNext()
 	return next;
 }
 
-void Obstacle::draw()
+void Obstacle::draw(int level)
 {
+    // Make object transparent after FOGEND
+    
     glPushMatrix();
-    glColor3f(1.0, 1.0, 1.0);
+    glColor4f(1.0, 1.0, 1.0, (getZPos()/(-1000) < (1 - 0.25*(level-1) ? 1.0:0.0)));
     glTranslatef( this->getXPos(), this->getYPos(), this->getZPos() );
-    glutSolidTeapot(5.0);
+    glutSolidTeapot(2.5);
     glPopMatrix();    
 }
 
-void Obstacle::move()
+void Obstacle::move(int level)
 {
-    zPos += 5;
+    zPos += MOVE_BY*level;
 }

@@ -39,49 +39,52 @@ float fogStart = 0.0;
 float fogEnd   = 0.0;
 
 // Game speed (milliseconds)
-int speedMove   = 0;
+int speedMove   = 100;
 int speedCreate = 0;
-
-
 
 Camera cam;
 Player player;
 ObstacleList obstacles;
 
+// Game values for Level 1
 void setLevel1()
 {
     state = LEVEL;
     level = 1;
+    
+    // Start fog at 3/4 of play field for Level 1
     fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
-    fogStart = -(GAME_DEPTH) * (1.0/2.0);
-    fogEnd   = -(GAME_DEPTH) * (3.0/4.0);
+    fogStart = -(GAME_DEPTH) * FOGEND_L1*0.75;
+    fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
-    speedMove   = 10;
-    speedCreate = 10000;
+    speedCreate = 3000;
 }
 
+// Game values for Level 2
 void setLevel2()
 {
     state = LEVEL;
     level = 2;
-    fogColor[R] = 0.7; fogColor[G] = 0.3; fogColor[B] = 0.2;
-    fogStart = -(GAME_DEPTH) * (1.0/3.0);
-    fogEnd   = -(GAME_DEPTH) * (1.0/2.0);
+    
+    // Start fog at 3/4 of play field for Level 2
+    fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
+    fogStart = -(GAME_DEPTH) * FOGEND_L2*0.75;
+    fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
-    speedMove   = 2;
-    speedCreate = 5000;
+    speedCreate = 2000;
 }
 
 void setLevel3()
 {
     state = LEVEL;
     level = 3;
-    fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
-    fogStart = -(GAME_DEPTH) * (1.0/4.0);
-    fogEnd   = -(GAME_DEPTH) * (1.0/3.0);
 
-    speedMove   = 1;
-    speedCreate = 3000;
+    // Start fog at 3/4 of play field for Level 3
+    fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
+    fogStart = -(GAME_DEPTH) * FOGEND_L3*0.75;
+    fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
+
+    speedCreate = 1000;
 }
 
 void drawWorld()
@@ -96,7 +99,7 @@ void drawWorld()
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
 
-    // Draw Background
+    // Draw Background to cover field of view at GAME_DEPTH
     glDisable(GL_FOG);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) );
     glPushMatrix();
@@ -133,7 +136,7 @@ void display(void)
             cam.view();
             // TODO: draw Player;
             drawWorld();
-            obstacles.drawAll();
+            obstacles.drawAll(level);
 
         break;
         case GAME_OVER:
@@ -210,7 +213,7 @@ void moveTimer(int value)
     if (state == LEVEL)
     {
         // Move Obstacles
-        obstacles.moveAll();
+        obstacles.moveAll(level);
         
         // Remove Obstacles that exit world
         if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 0 )
