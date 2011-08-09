@@ -20,6 +20,7 @@
 #include <cstring>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 #include <GL/glut.h>
 
 #include "global.h"       // Global variables and constants
@@ -51,7 +52,7 @@ int speedMove   = 100;
 int speedCreate = 1000;
 
 // Mouse
-float sensitivity = 0.4;
+int sensitivity = 10;
 
 float xRot = 0.0;
 float yRot = 0.0;
@@ -60,6 +61,8 @@ float yPrev = height/2;
 
 // Texture
 GLuint worldTexId;
+GLuint menuTexId;
+GLuint gameoverTexId;
 
 //keyboard
 bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)  
@@ -109,17 +112,8 @@ void setLevel3()
 
     speedCreate = 1000;
 }
-/*
-void printString(char* s)
-{
-    if (s && strlen(s)) {
-        while (*s) {
-            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *s);
-            s++;
-        }
-    }
-}*/
 
+// Print a single char array
 void printString(char* s)
 {
     char* p;
@@ -127,8 +121,67 @@ void printString(char* s)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 }
 
-void printStats(int p, int l)
+// Draw text for menu and game over screen
+void drawMenu()
 {
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, menuTexId );
+    glBegin(GL_QUADS);
+    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
+    glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
+    glTexCoord2f( 1, 1 ); glVertex2f( width, height);
+    glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
+    /*
+    glTexCoord2f( 0, 0 ); glVertex2f( std::max(0, (width - (185/2))), std::max(0, (height - (67/2))) );
+    glTexCoord2f( 0, 1 ); glVertex2f( std::max(0, (width - (185/2))), std::min(height, (height+67)/2));
+    glTexCoord2f( 1, 1 ); glVertex2f( std::min(width, (width+185)/2), std::min(height, (height+67)/2));
+    glTexCoord2f( 1, 0 ); glVertex2f( std::min(width, (width+185)/2), std::max(0, (height - (67/2))) );
+    */
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
+
+// Draw text for menu and game over screen
+void drawGameOver()
+{
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, menuTexId );
+    glBegin(GL_QUADS);
+    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
+    glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
+    glTexCoord2f( 1, 1 ); glVertex2f( width, height);
+    glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
+    
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
+
+
+
+// Draw Background to cover field of view at GAME_DEPTH Print Statistics in Orthogonal view
+void drawWorld()
+{
+    glPushMatrix();
+    // Statistics
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
@@ -138,23 +191,19 @@ void printStats(int p, int l)
     glRasterPos2i(0,0);
     
     char buffer[20];
-    sprintf(buffer, "Score: %i", p);
+    sprintf(buffer, "Level: %i", player.getLives());
     printString(buffer);
 
-    sprintf(buffer, "Level: %i", l);
     printString(buffer);
-            
+    sprintf(buffer, "    Score: %i", player.getPoints());
+    glPopMatrix();
+
+    // Background    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
-}
 
-void drawWorld()
-{
-    // Draw Background to cover field of view at GAME_DEPTH
-    glDisable(GL_FOG);
-    glDisable(GL_LIGHTING);
-
+    glMatrixMode(GL_MODELVIEW);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
     glColor3f(fogColor[R], fogColor[G], fogColor[B]);
 
@@ -193,14 +242,17 @@ void keyOperations (void)
 	   if (keyStates['s']) 
 	   { // If the 's' key has been pressed  
 		   player.Move(0,-PLAYER_STEP); 
+           cam.translate(0,-PLAYER_STEP,0);
 		   if(player.getXLean()>=35)
 			   player.setXLean(35);
 		   else
 			   player.setXLean(player.getXLean()+3);
+
 	   }  
   	   if (keyStates['w']) 
 	   { // If the 'w' key has been pressed  
 		   player.Move(0,PLAYER_STEP); 
+           cam.translate(0,PLAYER_STEP,0);
 		   if(player.getXLean()<=-35)
 			   player.setXLean(-35);
 		   else
@@ -209,6 +261,7 @@ void keyOperations (void)
 	   if (keyStates['d']) 
 	   { // If the 'd' key has been pressed  
 		   player.Move(PLAYER_STEP,0); 
+           cam.translate(PLAYER_STEP,0,0);
 		    if(player.getZLean()>=55)
 			   player.setZLean(55);
 		   else
@@ -217,6 +270,7 @@ void keyOperations (void)
 	   if (keyStates['a']) 
 	   { // If the 'a' key has been pressed  
 		   player.Move(-PLAYER_STEP,0); 
+           cam.translate(-PLAYER_STEP,0,0);
 		   if(player.getZLean()<=-55)
 			   player.setZLean(-55);
 		   else
@@ -239,21 +293,17 @@ void display(void)
     switch (state)
     {
         case MENU:
-            
+            drawMenu();            
 
         break;
         case LEVEL:
-            // Display statistics
-            printStats(player.getPoints(), player.getLives());
-            glMatrixMode(GL_MODELVIEW);
-
             // Set camera view
 			cam.view();
             
             // Rotate view based on mouse input
             glTranslatef(player.getXPos(), player.getYPos(), 5.0);
-            glRotatef(xRot/10, 1.0, 0.0, 0.0);
-            glRotatef(yRot/10, 0.0, 1.0, 0.0);
+            glRotatef(xRot*sensitivity, 1.0, 0.0, 0.0);
+            glRotatef(yRot*sensitivity, 0.0, 1.0, 0.0);
             glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
 
             // Draw background and effects
@@ -264,10 +314,10 @@ void display(void)
             
             // Draw obstacles
             obstacles.drawAll(level);
-    
-
+            
         break;
         case GAME_OVER:
+            drawGameOver();
 
         break;
     }
@@ -280,6 +330,8 @@ void display(void)
 void reshape(int w, int h)
 {
     // Set global variables & adjust view
+    xPrev = xPrev / width  * w;
+    yPrev = yPrev / height * h;
     width = w;
     height = h;
     glViewport(0, 0, (GLsizei) w, (GLsizei) h);
@@ -287,6 +339,7 @@ void reshape(int w, int h)
     glLoadIdentity();
     gluPerspective( cam.fov, w/h, cam.zNear, cam.zFar );
     glMatrixMode(GL_MODELVIEW);
+    cam.view();
 }
 
 // GLUT Special Keyboard Function
@@ -322,12 +375,23 @@ void keyUp (unsigned char key, int x, int y)
 // GLUT mouse Function
 void mouse(int x, int y)
 {
-    int xDiff = x - xPrev;
-    int yDiff = y - yPrev;
+    float xDiff = (x - xPrev)/height;
+    float yDiff = (y - yPrev)/width;
     xPrev = x;
     yPrev = y;
-    xRot += (float) yDiff * sensitivity;
-    yRot += (float) xDiff * sensitivity;
+    xRot += (float) yDiff;
+    yRot += (float) xDiff;
+}
+
+// GLUT mouse click Function
+void click(int button, int stat, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+    {
+        if (state == MENU) setLevel1();
+        else if (state == GAME_OVER) state = MENU;
+    }
+    glutPostRedisplay();
 }
 
 // GLUT Timer Function for obstacles
@@ -341,15 +405,16 @@ void moveTimer(int value)
         // Remove Obstacles that exit world
         if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 25 )
         {
+            obstacles.remove();
             // Detect collisions
             float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();
             float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
             
-            obstacles.remove();
             
-
-            if (xDiff < 5 || yDiff < 5) {
-                // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE
+            // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE
+            if (xDiff < 5 && yDiff < 5) {
+                //if (player.getHealth() > 1)
+                
                 player.addPoints(P_HIT);
             } else {
                 // Avoid 
@@ -398,9 +463,22 @@ void init(void)
 
     // Load world texture
     Image* image = loadBMP("tex/star.bmp");
-    glGenTextures( 1, &worldTexId);
+    glGenTextures( 1, &worldTexId );
     glBindTexture( GL_TEXTURE_2D, worldTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+    // Load menu texture
+    image = loadBMP("tex/ducksinspace.bmp");
+    glGenTextures( 1, &menuTexId );
+    glBindTexture( GL_TEXTURE_2D, menuTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+    
+    // Load game over texture
+    image = loadBMP("tex/gameover.bmp");
+    glGenTextures( 1, &gameoverTexId );
+    glBindTexture( GL_TEXTURE_2D, gameoverTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
     delete image;
 }
 
@@ -421,6 +499,7 @@ int main(int argc, char** argv)
 
     glutSpecialFunc(specialKey);
     glutPassiveMotionFunc(mouse);
+    glutMouseFunc(click);
 
     glutTimerFunc(speedMove, moveTimer, 0);
     glutTimerFunc(speedCreate, createTimer, 0);

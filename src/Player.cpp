@@ -25,7 +25,7 @@ void drawmodel(void)
 {
     if (!pmodel) {
 		//http://www.oyonale.com/modeles.php?lang=en&page=53 for the .obj, made the .mtl myself
-        pmodel = glmReadOBJ("ducky.obj");
+        pmodel = glmReadOBJ("obj/ducky.obj");
         if (!pmodel) exit(0);
         glmUnitize(pmodel);
         glmFacetNormals(pmodel);
