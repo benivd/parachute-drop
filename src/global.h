@@ -41,7 +41,7 @@
 #define G   1
 #define B   2
 
-const enum objType { SUN, TEAPOT };			// least of possible objects
+enum objType { SUN, TEAPOT };			// least of possible objects
 
 // Player
 #define PLAYER_STEP     1

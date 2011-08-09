@@ -178,10 +178,11 @@ void drawGameOver()
 void drawWorld()
 {
     glPushMatrix();
-    // Statistics
+
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
 
+    // Statistics
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
@@ -194,8 +195,9 @@ void drawWorld()
     sprintf(buffer, "Level: %i", player.getLives());
     printString(buffer);
 
-    printString(buffer);
     sprintf(buffer, "    Score: %i", player.getPoints());
+    printString(buffer);
+
     glPopMatrix();
 
     // Background    
@@ -206,16 +208,6 @@ void drawWorld()
     glMatrixMode(GL_MODELVIEW);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
     glColor3f(fogColor[R], fogColor[G], fogColor[B]);
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture( GL_TEXTURE_2D, worldTexId );
-    glBegin(GL_QUADS);
-    glTexCoord2f( 0, 0 ); glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-    glTexCoord2f( 0, 1 ); glVertex3f( (GAME_WIDTH/2)-bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glTexCoord2f( 1, 1 ); glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)+bgSize, GAME_DEPTH );
-    glTexCoord2f( 1, 0 ); glVertex3f( (GAME_WIDTH/2)+bgSize, (GAME_HEIGHT/2)-bgSize, GAME_DEPTH );
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
     
     // Light
     glEnable(GL_LIGHTING);
@@ -406,6 +398,8 @@ void moveTimer(int value)
         if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 25 )
         {
             obstacles.remove();
+        }
+        if (false)  {
             // Detect collisions
             float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();
             float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
@@ -413,7 +407,12 @@ void moveTimer(int value)
             
             // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE
             if (xDiff < 5 && yDiff < 5) {
-                //if (player.getHealth() > 1)
+
+                if (player.getHealth() > 1)
+                {
+                    player.setHealth(player.getHealth()-1);
+                } else {
+                }
                 
                 player.addPoints(P_HIT);
             } else {
@@ -461,14 +460,8 @@ void init(void)
     glEnable(GL_BLEND);
     glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    // Load world texture
-    Image* image = loadBMP("tex/star.bmp");
-    glGenTextures( 1, &worldTexId );
-    glBindTexture( GL_TEXTURE_2D, worldTexId );
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-
     // Load menu texture
-    image = loadBMP("tex/ducksinspace.bmp");
+    Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
     glBindTexture( GL_TEXTURE_2D, menuTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
