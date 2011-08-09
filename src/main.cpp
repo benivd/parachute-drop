@@ -194,7 +194,7 @@ void keyOperations (void)
 		   if(player.getXLean()>=35)
 			   player.setXLean(35);
 		   else
-			   player.setXLean(player.getXLean()+5);
+			   player.setXLean(player.getXLean()+3);
 	   }  
   	   if (keyStates['w']) 
 	   { // If the 'w' key has been pressed  
@@ -202,7 +202,7 @@ void keyOperations (void)
 		   if(player.getXLean()<=-35)
 			   player.setXLean(-35);
 		   else
-			   player.setXLean(player.getXLean()-5);
+			   player.setXLean(player.getXLean()-3);
 	   }  
 	   if (keyStates['d']) 
 	   { // If the 'd' key has been pressed  
@@ -210,7 +210,7 @@ void keyOperations (void)
 		    if(player.getZLean()>=55)
 			   player.setZLean(55);
 		   else
-			   player.setZLean(player.getZLean()+5);
+			   player.setZLean(player.getZLean()+3);
 	   }  
 	   if (keyStates['a']) 
 	   { // If the 'a' key has been pressed  
@@ -218,7 +218,7 @@ void keyOperations (void)
 		   if(player.getZLean()<=-55)
 			   player.setZLean(-55);
 		   else
-			   player.setZLean(player.getZLean()-5);
+			   player.setZLean(player.getZLean()-3);
 	   }  
 	   if(keyStates[27])
 	   {
