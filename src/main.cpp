@@ -18,7 +18,6 @@
 #include <ctime>
 #include <iostream>
 #include <GL/glut.h>
-#include <iostream>
 
 #include "global.h"       // Global variables and constants
 #include "Camera.h"       // Camera movement
@@ -147,7 +146,6 @@ void drawWorld()
 
 void keyOperations (void) 
 	{  
-		std::cout<<"harro"<<std::endl;
 	   if (keyStates['s']) 
 	   { // If the 'a' key has been pressed  
 		   player.Move(0,-PLAYER_STEP); 
@@ -191,7 +189,13 @@ void display(void)
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
             glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
             drawWorld();
-			player.draw();
+		
+		glPushMatrix();
+		glTranslatef(player.getXPos(), player.getYPos(), 0.0);
+		glRotatef(0, 1.0, 0.0, 0.0);
+		glTranslatef(-player.getXPos(), -player.getYPos(), 0.0);
+		player.draw();
+		glPopMatrix();
             obstacles.drawAll(level);
 
         break;
@@ -220,7 +224,6 @@ void reshape(int w, int h)
 // GLUT Special Keyboard Function
 void specialKey(int key, int x, int y)
 {
-	std::cout<<"HI3"<<std::endl;
     switch (key)
     {
         case GLUT_KEY_F1:
@@ -320,12 +323,13 @@ void init(void)
     glEnable(GL_BLEND);
     glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+	
     // Load world texture
     Image* image = loadBMP("tex/star.bmp");
     glGenTextures( 1, &worldTexId);
     glBindTexture( GL_TEXTURE_2D, worldTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-    delete image;
+    delete image;	
 }
 
 int main(int argc, char** argv)
