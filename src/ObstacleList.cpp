@@ -58,10 +58,12 @@ int ObstacleList::size()
 // Insert an element at the end of the ObstacleList 
 void ObstacleList::insert(float xPos, float yPos, float zPos)
 {
-	Obstacle* MyNode = new Obstacle;
-	MyNode->setXPos(xPos);
-	MyNode->setYPos(yPos);
-	MyNode->setZPos(zPos);
+	int test = rand() % 5;	
+	Obstacle* MyNode = new Obstacle(xPos, yPos, zPos, NULL);
+	if (test==0)
+	{
+		MyNode->setObjType(SUN);
+	}
 
 	if(last != 0)
 	{

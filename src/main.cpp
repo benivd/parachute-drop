@@ -39,6 +39,8 @@ int level = 0;
 
 float bgSize = 0.0;
 
+GLfloat position[] = {0,0,0,0};
+
 // Fog
 GLfloat fogColor[3] = { 0.0, 0.0, 0.0 };
 float fogStart = 0.0;
@@ -172,7 +174,7 @@ void drawWorld()
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambientLight );
 
     glEnable(GL_LIGHT0);
-    GLfloat lightColor0[] = { 0.8, 0.8, 0.8 };
+    GLfloat lightColor0[] = { .5, 0.2, 0.2 };
     GLfloat lightPos0[] = { -0.5, 1, 0.25, 0.0 };
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
@@ -260,7 +262,6 @@ void display(void)
             // Draw player
 			player.draw();
             
-
             // Draw obstacles
             obstacles.drawAll(level);
     
@@ -338,7 +339,7 @@ void moveTimer(int value)
         obstacles.moveAll(level);
         
         // Remove Obstacles that exit world
-        if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 0 )
+        if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 25 )
         {
             // Detect collisions
             float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();

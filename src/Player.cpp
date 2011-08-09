@@ -43,7 +43,9 @@ void Player::draw()
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
 	glRotatef(zLean,0,0,1);
-    drawmodel();
+    drawmodel();	
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
     glPopMatrix();
 }
 
