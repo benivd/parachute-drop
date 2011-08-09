@@ -75,7 +75,7 @@ void Obstacle::draw(int level)
     glPushMatrix();
     glColor4f(1.0, 1.0, 1.0,(getZPos()/(-1000) < (1 - 0.25*(level-1) ? 1.0:0.0)));
     glTranslatef( getXPos(), getYPos(), getZPos() );
-    glutSolidTeapot(2.5);
+    glutSolidTeapot(25);
     glPopMatrix();    
 }
 

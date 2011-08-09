@@ -40,6 +40,9 @@ void Player::draw()
     glPushMatrix();
     glColor3f(1.0, 1.0, 1.0);
 	glTranslated(xPos, yPos,-5);
+	glRotatef(180,0,1,0);
+	glRotatef(xLean,1,0,0);
+	glRotatef(zLean,0,0,1);
     drawmodel();
     glPopMatrix();
 }
@@ -49,3 +52,22 @@ void Player::Move(float stepX, float stepY) {
 	yPos += stepY;
 }
 
+void Player::Lean() {
+	xLean=xLean*.9;
+	zLean=zLean*.9;
+}
+
+
+
+
+/*
+
+lean accel = 0
+press button lean accel++ /caped at 35*
+contant decel to 0
+rotate isn't instant.
+
+lean in DRAW.
+rotX
+RotZ
+*/

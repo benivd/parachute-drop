@@ -43,5 +43,6 @@
 
 // Player
 #define PLAYER_STEP     0.1
+#define LEAN_DECELL		5
 
 #endif

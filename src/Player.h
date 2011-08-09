@@ -22,6 +22,9 @@ class Player
         float xPos;
         float yPos;
 
+		float xLean;
+		float zLean;
+
     public:
         Player();
         // ~Player(); // Using default
@@ -31,15 +34,20 @@ class Player
         void setPoints(int points) { this->points  = points; }
         void setXPos(float xPos)   { this->xPos    = xPos; }
         void setYPos(float yPos)   { this->yPos    = yPos; }
+		void setXLean(float xLean) { this->xLean   = xLean; }
+		void setZLean(float zLean) { this->zLean   = zLean; }
 
         int getLives()  { return this->lives; }
         int getHealth() { return this->health; }
         int getPoints() { return this->points; }
         float getXPos() { return this->xPos; }
         float getYPos() { return this->yPos; }
+	    float getXLean() { return this->xLean; }
+        float getZLean() { return this->zLean; }
 
         void draw();
 		void Move(float stepX, float stepY);
+		void Lean();
 };
 
 #endif

@@ -147,25 +147,42 @@ void drawWorld()
 void keyOperations (void) 
 	{  
 	   if (keyStates['s']) 
-	   { // If the 'a' key has been pressed  
+	   { // If the 's' key has been pressed  
 		   player.Move(0,-PLAYER_STEP); 
+		   if(player.getXLean()>=35)
+			   player.setXLean(35);
+		   else
+			   player.setXLean(player.getXLean()+5);
 	   }  
   	   if (keyStates['w']) 
-	   { // If the 'a' key has been pressed  
+	   { // If the 'w' key has been pressed  
 		   player.Move(0,PLAYER_STEP); 
+		   if(player.getXLean()<=-35)
+			   player.setXLean(-35);
+		   else
+			   player.setXLean(player.getXLean()-5);
 	   }  
 	   if (keyStates['d']) 
-	   { // If the 'a' key has been pressed  
+	   { // If the 'd' key has been pressed  
 		   player.Move(PLAYER_STEP,0); 
+		    if(player.getZLean()>=55)
+			   player.setZLean(55);
+		   else
+			   player.setZLean(player.getZLean()+5);
 	   }  
 	   if (keyStates['a']) 
 	   { // If the 'a' key has been pressed  
 		   player.Move(-PLAYER_STEP,0); 
+		   if(player.getZLean()<=-55)
+			   player.setZLean(-55);
+		   else
+			   player.setZLean(player.getZLean()-5);
 	   }  
 	   if(keyStates[27])
 	   {
 		    exit(0);
 	   }
+	player.Lean();
    }  
 
  
@@ -190,11 +207,8 @@ void display(void)
             glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
             drawWorld();
 		
-		glPushMatrix();
-		glTranslatef(player.getXPos(), player.getYPos(), 0.0);
-		glRotatef(0, 1.0, 0.0, 0.0);
-		glTranslatef(-player.getXPos(), -player.getYPos(), 0.0);
 		player.draw();
+		
 		glPopMatrix();
             obstacles.drawAll(level);
 
