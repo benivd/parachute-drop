@@ -14,9 +14,12 @@
  */
 
 #include <cstdlib>
+#include <cstdio>
 #include <cmath>
 #include <ctime>
+#include <cstring>
 #include <iostream>
+#include <sstream>
 #include <GL/glut.h>
 
 #include "global.h"       // Global variables and constants
@@ -46,13 +49,12 @@ int speedMove   = 100;
 int speedCreate = 1000;
 
 // Mouse
-float sensitivity = 0.5;
+float sensitivity = 0.4;
 
 float xRot = 0.0;
 float yRot = 0.0;
 float xPrev = width/2;
 float yPrev = height/2;
-
 
 // Texture
 GLuint worldTexId;
@@ -60,10 +62,10 @@ GLuint worldTexId;
 //keyboard
 bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)  
 
-
 Camera cam;
 Player player;
 ObstacleList obstacles;
+
 
 // Game values for Level 1
 void setLevel1()
@@ -73,7 +75,7 @@ void setLevel1()
     
     // Start fog at 3/4 of play field for Level 1
     //fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
-    fogStart = -(GAME_DEPTH) * FOGEND_L1*0.75;
+    fogStart = -(GAME_DEPTH) * FOGEND_L1*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
     speedCreate = 3000;
@@ -87,7 +89,7 @@ void setLevel2()
     
     // Start fog at 3/4 of play field for Level 2
     //fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
-    fogStart = -(GAME_DEPTH) * FOGEND_L2*0.75;
+    fogStart = -(GAME_DEPTH) * FOGEND_L2*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
     speedCreate = 2000;
@@ -100,10 +102,49 @@ void setLevel3()
 
     // Start fog at 3/4 of play field for Level 3
     //fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
-    fogStart = -(GAME_DEPTH) * FOGEND_L3*0.75;
+    fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
     speedCreate = 1000;
+}
+/*
+void printString(char* s)
+{
+    if (s && strlen(s)) {
+        while (*s) {
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *s);
+            s++;
+        }
+    }
+}*/
+
+void printString(char* s)
+{
+    char* p;
+    for (p = s; *p; p++)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+}
+
+void printStats(int p, int l)
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
+    glRasterPos2i(0,0);
+    
+    char buffer[20];
+    sprintf(buffer, "Score: %i", p);
+    printString(buffer);
+
+    sprintf(buffer, "Level: %i", l);
+    printString(buffer);
+            
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
 }
 
 void drawWorld()
@@ -142,6 +183,7 @@ void drawWorld()
     glFogi( GL_FOG_MODE, GL_LINEAR);
     glFogi( GL_FOG_START, fogStart);
     glFogi( GL_FOG_END, fogEnd);
+
 }
 
 void keyOperations (void) 
@@ -183,8 +225,7 @@ void keyOperations (void)
 		    exit(0);
 	   }
 	player.Lean();
-   }  
-
+   } 
  
 // GLUT Display Function
 void display(void)
@@ -200,17 +241,29 @@ void display(void)
 
         break;
         case LEVEL:
+            // Display statistics
+            printStats(player.getPoints(), player.getLives());
+            glMatrixMode(GL_MODELVIEW);
+
+            // Set camera view
 			cam.view();
+            
+            // Rotate view based on mouse input
             glTranslatef(player.getXPos(), player.getYPos(), 5.0);
             glRotatef(xRot/10, 1.0, 0.0, 0.0);
             glRotatef(yRot/10, 0.0, 1.0, 0.0);
             glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
+
+            // Draw background and effects
             drawWorld();
-		
-		player.draw();
-		
-		glPopMatrix();
+
+            // Draw player
+			player.draw();
+            
+
+            // Draw obstacles
             obstacles.drawAll(level);
+    
 
         break;
         case GAME_OVER:
@@ -292,9 +345,14 @@ void moveTimer(int value)
             float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
             
             obstacles.remove();
+            
 
             if (xDiff < 5 || yDiff < 5) {
                 // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE
+                player.addPoints(P_HIT);
+            } else {
+                // Avoid 
+                player.addPoints(P_AVOID);
             }
         }
 
@@ -337,13 +395,12 @@ void init(void)
     glEnable(GL_BLEND);
     glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-	
     // Load world texture
     Image* image = loadBMP("tex/star.bmp");
     glGenTextures( 1, &worldTexId);
     glBindTexture( GL_TEXTURE_2D, worldTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-    delete image;	
+    delete image;
 }
 
 int main(int argc, char** argv)

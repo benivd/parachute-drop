@@ -32,6 +32,7 @@ class Player
         void setLives(int lives)   { this->lives   = lives; }
         void setHealth(int health) { this->health  = health; }
         void setPoints(int points) { this->points  = points; }
+        void addPoints(int points) { this->points += points; }
         void setXPos(float xPos)   { this->xPos    = xPos; }
         void setYPos(float yPos)   { this->yPos    = yPos; }
 		void setXLean(float xLean) { this->xLean   = xLean; }

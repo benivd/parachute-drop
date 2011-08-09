@@ -45,4 +45,8 @@
 #define PLAYER_STEP     0.1
 #define LEAN_DECELL		5
 
+// Points
+#define P_HIT          -500
+#define P_AVOID         10
+
 #endif
