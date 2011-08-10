@@ -11,6 +11,14 @@
 Obstacle::Obstacle()
 {
 	objtype = TEAPOT;
+	xAxis = rand() % 2;
+	yAxis = rand() % 2;
+	if (xAxis == 0 && yAxis == 0)
+		zAxis == 1;
+	else
+		zAxis = rand() % 2;
+	spinAngle = 0.0;
+	colorGen = rand() % 360;
 }
 
 
@@ -19,6 +27,14 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	xPos = x;
 	yPos = y;
 	zPos = z;
+	xAxis = rand() % 2;
+	yAxis = rand() % 2;
+	if (xAxis == 0 && yAxis == 0)
+		zAxis == 1;
+	else
+		zAxis = rand() % 2;
+	spinAngle = 0.0;
+	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = TEAPOT;
 }
@@ -28,6 +44,14 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	xPos = x;
 	yPos = y;
 	zPos = z;
+	xAxis = rand() % 2;
+	yAxis = rand() % 2;
+	if (xAxis == 0 && yAxis == 0)
+		zAxis == 1;
+	else
+		zAxis = rand() % 2;
+	spinAngle = 0.0;
+	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = objT;
 }
@@ -98,7 +122,8 @@ void Obstacle::draw(int level)
     glTranslatef( getXPos(), getYPos(), getZPos() );
 	if (objtype==TEAPOT)
 	{
-		glColor3f(0,0,1);
+		glRotatef(spinAngle, xAxis, yAxis, zAxis);
+		glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI), 0.5+0.5*sin(0.05*colorGen+M_PI/2), 0.5+0.5*sin(0.05*colorGen));
 		glutSolidTeapot(25);
 	}
 	if (objtype==SUN)
@@ -119,7 +144,8 @@ void Obstacle::draw(int level)
 		glutSolidSphere(10,20,20);
 		glEnable(GL_LIGHTING);
 	}
-    glPopMatrix();    
+    glPopMatrix();
+	spinAngle += 5.0;
 }
 
 void Obstacle::move(int level)
