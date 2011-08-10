@@ -19,6 +19,8 @@ class Obstacle
 {
 	private:
 		float xPos, yPos, zPos;                 // Object coordinates
+		int xAxis, yAxis, zAxis;				// Axes of rotation
+		float spinAngle, colorGen;				// Angle of rotation, color generator
 		Obstacle* next;                         // A pointer to the next node		
 		objType objtype;						// type of 'this' object	
 
