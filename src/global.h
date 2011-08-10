@@ -41,10 +41,11 @@
 #define G   1
 #define B   2
 
-enum objType { SUN, TEAPOT };			// least of possible objects
+enum objType { SUN, TEAPOT, CUBE, DODEC, ICOSA, CONE, TORUS };			// least of possible objects
 
 // Player
-#define PLAYER_STEP     10
+#define PLAYER_STEP     5
+
 #define LEAN_DECELL		5
 
 // Points

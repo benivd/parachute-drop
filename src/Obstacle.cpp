@@ -144,8 +144,49 @@ void Obstacle::draw(int level)
 		glutSolidSphere(10,20,20);
 		glEnable(GL_LIGHTING);
 	}
+	
+	if (objtype==CUBE)
+	{
+		glColor3f(0,1,1);
+		glutWireCube(25);
+	}
+	
+	if(objtype==DODEC)
+	{
+		glPushMatrix();
+		glColor3f(1,0,0);
+		glScalef(25,25,25);
+		glutSolidDodecahedron();
+		glPopMatrix();
+	}
+
+	if(objtype==ICOSA)
+	{
+		glPushMatrix();
+		glColor3f(0,0,1);
+		glScalef(25,25,25);
+		glutSolidIcosahedron();
+		glPopMatrix();
+	}
+
+	if(objtype==CONE)
+	{
+		glPushMatrix();
+		glColor3f(0,1,1);
+		glScalef(10,10,10);
+		glutSolidCone(10,10,20,20);
+		glPopMatrix();
+	}
+
+	if(objtype==TORUS)
+	{
+		glPushMatrix();
+		glColor3f(0,1,0);
+		glutSolidTorus(5,10,30,30);
+		glPopMatrix();
+	}
     glPopMatrix();
-	spinAngle += 5.0;
+	spinAngle += 5.0;  
 }
 
 void Obstacle::move(int level)
@@ -156,4 +197,5 @@ void Obstacle::move(int level)
 		GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
 		glLightfv(GL_LIGHT1, GL_POSITION, pos);
 	}
+	glutPostRedisplay();
 }

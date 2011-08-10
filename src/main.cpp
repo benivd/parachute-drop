@@ -285,7 +285,7 @@ void display(void)
     switch (state)
     {
         case MENU:
-            drawMenu();            
+           drawMenu();            
 
         break;
         case LEVEL:
@@ -300,10 +300,11 @@ void display(void)
 
             // Draw background and effects
             drawWorld();
+			std::cout<<"got here!"<<std::endl;
 
             // Draw player
 			player.draw();
-            
+			std::cout<<"got here!2"<<std::endl;
             // Draw obstacles
             obstacles.drawAll(level);
             
