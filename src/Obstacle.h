@@ -50,8 +50,8 @@ class Obstacle
         void draw(int level);
         void move(int level);
 
-		
-
+        bool collide(int xDiff, int yDiff);
+        void explode();
 };
 
 #endif

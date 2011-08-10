@@ -85,7 +85,9 @@ void setLevel1()
 
     speedCreate = 3000;
 
+    // Clear level
     obstacles.removeAll();
+    glDisable(GL_LIGHT1);
 }
 
 // Game values for Level 2
@@ -100,7 +102,10 @@ void setLevel2()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
     speedCreate = 2000;
+    
+    // Clear level
     obstacles.removeAll();
+    glDisable(GL_LIGHT1);
 }
 
 void setLevel3()
@@ -114,7 +119,10 @@ void setLevel3()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
     speedCreate = 1000;
+    
+    // Clear level
     obstacles.removeAll();
+    glDisable(GL_LIGHT1);
 }
 
 // Print a single char array
@@ -159,6 +167,7 @@ void drawGameOver()
 {
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
@@ -166,16 +175,24 @@ void drawGameOver()
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
 
+    // Statistics
+    glColor3f(1.0, 1.0, 1.0);
+    glRasterPos2i(width/2-40, height/2-12);
+    
+    char buffer[20];
+    sprintf(buffer, "Score: %i", player.getPoints());
+    printString(buffer);
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     glBegin(GL_QUADS);
-    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
-    glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
-    glTexCoord2f( 1, 1 ); glVertex2f( width, height);
-    glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
-    
+    glTexCoord3f( 0, 0, -5 ); glVertex2f( 0, 0);
+    glTexCoord3f( 1, 0, -5 ); glVertex2f( width, 0);
+    glTexCoord3f( 1, 1, -5 ); glVertex2f( width, height);
+    glTexCoord3f( 0, 1, -5 ); glVertex2f( 0, height);
     glEnd();
     glDisable(GL_TEXTURE_2D);
+
+
 }
 
 
@@ -195,10 +212,15 @@ void drawWorld()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2i(0,0);
-    
+    glRasterPos2i(0, height-24);
+
     char buffer[20];
-    sprintf(buffer, "Level: %i", player.getLives());
+    sprintf(buffer, "Level %i", level);
+    printString(buffer);
+    
+    glRasterPos2i(0,0);
+ 
+    sprintf(buffer, "Lives: %i", player.getLives());
     printString(buffer);
 
     sprintf(buffer, "    Score: %i", player.getPoints());
@@ -303,18 +325,17 @@ void display(void)
 			cam.view();
             
             // Rotate view based on mouse input
-            glTranslatef(player.getXPos(), player.getYPos(), 5.0);
+            glTranslatef(player.getXPos(), player.getYPos(), cam.dz+5.0);
             glRotatef(xRot*sensitivity, 1.0, 0.0, 0.0);
             glRotatef(yRot*sensitivity, 0.0, 1.0, 0.0);
-            glTranslatef(-player.getXPos(), -player.getYPos(), -5.0);
+            glTranslatef(-player.getXPos(), -player.getYPos(), -(cam.dz+5.0));
 
             // Draw background and effects
             drawWorld();
-			std::cout<<"got here!"<<std::endl;
 
             // Draw player
 			player.draw();
-			std::cout<<"got here!2"<<std::endl;
+            
             // Draw obstacles
             obstacles.drawAll(level);
             
@@ -359,6 +380,9 @@ void specialKey(int key, int x, int y)
         case GLUT_KEY_F3:
             setLevel3();
         break;
+        case GLUT_KEY_F4:
+            state = GAME_OVER;
+        break;
     }	
 
     glutPostRedisplay();
@@ -394,6 +418,17 @@ void click(int button, int stat, int x, int y)
         if (state == MENU) setLevel1();
         else if (state == GAME_OVER) state = MENU;
     }
+
+    // Wheel down - Zoom in
+    if (button == 4)
+    {
+        if (cam.cz >  0) cam.translate(0.0, 0.0,-1.0);
+
+    } // Wheel up - Zoom out
+    else if (button == 3)
+    {
+        if (cam.cz < 20) cam.translate(0.0, 0.0, 1.0);
+    }
     glutPostRedisplay();
 }
 
@@ -405,31 +440,33 @@ void moveTimer(int value)
         // Move Obstacles
         obstacles.moveAll(level);
         
-        // Obstacles reach player
-        if (obstacles.getFirst()->getZPos() > 0)
+        // Current obstacle reaches z = 0 ?
+        if (obstacles.getCurrent()->getZPos() > 0)
         {
-            float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();
-            float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
+            float xDiff = player.getXPos() - (obstacles.getCurrent())->getXPos();
+            float yDiff = player.getYPos() - (obstacles.getCurrent())->getYPos();
             
-            // TODO: COLLISION DETECTION
-            if (xDiff < 2 && yDiff < 2)
-            {            
-                // TODO: EXPLOSION
-                obstacles.remove();
+            // Obstacle collides?
+            if (obstacles.getCurrent()->collide(xDiff, yDiff))
+            {
+                obstacles.getCurrent()->explode();
                 player.addPoints(P_HIT);
 
                 // Lose health
                 if (player.getHealth() > 0)
                 {
+                    // health -1
                     player.setHealth(player.getHealth()-1);
                 }
+                // Lose life
                 else {
+                    // reset health
                     player.setHealth(3);
-                    player.setLives(player.getLives()-1);
 
                     // Lose life
                     if (player.getLives() > 0)
                     {
+                        // Lives -1; reset current level
                         player.setLives(player.getLives()-1);
                         switch (level)
                         {
@@ -443,16 +480,24 @@ void moveTimer(int value)
                                 setLevel3();
                             break;
                         }
-                    } // Game over
+                    }
+                    // Game over
                     else {
                         state = GAME_OVER;
                     }
                 }
-            }
+                
+            } // Obstacle avoided
             else {
-                obstacles.remove();
                 player.addPoints(P_AVOID);
             }
+            // Set next obstacle as current
+            obstacles.setCurrent(obstacles.getCurrent()->getNext());
+
+        } // First obstacle out of sight ?
+        else if (obstacles.getFirst()->getZPos() > 50)
+        {
+            obstacles.remove();
         }
 
         glutPostRedisplay();
@@ -527,7 +572,7 @@ int main(int argc, char** argv)
     glutSpecialFunc(specialKey);
     glutPassiveMotionFunc(mouse);
     glutMouseFunc(click);
-
+    
     glutTimerFunc(speedMove, moveTimer, 0);
     glutTimerFunc(speedCreate, createTimer, 0);
 

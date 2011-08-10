@@ -19,12 +19,15 @@ class ObstacleList
 	private:
 		Obstacle* first;
 		Obstacle* last;
+        Obstacle* current;
 
 	public:
 		ObstacleList();       //Default constructor
 		//~ObstacleList();
         
         Obstacle* getFirst();
+        Obstacle* getCurrent();
+        void setCurrent(Obstacle* obstacle);
 		
         // Returns true if this list contains no elements.
 		bool isEmpty();

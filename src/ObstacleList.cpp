@@ -1,4 +1,5 @@
-#include"ObstacleList.h"
+#include "ObstacleList.h"
+#include "Obstacle.h"
 
 #include <iostream>
 #include <string>
@@ -11,7 +12,7 @@ ObstacleList::ObstacleList()
 {
 	first = 0;
 	last = 0;
-
+    current = 0;
 }
 
 /*
@@ -25,6 +26,16 @@ ObstacleList::~ObstacleList()
 Obstacle* ObstacleList::getFirst()
 {
     return first;
+}
+
+Obstacle* ObstacleList::getCurrent()
+{
+    return current;
+}
+
+void ObstacleList::setCurrent(Obstacle* obstacle)
+{
+    current = obstacle;
 }
 
 //Boolean function returns tru id the link list is empty
@@ -80,10 +91,12 @@ void ObstacleList::insert(float xPos, float yPos, float zPos)
 		last->setNext(MyNode);
 		last = MyNode;
 	}
-	else								//if first element to add to link list, set the first node = to last node
+    // First element ?
+	else								
 	{
-		last = MyNode;				//address of the first and last node = newly created node
+		last = MyNode;
 		first = last;
+        current = first;
 	}
 }
 
@@ -98,11 +111,13 @@ void ObstacleList::remove()
 	{
 		first = 0;
 		last = 0;
+        current = 0;
 	}
 	else
 	{
-		first = first->getNext();
-	}
+		if (current == first) current = first->getNext();
+        first = first->getNext();
+    }
 }
 
 

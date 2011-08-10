@@ -29,10 +29,12 @@
 // Game World
 #define GAME_WIDTH      200     // X
 #define GAME_HEIGHT     200     // Y
-#define GAME_DEPTH     -1000     // Z
+#define GAME_DEPTH     -1000    // Z
+
+#define FOV             25
 
 // Obstacles
-#define MOVE_BY         10
+#define MOVE_BY         5
 #define FOGEND_L1       1.0
 #define FOGEND_L2       0.85
 #define FOGEND_L3       0.70
@@ -44,11 +46,11 @@
 enum objType { SUN, TEAPOT, CUBE, DODEC, ICOSA, CONE, TORUS };			// least of possible objects
 
 // Player
-#define PLAYER_STEP     5
-#define LEAN_DECELL		5
+#define PLAYER_STEP     2
+#define LEAN_DECELL		2
 
 // Points
-#define P_HIT          -500
-#define P_AVOID         10
+#define P_HIT          -100
+#define P_AVOID         100
 
 #endif

@@ -15,7 +15,7 @@ Obstacle::Obstacle()
 	xAxis = rand() % 2;
 	yAxis = rand() % 2;
 	if (xAxis == 0 && yAxis == 0)
-		zAxis == 1;
+		zAxis = 1;
 	else
 		zAxis = rand() % 2;
 	spinAngle = 0.0;
@@ -31,7 +31,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	xAxis = rand() % 2;
 	yAxis = rand() % 2;
 	if (xAxis == 0 && yAxis == 0)
-		zAxis == 1;
+		zAxis = 1;
 	else
 		zAxis = rand() % 2;
 	spinAngle = 0.0;
@@ -48,7 +48,7 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	xAxis = rand() % 2;
 	yAxis = rand() % 2;
 	if (xAxis == 0 && yAxis == 0)
-		zAxis == 1;
+		zAxis = 1;
 	else
 		zAxis = rand() % 2;
 	spinAngle = 0.0;
@@ -116,10 +116,8 @@ objType Obstacle::getObjType()
 
 void Obstacle::draw(int level)
 {
-    // Make object transparent after FOGEND
-    
     glPushMatrix();
-    glColor4f(1.0, 1.0, 1.0,(getZPos()/(-1000) < (1 - 0.25*(level-1) ? 1.0:0.0)));
+    
     glTranslatef( getXPos(), getYPos(), getZPos() );
 	if (objtype==TEAPOT)
 	{
@@ -193,10 +191,14 @@ void Obstacle::draw(int level)
 void Obstacle::move(int level)
 {
     zPos += MOVE_BY*level;
-	if (objtype==SUN)
-	{
-		GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
-		glLightfv(GL_LIGHT1, GL_POSITION, pos);
-	}
-	glutPostRedisplay();
+}
+
+bool Obstacle::collide(int xDiff, int yDiff)
+{
+    return (xDiff < 5 && yDiff < 5);
+}
+
+void Obstacle::explode()
+{
+
 }
