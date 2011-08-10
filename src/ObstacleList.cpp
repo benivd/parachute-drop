@@ -78,7 +78,7 @@ void ObstacleList::insert(float xPos, float yPos, float zPos)
 	if (randObj==1)
 		MyNode->setObjType(CUBE);
 	if (randObj==2)
-		MyNode->setObjType(DODEC);
+		MyNode->setObjType(VMASK);
 	if (randObj==3)
 		MyNode->setObjType(ICOSA);
 	if (randObj==4)

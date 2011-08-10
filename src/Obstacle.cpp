@@ -6,7 +6,26 @@
 #include <GL/glut.h>
 
 #include "global.h"
+#include "objLoader/glm.h"
 
+//model
+GLMmodel* pmodel2;
+
+void drawVMask(void)
+{
+    if (!pmodel2) {
+		//
+        pmodel2 = glmReadOBJ("obj/VMask.obj");
+        if (!pmodel2) exit(0);
+        glmUnitize(pmodel2);
+        glmFacetNormals(pmodel2);
+        glmVertexNormals(pmodel2, 90.0);
+    }
+    
+    glmDraw(pmodel2, GLM_SMOOTH | GLM_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+}
 
 // default constructor added
 Obstacle::Obstacle()
@@ -182,14 +201,14 @@ void Obstacle::draw(int level)
         }
 	}
 	
-	if(objtype==DODEC)
+	if(objtype==VMASK)
 	{
         if (!crash)
         {
-		    glColor3f(1,0,0);
-		    glScalef(25,25,25);
-		    glutSolidDodecahedron();
-        }
+		glColor4f(1,0,0,.1);
+		glScalef(25,25,25);
+		drawVMask();
+		        }
         else
         {
 
@@ -217,7 +236,8 @@ void Obstacle::draw(int level)
 		    glColor3f(0,1,1);
 		    glScalef(10,10,10);
 		    glutSolidCone(10,10,20,20);
-        } else {
+        }
+		else {
         
         }
 	}

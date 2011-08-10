@@ -45,11 +45,11 @@
 #define G   1
 #define B   2
 
-enum objType { SUN, TEAPOT, CUBE, DODEC, ICOSA, CONE, TORUS };			// least of possible objects
+enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of possible objects
 
 // Player
-#define PLAYER_STEP     2
-#define LEAN_DECELL		2
+#define PLAYER_STEP     10
+#define LEAN_DECELL		5
 
 // Points
 #define P_HIT          -100

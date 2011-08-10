@@ -46,6 +46,7 @@ class Player
 	    float getXLean() { return this->xLean; }
         float getZLean() { return this->zLean; }
 
+
         void draw();
 		void Move(float stepX, float stepY);
 		void Lean();

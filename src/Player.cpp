@@ -30,22 +30,21 @@ void drawmodel(void)
         glmUnitize(pmodel);
         glmFacetNormals(pmodel);
         glmVertexNormals(pmodel, 90.0);
-    }
+	 }
     
     glmDraw(pmodel, GLM_SMOOTH | GLM_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 void Player::draw()
 {
     glPushMatrix();
-    glColor3f(1.0, 1.0, 1.0);
 	glTranslated(xPos, yPos,-5);
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
 	glRotatef(zLean,0,0,1);
     drawmodel();	
-	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
     glPopMatrix();
 }
 
@@ -59,17 +58,3 @@ void Player::Lean() {
 	zLean=zLean*.9;
 }
 
-
-
-
-/*
-
-lean accel = 0
-press button lean accel++ /caped at 35*
-contant decel to 0
-rotate isn't instant.
-
-lean in DRAW.
-rotX
-RotZ
-*/
