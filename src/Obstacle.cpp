@@ -1,6 +1,7 @@
 #include "Obstacle.h"
 
 
+#include <cmath>
 #include <iostream>
 #include <GL/glut.h>
 

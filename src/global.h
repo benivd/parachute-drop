@@ -45,7 +45,6 @@ enum objType { SUN, TEAPOT, CUBE, DODEC, ICOSA, CONE, TORUS };			// least of pos
 
 // Player
 #define PLAYER_STEP     5
-
 #define LEAN_DECELL		5
 
 // Points

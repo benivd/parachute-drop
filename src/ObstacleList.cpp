@@ -165,3 +165,9 @@ void ObstacleList::drawAll(int level)
 	}
 
 }
+
+void ObstacleList::removeAll()
+{
+    for (int i = 0; i < size(); i++)
+        remove();
+}

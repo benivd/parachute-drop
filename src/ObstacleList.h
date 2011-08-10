@@ -41,6 +41,7 @@ class ObstacleList
 		void moveAll(int level);
 
         void drawAll(int level);
+        void removeAll();
 };
 
 #endif

@@ -84,6 +84,8 @@ void setLevel1()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
     speedCreate = 3000;
+
+    obstacles.removeAll();
 }
 
 // Game values for Level 2
@@ -98,6 +100,7 @@ void setLevel2()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
     speedCreate = 2000;
+    obstacles.removeAll();
 }
 
 void setLevel3()
@@ -111,6 +114,7 @@ void setLevel3()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
     speedCreate = 1000;
+    obstacles.removeAll();
 }
 
 // Print a single char array
@@ -131,6 +135,7 @@ void drawMenu()
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, menuTexId );
@@ -159,9 +164,10 @@ void drawGameOver()
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture( GL_TEXTURE_2D, menuTexId );
+    glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     glBegin(GL_QUADS);
     glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
     glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
@@ -285,7 +291,11 @@ void display(void)
     switch (state)
     {
         case MENU:
-           drawMenu();            
+            player.setLives(3);
+            player.setHealth(3);
+            player.setPoints(0);
+
+            drawMenu();            
 
         break;
         case LEVEL:
@@ -390,34 +400,57 @@ void click(int button, int stat, int x, int y)
 // GLUT Timer Function for obstacles
 void moveTimer(int value)
 {
-    if (state == LEVEL)
+    if (state == LEVEL && !obstacles.isEmpty())
     {
         // Move Obstacles
         obstacles.moveAll(level);
         
-        // Remove Obstacles that exit world
-        if ( !obstacles.isEmpty() && (obstacles.getFirst())->getZPos() >= 25 )
+        // Obstacles reach player
+        if (obstacles.getFirst()->getZPos() > 0)
         {
-            obstacles.remove();
-        }
-        if (false)  {
-            // Detect collisions
             float xDiff = player.getXPos() - (obstacles.getFirst())->getXPos();
             float yDiff = player.getYPos() - (obstacles.getFirst())->getYPos();
             
-            
-            // TODO: COLLISION DETECTION - IMPLEMENT PLAYER/OBS SIZE
-            if (xDiff < 5 && yDiff < 5) {
+            // TODO: COLLISION DETECTION
+            if (xDiff < 2 && yDiff < 2)
+            {            
+                // TODO: EXPLOSION
+                obstacles.remove();
+                player.addPoints(P_HIT);
 
-                if (player.getHealth() > 1)
+                // Lose health
+                if (player.getHealth() > 0)
                 {
                     player.setHealth(player.getHealth()-1);
-                } else {
                 }
-                
-                player.addPoints(P_HIT);
-            } else {
-                // Avoid 
+                else {
+                    player.setHealth(3);
+                    player.setLives(player.getLives()-1);
+
+                    // Lose life
+                    if (player.getLives() > 0)
+                    {
+                        player.setLives(player.getLives()-1);
+                        switch (level)
+                        {
+                            case 1:
+                                setLevel1();
+                            break;
+                            case 2:
+                                setLevel2();
+                            break;
+                            case 3:
+                                setLevel3();
+                            break;
+                        }
+                    } // Game over
+                    else {
+                        state = GAME_OVER;
+                    }
+                }
+            }
+            else {
+                obstacles.remove();
                 player.addPoints(P_AVOID);
             }
         }
