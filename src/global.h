@@ -44,7 +44,7 @@
 enum objType { SUN, TEAPOT };			// least of possible objects
 
 // Player
-#define PLAYER_STEP     1
+#define PLAYER_STEP     10
 #define LEAN_DECELL		5
 
 // Points
