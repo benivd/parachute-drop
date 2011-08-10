@@ -38,6 +38,8 @@ gameState state = MENU;
 
 int level = 0;
 
+int levelCounter = LEVEL_TIME;
+
 float bgSize = 0.0;
 
 GLfloat position[] = {0,0,0,0};
@@ -77,6 +79,7 @@ void setLevel1()
 {
     state = LEVEL;
     level = 1;
+    levelCounter = LEVEL_TIME;
     
     // Start fog at 3/4 of play field for Level 1
     //fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
@@ -95,6 +98,7 @@ void setLevel2()
 {
     state = LEVEL;
     level = 2;
+    levelCounter = LEVEL_TIME;
     
     // Start fog at 3/4 of play field for Level 2
     //fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
@@ -112,6 +116,7 @@ void setLevel3()
 {
     state = LEVEL;
     level = 3;
+    levelCounter = LEVEL_TIME;
 
     // Start fog at 3/4 of play field for Level 3
     //fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
@@ -152,12 +157,6 @@ void drawMenu()
     glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
     glTexCoord2f( 1, 1 ); glVertex2f( width, height);
     glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
-    /*
-    glTexCoord2f( 0, 0 ); glVertex2f( std::max(0, (width - (185/2))), std::max(0, (height - (67/2))) );
-    glTexCoord2f( 0, 1 ); glVertex2f( std::max(0, (width - (185/2))), std::min(height, (height+67)/2));
-    glTexCoord2f( 1, 1 ); glVertex2f( std::min(width, (width+185)/2), std::min(height, (height+67)/2));
-    glTexCoord2f( 1, 0 ); glVertex2f( std::min(width, (width+185)/2), std::max(0, (height - (67/2))) );
-    */
     glEnd();
     glDisable(GL_TEXTURE_2D);
 }
@@ -175,13 +174,14 @@ void drawGameOver()
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
 
-    // Statistics
+    // Points
     glColor3f(1.0, 1.0, 1.0);
     glRasterPos2i(width/2-40, height/2-12);
-    
     char buffer[20];
     sprintf(buffer, "Score: %i", player.getPoints());
     printString(buffer);
+
+    // Game Over Screen
     glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     glBegin(GL_QUADS);
@@ -191,11 +191,7 @@ void drawGameOver()
     glTexCoord3f( 0, 1, -5 ); glVertex2f( 0, height);
     glEnd();
     glDisable(GL_TEXTURE_2D);
-
-
 }
-
-
 
 // Draw Background to cover field of view at GAME_DEPTH Print Statistics in Orthogonal view
 void drawWorld()
@@ -226,8 +222,6 @@ void drawWorld()
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
 
-    glPopMatrix();
-
     // Background    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -236,7 +230,7 @@ void drawWorld()
     glMatrixMode(GL_MODELVIEW);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
     glColor3f(fogColor[R], fogColor[G], fogColor[B]);
-    
+
     // Light
     glEnable(GL_LIGHTING);
     GLfloat ambientLight[] = { 0.2, 0.2, 0.2, 1 };
@@ -255,6 +249,7 @@ void drawWorld()
     glFogi( GL_FOG_START, fogStart);
     glFogi( GL_FOG_END, fogEnd);
 
+    glPopMatrix();
 }
 
 void keyOperations (void) 
@@ -502,6 +497,28 @@ void moveTimer(int value)
 
         glutPostRedisplay();
     }
+
+    // Update level counter, and change level
+    if (state == LEVEL)
+    {
+        levelCounter -= speedMove;
+        if (levelCounter <= 0)
+        {
+            switch (level)
+            {
+                case 1:
+                    setLevel2();
+                break;
+                case 2:
+                    setLevel3();
+                break;
+                case 3:
+                    state = GAME_OVER;
+                break;
+            }
+        }
+    }
+
     glutTimerFunc(speedMove, moveTimer, 0);
 }
 

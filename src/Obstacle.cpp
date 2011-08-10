@@ -124,7 +124,7 @@ void Obstacle::setCrash(bool state)
 
 bool Obstacle::getCrash()
 {
-    return crash
+    return crash;
 }
 
 void Obstacle::draw(int level)
