@@ -14,7 +14,6 @@ GLMmodel* pmodel2;
 void drawVMask(void)
 {
     if (!pmodel2) {
-		//
         pmodel2 = glmReadOBJ("obj/VMask.obj");
         if (!pmodel2) exit(0);
         glmUnitize(pmodel2);
@@ -40,6 +39,9 @@ Obstacle::Obstacle()
 		zAxis = rand() % 2;
 	spinAngle = 0.0;
 	colorGen = rand() % 360;
+
+    // TODO: define a size for each object
+    objSize = 10.0;
 }
 
 
@@ -59,6 +61,9 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = TEAPOT;
+
+    // TODO: define a size for each object
+    objSize = 10.0;
 }
 
 Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
@@ -77,6 +82,9 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = objT;
+
+    // TODO: define a size for each object
+    objSize = 10.0;
 }
 
 /*
@@ -146,6 +154,16 @@ bool Obstacle::getCrash()
     return crash;
 }
 
+void Obstacle::setObjSize(int size)
+{
+    objSize = size;
+}
+
+int Obstacle::getObjSize()
+{
+    return objSize;
+}
+
 void Obstacle::draw(int level)
 {
     glPushMatrix();
@@ -155,6 +173,7 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
+            glTranslatef(0.0, 0.0, -objSize);
 		    glRotatef(spinAngle, xAxis, yAxis, zAxis);
 		    glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI),
                       0.5+0.5*sin(0.05*colorGen+M_PI/2),
@@ -172,6 +191,8 @@ void Obstacle::draw(int level)
 
 		    //Sun position		
 		    GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
+            
+            glTranslatef(0.0, 0.0, -objSize);
 		    glColor3f(1,1,0);
 		    glEnable(GL_LIGHT1);
 		    glLightfv(GL_LIGHT1, GL_POSITION, pos);
@@ -192,6 +213,7 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
+            glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,1);
         	glutWireCube(25);
         }
@@ -205,10 +227,11 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
-		glColor4f(1,0,0,.1);
-		glScalef(25,25,25);
-		drawVMask();
-		        }
+            glTranslatef(0.0, 0.0, -objSize);
+		    glColor4f(1,0,0,.1);
+		    glScalef(25,25,25);
+		    drawVMask();
+		}
         else
         {
 
@@ -219,6 +242,7 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
+            glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,0,1);
         	glScalef(25,25,25);
 		    glutSolidIcosahedron();
@@ -233,11 +257,13 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
+            glTranslatef(0.0, 0.0, -objSize);
 		    glColor3f(0,1,1);
 		    glScalef(10,10,10);
 		    glutSolidCone(10,10,20,20);
         }
-		else {
+		else 
+        {
         
         }
 	}
@@ -246,9 +272,12 @@ void Obstacle::draw(int level)
 	{
         if (!crash)
         {
+            glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,0);
             glutSolidTorus(5,10,30,30);
-        } else {
+        }
+        else 
+        {
 
         }
 	}
@@ -263,7 +292,7 @@ void Obstacle::move(int level)
 
 bool Obstacle::collide(int xDiff, int yDiff)
 {
-    return (xDiff < 5 && yDiff < 5);
+    return (xDiff < objSize/2 + PLAYER_SIZE && yDiff < objSize/2 + PLAYER_SIZE);
 }
 
 void Obstacle::explode()

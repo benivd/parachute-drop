@@ -66,9 +66,10 @@ GLuint worldTexId;
 GLuint menuTexId;
 GLuint gameoverTexId;
 
-//keyboard
-bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)  
+// Keyboard
+bool* keyStates = new bool[256];
 
+// Create Class Instances
 Camera cam;
 Player player;
 ObstacleList obstacles;
@@ -81,8 +82,7 @@ void setLevel1()
     level = 1;
     levelCounter = LEVEL_TIME;
     
-    // Start fog at 3/4 of play field for Level 1
-    //fogColor[R] = 0.9; fogColor[G] = 0.9; fogColor[B] = 1.0;
+    // Start fog at 1/2 of play field for Level 1
     fogStart = -(GAME_DEPTH) * FOGEND_L1*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
@@ -100,8 +100,7 @@ void setLevel2()
     level = 2;
     levelCounter = LEVEL_TIME;
     
-    // Start fog at 3/4 of play field for Level 2
-    //fogColor[R] = 0.6; fogColor[G] = 0.3; fogColor[B] = 0.2;
+    // Start fog at 1/2 of play field for Level 2
     fogStart = -(GAME_DEPTH) * FOGEND_L2*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
@@ -118,8 +117,7 @@ void setLevel3()
     level = 3;
     levelCounter = LEVEL_TIME;
 
-    // Start fog at 3/4 of play field for Level 3
-    //fogColor[R] = 0.3; fogColor[G] = 0.2; fogColor[B] = 0.3;
+    // Start fog at 1/2 of play field for Level 3
     fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
@@ -229,7 +227,7 @@ void drawWorld()
 
     glMatrixMode(GL_MODELVIEW);
     bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
-    glColor3f(fogColor[R], fogColor[G], fogColor[B]);
+    glColor3f(0.0, 0.0, 0.0);
 
     // Light
     glEnable(GL_LIGHTING);
@@ -242,7 +240,7 @@ void drawWorld()
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
     
-    // Set Fog
+    // Fog
     glEnable(GL_FOG);
     glFogfv( GL_FOG_COLOR, fogColor);
     glFogi( GL_FOG_MODE, GL_LINEAR);
@@ -252,44 +250,95 @@ void drawWorld()
     glPopMatrix();
 }
 
+void drawPanels()
+{
+    // Top Panel:
+    glPushMatrix();
+    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + 1, GAME_DEPTH/2 + 50);
+    glScalef(GAME_WIDTH, 1.0, GAME_DEPTH);
+    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+
+    // Bottom Panel:
+    glPushMatrix();
+    glTranslatef(GAME_WIDTH/2, -1, GAME_DEPTH/2 + 50);
+    glScalef(GAME_WIDTH, 1.0, GAME_DEPTH);
+    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+
+    // Left Panel:
+    glPushMatrix();
+    glTranslatef(-1, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
+    glScalef(1.0, GAME_HEIGHT, GAME_DEPTH);
+    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+
+    // Top panel:
+    glPushMatrix();
+    glTranslatef(GAME_WIDTH + 1, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
+    glScalef(1.0, GAME_HEIGHT, GAME_DEPTH);
+    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glutSolidCube(1);
+    glPopMatrix();
+}
+
 void keyOperations (void) 
 	{  
+       // If the 's' key has been pressed  
 	   if (keyStates['s']) 
-	   { // If the 's' key has been pressed  
-		   player.Move(0,-PLAYER_STEP); 
-           cam.translate(0,-PLAYER_STEP,0);
-		   if(player.getXLean()>=35)
-			   player.setXLean(35);
-		   else
-			   player.setXLean(player.getXLean()+3);
+	   {
+           if (player.getYPos() > 0.0)
+           {
+               player.Move(0,-PLAYER_STEP);   
+               cam.translate(0,-PLAYER_STEP,0);
+               if(player.getXLean()>=35)
+                   player.setXLean(35);
+               else
+                   player.setXLean(player.getXLean()+3);
+           }
 
-	   }  
+	   } 
+       // If the 'w' key has been pressed   
   	   if (keyStates['w']) 
-	   { // If the 'w' key has been pressed  
-		   player.Move(0,PLAYER_STEP); 
-           cam.translate(0,PLAYER_STEP,0);
-		   if(player.getXLean()<=-35)
-			   player.setXLean(-35);
-		   else
-			   player.setXLean(player.getXLean()-3);
-	   }  
+	   {
+           if (player.getYPos() < GAME_HEIGHT)
+           {
+               player.Move(0,PLAYER_STEP); 
+               cam.translate(0,PLAYER_STEP,0);
+               if(player.getXLean()<=-35)
+                   player.setXLean(-35);
+               else
+                   player.setXLean(player.getXLean()-3);
+           }  
+       }
+       // If the 'd' key has been pressed  
 	   if (keyStates['d']) 
-	   { // If the 'd' key has been pressed  
-		   player.Move(PLAYER_STEP,0); 
-           cam.translate(PLAYER_STEP,0,0);
-		    if(player.getZLean()>=55)
-			   player.setZLean(55);
-		   else
-			   player.setZLean(player.getZLean()+3);
-	   }  
+	   {
+           if (player.getXPos() < GAME_WIDTH)
+           {
+               player.Move(PLAYER_STEP,0); 
+               cam.translate(PLAYER_STEP,0,0);
+               if(player.getZLean()>=55)
+                   player.setZLean(55);
+               else
+                   player.setZLean(player.getZLean()+3);
+           }
+	   }
+       // If the 'a' key has been pressed
 	   if (keyStates['a']) 
-	   { // If the 'a' key has been pressed  
-		   player.Move(-PLAYER_STEP,0); 
-           cam.translate(-PLAYER_STEP,0,0);
-		   if(player.getZLean()<=-55)
-			   player.setZLean(-55);
-		   else
-			   player.setZLean(player.getZLean()-3);
+	   { 
+           if (player.getXPos() > 0.0)
+           {
+               player.Move(-PLAYER_STEP,0); 
+               cam.translate(-PLAYER_STEP,0,0);
+               if(player.getZLean()<=-55)
+                   player.setZLean(-55);
+               else
+                   player.setZLean(player.getZLean()-3);
+           }
 	   }  
 	   if(keyStates[27])
 	   {
@@ -328,11 +377,14 @@ void display(void)
             // Draw background and effects
             drawWorld();
 
-            // Draw player
-			player.draw();
-            
+            // Draw glass boundaries
+            drawPanels();
+
             // Draw obstacles
             obstacles.drawAll(level);
+            
+            // Draw player
+			player.draw();
             
         break;
         case GAME_OVER:
@@ -540,7 +592,7 @@ void init(void)
 	}
 
     srand( time(NULL) );
-    glClearColor(fogColor[R], fogColor[G], fogColor[B], 0.0);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
 
     glShadeModel(GL_SMOOTH);
 

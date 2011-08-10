@@ -23,13 +23,14 @@ class Obstacle
 		float spinAngle, colorGen;				// Angle of rotation, color generator
 		Obstacle* next;                         // A pointer to the next node		
 		objType objtype;						// type of 'this' object
-        bool crash;
+        bool crash;                             // Whether the object has crashed
+        int objSize;                            // Approximate object size for collision detection
 
 	public:
-		Obstacle();                             //default constructor is added
-		Obstacle(float,float,float,Obstacle*);  // Regular constructor
+		Obstacle();                                     // Default constructor is added
+		Obstacle(float,float,float,Obstacle*);          // Regular constructor
 		Obstacle(float,float,float,Obstacle*,objType);  // Regular constructor
-		//~Obstacle();                          // Destructor
+		//~Obstacle();                                  // Destructor
 
 		void setXPos(float);
 		float getXPos();
@@ -45,6 +46,9 @@ class Obstacle
 
 		void setObjType(objType); //sets type
 		objType getObjType();	//gets Type
+
+        void setObjSize(int size);
+        int getObjSize();
 
         void setCrash(bool);
         bool getCrash();
