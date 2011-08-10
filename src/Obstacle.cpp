@@ -11,6 +11,7 @@
 // default constructor added
 Obstacle::Obstacle()
 {
+    crash = false;
 	objtype = TEAPOT;
 	xAxis = rand() % 2;
 	yAxis = rand() % 2;
@@ -25,6 +26,7 @@ Obstacle::Obstacle()
 
 Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 {
+    crash = false;
 	xPos = x;
 	yPos = y;
 	zPos = z;
@@ -42,6 +44,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 
 Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 {
+    crash = false;
 	xPos = x;
 	yPos = y;
 	zPos = z;
@@ -114,6 +117,16 @@ objType Obstacle::getObjType()
 	return objtype;
 }
 
+void Obstacle::setCrash(bool state)
+{
+    crash = state;
+}
+
+bool Obstacle::getCrash()
+{
+    return crash
+}
+
 void Obstacle::draw(int level)
 {
     glPushMatrix();
@@ -121,68 +134,103 @@ void Obstacle::draw(int level)
     glTranslatef( getXPos(), getYPos(), getZPos() );
 	if (objtype==TEAPOT)
 	{
-		glRotatef(spinAngle, xAxis, yAxis, zAxis);
-		glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI), 0.5+0.5*sin(0.05*colorGen+M_PI/2), 0.5+0.5*sin(0.05*colorGen));
-		glutSolidTeapot(25);
+        if (!crash)
+        {
+		    glRotatef(spinAngle, xAxis, yAxis, zAxis);
+		    glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI),
+                      0.5+0.5*sin(0.05*colorGen+M_PI/2),
+                      0.5+0.5*sin(0.05*colorGen));
+		    glutSolidTeapot(25);
+        }
 	}
 	if (objtype==SUN)
 	{
-		GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 0.1f };
-		GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 0.1f };
-		GLfloat spec[] = { 1.0f, 1.0f, 1.0f, 10.0f };
+        if (!crash)
+        {
+		    GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 0.1f };
+		    GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 0.1f };
+		    GLfloat spec[] = { 1.0f, 1.0f, 1.0f, 10.0f };
 
-		//Sun position		
-		GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
-		glColor3f(1,1,0);
-		glEnable(GL_LIGHT1);
-		glLightfv(GL_LIGHT1, GL_POSITION, pos);
-		//glLightfv(GL_LIGHT1, GL_AMBIENT, amb); ambient looks wierd
-		glLightfv(GL_LIGHT1, GL_SPECULAR, spec);
-		glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
-		glDisable(GL_LIGHTING);
-		glutSolidSphere(10,20,20);
-		glEnable(GL_LIGHTING);
+		    //Sun position		
+		    GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
+		    glColor3f(1,1,0);
+		    glEnable(GL_LIGHT1);
+		    glLightfv(GL_LIGHT1, GL_POSITION, pos);
+	    	//glLightfv(GL_LIGHT1, GL_AMBIENT, amb); ambient looks wierd
+		    glLightfv(GL_LIGHT1, GL_SPECULAR, spec);
+		    glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
+		    glDisable(GL_LIGHTING);
+		    glutSolidSphere(10,20,20);
+		    glEnable(GL_LIGHTING);
+        }
+        else
+        {
+
+        }
 	}
 	
 	if (objtype==CUBE)
 	{
-		glColor3f(0,1,1);
-		glutWireCube(25);
+        if (!crash)
+        {
+            glColor3f(0,1,1);
+        	glutWireCube(25);
+        }
+        else
+        {
+
+        }
 	}
 	
 	if(objtype==DODEC)
 	{
-		glPushMatrix();
-		glColor3f(1,0,0);
-		glScalef(25,25,25);
-		glutSolidDodecahedron();
-		glPopMatrix();
+        if (!crash)
+        {
+		    glColor3f(1,0,0);
+		    glScalef(25,25,25);
+		    glutSolidDodecahedron();
+        }
+        else
+        {
+
+        }
 	}
 
 	if(objtype==ICOSA)
 	{
-		glPushMatrix();
-		glColor3f(0,0,1);
-		glScalef(25,25,25);
-		glutSolidIcosahedron();
-		glPopMatrix();
+        if (!crash)
+        {
+            glColor3f(0,0,1);
+        	glScalef(25,25,25);
+		    glutSolidIcosahedron();
+        }
+        else
+        {
+
+        }
 	}
 
 	if(objtype==CONE)
 	{
-		glPushMatrix();
-		glColor3f(0,1,1);
-		glScalef(10,10,10);
-		glutSolidCone(10,10,20,20);
-		glPopMatrix();
+        if (!crash)
+        {
+		    glColor3f(0,1,1);
+		    glScalef(10,10,10);
+		    glutSolidCone(10,10,20,20);
+        } else {
+        
+        }
 	}
 
 	if(objtype==TORUS)
 	{
-		glPushMatrix();
-		glColor3f(0,1,0);
-		glutSolidTorus(5,10,30,30);
-		glPopMatrix();
+        if (!crash)
+        {
+            glColor3f(0,1,0);
+            glutSolidTorus(5,10,30,30);
+        } else {
+
+        }
 	}
     glPopMatrix();
 	spinAngle += 5.0;  
@@ -200,5 +248,5 @@ bool Obstacle::collide(int xDiff, int yDiff)
 
 void Obstacle::explode()
 {
-
+    crash = true;
 }

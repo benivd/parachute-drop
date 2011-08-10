@@ -22,7 +22,8 @@ class Obstacle
 		int xAxis, yAxis, zAxis;				// Axes of rotation
 		float spinAngle, colorGen;				// Angle of rotation, color generator
 		Obstacle* next;                         // A pointer to the next node		
-		objType objtype;						// type of 'this' object	
+		objType objtype;						// type of 'this' object
+        bool crash;
 
 	public:
 		Obstacle();                             //default constructor is added
@@ -44,6 +45,9 @@ class Obstacle
 
 		void setObjType(objType); //sets type
 		objType getObjType();	//gets Type
+
+        void setCrash(bool);
+        bool getCrash();
 
 		void setSunPos(float,float,float,float);
 
