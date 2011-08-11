@@ -7,12 +7,29 @@
 
 #include "global.h"
 #include "objLoader/glm.h"
+#include "imageloader.h"
 
 //model
 GLMmodel* pmodel2;
 
+//texture
+static GLuint MaskTexId;
+
+
+void Obstacle::LoadVMask(void)
+{
+	// Load menu texture
+	Image* image = loadBMP("tex/VMaskCol.bmp");
+	glGenTextures( 1, &MaskTexId );
+	glBindTexture( GL_TEXTURE_2D, MaskTexId );
+	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+}
+
 void drawVMask(void)
 {
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture( GL_TEXTURE_2D, MaskTexId );
     if (!pmodel2) {
         pmodel2 = glmReadOBJ("obj/VMask.obj");
         if (!pmodel2) exit(0);
@@ -21,7 +38,7 @@ void drawVMask(void)
         glmVertexNormals(pmodel2, 90.0);
     }
     
-    glmDraw(pmodel2, GLM_SMOOTH | GLM_MATERIAL);
+    glmDraw(pmodel2, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE );
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 }

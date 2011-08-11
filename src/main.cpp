@@ -112,7 +112,7 @@ void setLevel2()
 }
 
 void setLevel3()
-{
+{	
     state = LEVEL;
     level = 3;
     levelCounter = LEVEL_TIME;
@@ -608,6 +608,9 @@ void init(void)
     glEnable(GL_BLEND);
     glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+	//Load Mask texture
+	Obstacle::LoadVMask();
+
     // Load menu texture
     Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
@@ -619,6 +622,7 @@ void init(void)
     glGenTextures( 1, &gameoverTexId );
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+	
 
     delete image;
 }

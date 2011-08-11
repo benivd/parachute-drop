@@ -55,6 +55,7 @@ class Obstacle
 
 		void setSunPos(float,float,float,float);
 
+		static void LoadVMask(void);
         void draw(int level);
         void move(int level);
 
