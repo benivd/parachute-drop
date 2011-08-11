@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <GL/glut.h>
+#include <iostream>
 
 #include "objLoader/glm.c"
 
@@ -17,6 +18,7 @@ Player::Player()
     setXPos( GAME_WIDTH  /2 );
     setYPos( GAME_HEIGHT /2 );
 	setZPos( -5);
+	setSpinout(false);
 	ySpin=0;
 
 }
@@ -39,24 +41,42 @@ void drawmodel(void)
 	glEnable(GL_COLOR_MATERIAL);
 }
 
+void Player::explode()
+{
+	if(health!=0)
+		setSpinout(true);
+	else
+	{
+		flash=true;
+		flashcount=10;
+	}
+}
+
 void Player::draw(bool testMode)
 {
     glPushMatrix();
 	glTranslated(xPos, yPos,zPos);
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
-	glRotatef(zLean,0,0,1);
-	if(getSpinout())
+	glRotatef(zLean,0,0,1);	
+	if(spinout)
 	{
-		ySpin=ySpin+1;
-		if(ySpin>=360)
+		setYspin(getYSpin()+25);
+		if(getYSpin()>=360)
 		{
 			ySpin=0;
 			spinout=false;
 		}
 	}
 	glRotatef(ySpin,0,1,0);
-    drawmodel();	
+	if(flash)
+	{
+		flashcount=flashcount-1;
+		if(flashcount==0)
+			flash=false;
+	}
+	if(flashcount%2==0)
+		drawmodel();	
 	if(testMode)
 		glutWireSphere(.6,10,10);
     glPopMatrix();
@@ -66,12 +86,6 @@ void Player::Move(float stepX, float stepY) {
 	xPos += stepX;
 	yPos += stepY;	
 }
-
-void Player::explode()
-{
-	setSpinout(true);
-}
-
 
 void Player::Lean() {
 	xLean=xLean*.9;

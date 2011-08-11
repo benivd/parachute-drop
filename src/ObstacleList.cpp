@@ -209,7 +209,7 @@ float ObstacleList::distance(float x, float y, float z, float x2, float y2, floa
 
 
 
-bool ObstacleList::CollidesAll(Player player)
+bool ObstacleList::CollidesAll(Player* player)
 {
     if (isEmpty()) return false;
 	if (first!=0)			//Verify first if the link list is not empty
@@ -218,16 +218,16 @@ bool ObstacleList::CollidesAll(Player player)
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
 			if( (!first->getCrash()) &&
-                distance(player.getXPos(),
-                         player.getYPos(),
-                         player.getZPos(),
+                distance(player->getXPos(),
+                         player->getYPos(),
+                         player->getZPos(),
                          first->getXPos(),
                          first->getYPos(),
                          first->getZPos()) <
-                player.getRad() + first->getObjRad() )
+                player->getRad() + first->getObjRad() )
             {
 				first->explode();
-				player.explode();
+				player->explode();
 				return true;
 			}
 		}
@@ -237,17 +237,17 @@ bool ObstacleList::CollidesAll(Player player)
 
 			 do{
 				 if( (!temp->getCrash()) &&
-                     distance(player.getXPos(),
-                              player.getYPos(),
-                              player.getZPos(),
+                     distance(player->getXPos(),
+                              player->getYPos(),
+                              player->getZPos(),
                               temp->getXPos(),
                               temp->getYPos(),
                               temp->getZPos()) <
-                     player.getRad() + temp->getObjRad() )
+                     player->getRad() + temp->getObjRad() )
 					{
 						//obstacle reacts
 						temp->explode();
-						player.explode();
+						player->explode();
 						return true;
 					}
        				temp = temp->getNext();
@@ -256,17 +256,17 @@ bool ObstacleList::CollidesAll(Player player)
 
 				//last obj
 				if( (!last->getCrash()) &&
-                    distance(player.getXPos(),
-                             player.getYPos(),
-                             player.getZPos(),
+                    distance(player->getXPos(),
+                             player->getYPos(),
+                             player->getZPos(),
                              last->getXPos(),
                              last->getYPos(),
                              last->getZPos()) <
-                    player.getRad()+last->getObjRad())
+                    player->getRad()+last->getObjRad())
 				{
 					//obstacle reacts
 					last->explode();
-					player.explode();
+					player->explode();
 					return true;
 				}
 		}

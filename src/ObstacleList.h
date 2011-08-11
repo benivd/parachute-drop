@@ -47,7 +47,7 @@ class ObstacleList
 
 		float distance(float,float,float,float,float,float);
 
-		bool CollidesAll(Player player);
+		bool CollidesAll(Player* player);
 		
         // Remove the first element in this LList
         void remove();

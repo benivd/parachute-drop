@@ -340,6 +340,11 @@ void keyOperations (void)
            }
 
 	   } 
+       // If the 's' key has been pressed  
+	   if (keyStates['r']) 
+	   {
+		   player.setYspin(player.getYSpin()+5);
+	   }
        // If the 'w' key has been pressed   
   	   if (keyStates['w']) 
 	   {
@@ -544,7 +549,7 @@ void moveTimer(int value)
         obstacles.moveAll(level);
 
         // Test for collision
-		if(obstacles.CollidesAll(player))
+		if(obstacles.CollidesAll(&player))
         {
             player.addPoints(P_HIT);
 

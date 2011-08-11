@@ -28,7 +28,9 @@ class Player
 
 		float rad;
 
-
+		int flashcount;
+		bool flash;
+		bool spinout;
 		int spintime;
 		float ySpin;
 
@@ -36,7 +38,6 @@ class Player
         Player();
         // ~Player(); // Using default
 
-		bool spinout;
         void setLives(int lives)   { this->lives   = lives; }
         void setHealth(int health) { this->health  = health; }
         void setPoints(int points) { this->points  = points; }
@@ -47,7 +48,8 @@ class Player
 		void setXLean(float xLean) { this->xLean   = xLean; }
 		void setZLean(float zLean) { this->zLean   = zLean; }
 		void setRad(float rad)	   {this->rad		= rad; }
-		void setSpinout(bool spinout) {this->spinout = spinout; }
+		void setSpinout(bool spinout2) {this->spinout = spinout2; }
+		void setYspin(float spin)	{this->ySpin = spin; }
 		void setSpinTime(int spintime) {this->spintime = spintime; }
 
         int getLives()  { return this->lives; }
@@ -61,6 +63,7 @@ class Player
 		float getRad()	{return this->rad;	}
 		bool getSpinout() {return this->spinout; }
 		int getSpinTime() {return this->spintime; }
+		float getYSpin() {return this->ySpin; }
 
 
 		void explode();

@@ -321,7 +321,6 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            //glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,0,1);
         	glScalef(25,25,25);
 		    glutSolidIcosahedron();
@@ -339,7 +338,6 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            //glTranslatef(0.0, 0.0, -objSize);
 		    glColor3f(0,1,1);
 		    glScalef(10,10,10);
 		    glutSolidCone(1,1,20,20);
