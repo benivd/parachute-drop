@@ -30,24 +30,25 @@
 
 #include "imageloader.h"  // BMP loader for textures
 
- bool testMode = false;
+bool testMode = false;
 
 int width  = WIDTH;       // Current window width
 int height = HEIGHT;      // Current window height
 
+// Game info
 enum gameState { MENU, LEVEL, GAME_OVER };
 gameState state = MENU;
 
 int level = 0;
-
 int levelCounter = LEVEL_TIME;
 
-float bgSize = 0.0;
-
+// Obstacles
 GLfloat position[] = {0,0,0,0};
+        
+// World
+int starPos[NUM_STARS][2];
 
 // Fog
-GLfloat fogColor[3] = { 0.0, 0.0, 0.0 };
 float fogStart = 0.0;
 float fogEnd   = 0.0;
 
@@ -55,9 +56,7 @@ float fogEnd   = 0.0;
 int speedMove   = 100;
 int speedCreate = 1000;
 
-// Mouse
-int sensitivity = 10;
-
+// Rotation
 float xRot = 0.0;
 float yRot = 0.0;
 float xPrev = width/2;
@@ -92,7 +91,7 @@ void setLevel1()
 
     // Clear level
     obstacles.removeAll();
-    glDisable(GL_LIGHT1);
+   // glDisable(GL_LIGHT1);
 }
 
 // Game values for Level 2
@@ -110,7 +109,7 @@ void setLevel2()
     
     // Clear level
     obstacles.removeAll();
-    glDisable(GL_LIGHT1);
+   // glDisable(GL_LIGHT1);
 }
 
 void setLevel3()
@@ -127,7 +126,7 @@ void setLevel3()
     
     // Clear level
     obstacles.removeAll();
-    glDisable(GL_LIGHT1);
+   // glDisable(GL_LIGHT1);
 }
 
 // Print a single char array
@@ -138,7 +137,7 @@ void printString(char* s)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 }
 
-// Draw text for menu and game over screen
+// Draw text for title screen
 void drawMenu()
 {
     glDisable(GL_FOG);
@@ -161,7 +160,7 @@ void drawMenu()
     glDisable(GL_TEXTURE_2D);
 }
 
-// Draw text for menu and game over screen
+// Draw text for game over screen
 void drawGameOver()
 {
     glDisable(GL_FOG);
@@ -172,7 +171,6 @@ void drawGameOver()
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
 
     // Points
     glColor3f(1.0, 1.0, 1.0);
@@ -193,7 +191,31 @@ void drawGameOver()
     glDisable(GL_TEXTURE_2D);
 }
 
-// Draw Background to cover field of view at GAME_DEPTH Print Statistics in Orthogonal view
+void drawStars()
+{
+    // Stars
+    for (int i = 0; i < NUM_STARS; i++)
+    {
+        glPushMatrix();
+        glTranslatef( starPos[i][0], starPos[i][1], GAME_DEPTH );
+        glBegin(GL_QUADS);
+        glVertex2f( -0.5, -0.5);
+        glVertex2f( +0.5, -0.5);
+        glVertex2f( +0.5, +0.5);
+        glVertex2f( -0.5, +0.5);
+        glEnd();
+        glPopMatrix();
+    }
+    
+    // Sun (at GAME_DEPTH, above the glass panels)
+    glPushMatrix();
+    glColor3f(0.7, 0.5, 0.0);
+    glTranslatef( 0.0, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
+    glutSolidSphere(SUN_SIZE, SUN_SIZE, SUN_SIZE);
+    glPopMatrix();
+}
+
+// Print game statistics and enable fog & light0
 void drawWorld()
 {
     glPushMatrix();
@@ -219,20 +241,20 @@ void drawWorld()
     sprintf(buffer, "Lives: %i", player.getLives());
     printString(buffer);
 
-	
-    sprintf(buffer, "Health: %i", player.getHealth());
+    sprintf(buffer, "    Health: %i", player.getHealth());
     printString(buffer);
 
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
 
-    // Sun
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
-
     glMatrixMode(GL_MODELVIEW);
-    
+
+    glPopMatrix();
+
+    drawStars();
 
     // Light
     glEnable(GL_LIGHTING);
@@ -246,13 +268,12 @@ void drawWorld()
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
     
     // Fog
+    GLfloat fogColor[3] = { 0.0, 0.0, 0.0 };
     glEnable(GL_FOG);
     glFogfv( GL_FOG_COLOR, fogColor);
     glFogi( GL_FOG_MODE, GL_LINEAR);
     glFogi( GL_FOG_START, fogStart);
     glFogi( GL_FOG_END, fogEnd);
-
-    glPopMatrix();
 }
 
 void drawPanels()
@@ -269,39 +290,41 @@ void drawPanels()
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     */
 
+    int tunnelSize = ( -GAME_DEPTH )*2;
+
     // Top Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + PLAYER_SIZE/2 + 0.5, GAME_DEPTH/2 + 50);
-    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + PLAYER_SIZE/2 + 0.5, -tunnelSize/2 + 50);
+    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Bottom Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, -(PLAYER_SIZE/2 + 0.5), GAME_DEPTH/2 + 50);
-    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH/2, -(PLAYER_SIZE/2 + 0.5), -tunnelSize/2 + 50);
+    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Left Panel:
     glPushMatrix();
-    glTranslatef(-(PLAYER_SIZE/2 + 0.5), GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, GAME_DEPTH);
+    glTranslatef(-(PLAYER_SIZE/2 + 0.5), GAME_HEIGHT/2, -tunnelSize/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Top panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH + PLAYER_SIZE/2 + 0.5, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH + PLAYER_SIZE/2 + 0.5, GAME_HEIGHT/2, -tunnelSize/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 }
-
+    
 void keyOperations (void) 
 	{  
        // If the 's' key has been pressed  
@@ -379,6 +402,7 @@ void display(void)
 {
 	keyOperations(); 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0,0,0,0);
     glPushMatrix();
 
     switch (state)
@@ -397,22 +421,24 @@ void display(void)
             
             // Rotate view based on mouse input around player
             glTranslatef(player.getXPos(), player.getYPos(), cam.dz+5.0);
-            glRotatef(xRot*sensitivity, 1.0, 0.0, 0.0);
-            glRotatef(yRot*sensitivity, 0.0, 1.0, 0.0);
+            glRotatef(xRot*SENSITIVITY, 1.0, 0.0, 0.0);
+            glRotatef(yRot*SENSITIVITY, 0.0, 1.0, 0.0);
             glTranslatef(-player.getXPos(), -player.getYPos(), -(cam.dz+5.0));
 
             // Draw background and effects
             drawWorld();
 
+            // Draw sun and stars
+            //drawStars();
+
             // Draw glass boundaries
             drawPanels();
-
+            
             // Draw obstacles
             obstacles.drawAll(level, testMode);
             
             // Draw player
-			player.draw(testMode);
-
+            player.draw(testMode);
 
 			glEnd();
 			
@@ -500,7 +526,7 @@ void click(int button, int stat, int x, int y)
     // Wheel down - Zoom in
     if (button == 4)
     {
-        if (cam.cz >  0) cam.translate(0.0, 0.0,-1.0);
+        if (cam.cz > -6) cam.translate(0.0, 0.0,-1.0);
 
     } // Wheel up - Zoom out
     else if (button == 3)
@@ -608,11 +634,6 @@ void createTimer(int value)
 // OpenGL Initialisation
 void init(void)
 {
-	for(int key =0; key!=256; key++){
-		keyStates[key] = false; // Set the state of the current key to not pressed  
-	}
-
-    srand( time(NULL) );
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
     glShadeModel(GL_SMOOTH);
@@ -638,20 +659,35 @@ void init(void)
     Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
     glBindTexture( GL_TEXTURE_2D, menuTexId );
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
     
     // Load game over texture
     image = loadBMP("tex/gameover.bmp");
     glGenTextures( 1, &gameoverTexId );
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
-    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-	
-
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
     delete image;
 }
 
 int main(int argc, char** argv)
 {
+    srand( time(NULL) );
+
+    // Initialise global variables
+	for(int key =0; key!=256; key++){
+		keyStates[key] = false; // Set the state of the current key to not pressed  
+	}
+    
+    for (int i = 0; i < NUM_STARS; i++)
+    {
+        starPos[i][0] = rand() % (STAR_SPREAD*GAME_WIDTH)  -
+                                 (STAR_SPREAD*GAME_WIDTH/2 + GAME_WIDTH/2);
+        starPos[i][1] = rand() % (STAR_SPREAD*GAME_HEIGHT) -
+                                 (STAR_SPREAD*GAME_HEIGHT/2+ GAME_HEIGHT/2);
+    }
+    
     // GLUT initialisation and callbacks
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

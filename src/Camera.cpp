@@ -14,7 +14,7 @@ Camera::Camera(void) {
 	rx = 1.0, ry = 0.0, rz = 0.0;
 	camYaw = 0.0, camPitch = 0.0, camRoll = 0.0;
 
-    fov = FOV; zNear = 0.1; zFar = -GAME_DEPTH;
+    fov = FOV; zNear = 0.1; zFar = -(GAME_DEPTH)+50;
 
 }
 

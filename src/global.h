@@ -35,6 +35,11 @@
 
 #define FOV             25
 
+// Sky
+#define SUN_SIZE        40
+#define NUM_STARS       200
+#define STAR_SPREAD     5
+
 // Obstacles
 #define MOVE_BY         5
 #define FOGEND_L1       1.0
@@ -50,6 +55,7 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of pos
 #define PLAYER_SIZE     5
 #define PLAYER_STEP     2.5
 #define LEAN_DECELL		5
+#define SENSITIVITY     20
 
 // Points
 #define P_HIT          -100
