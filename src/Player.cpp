@@ -46,16 +46,6 @@ void Player::draw(bool testMode)
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
 	glRotatef(zLean,0,0,1);
-	glRotatef(ySpin,0,1,0);
-    drawmodel();	
-	if(testMode)
-		glutWireSphere(.6,10,10);
-    glPopMatrix();
-}
-
-void Player::Move(float stepX, float stepY) {
-	xPos += stepX;
-	yPos += stepY;
 	if(getSpinout())
 	{
 		ySpin=ySpin+1;
@@ -65,12 +55,21 @@ void Player::Move(float stepX, float stepY) {
 			spinout=false;
 		}
 	}
+	glRotatef(ySpin,0,1,0);
+    drawmodel();	
+	if(testMode)
+		glutWireSphere(.6,10,10);
+    glPopMatrix();
+}
+
+void Player::Move(float stepX, float stepY) {
+	xPos += stepX;
+	yPos += stepY;	
 }
 
 void Player::explode()
 {
 	setSpinout(true);
-	spintime=36;
 }
 
 

@@ -228,36 +228,41 @@ void Obstacle::draw(int level, bool testMode)
 	if (objtype==SUN)
 	{
         if (!crash)
-        {
-		    GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-		    GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-		    GLfloat spec[] = { 1.0f, 1.0f, 1.0f, 10.0f };		
-						
+        {						
 		    //Sun position		
 		    GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};		
 			glColor3f(1,1,0);
             // glTranslatef(0.0, 0.0, -objSize);
 			if (sunNum=1)
 			{			  				
+				  GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 10.0f };
+				  GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+				  GLfloat spec[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 				glEnable(GL_LIGHT1);
 				glLightfv(GL_LIGHT1, GL_POSITION, pos);
-	    		//glLightfv(GL_LIGHT1, GL_AMBIENT, amb); ambient looks wierd
+	    		glLightfv(GL_LIGHT1, GL_AMBIENT, amb);
 				glLightfv(GL_LIGHT1, GL_SPECULAR, spec);
 				glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
 			}
 			if (sunNum=2)
-			{			  				
+			{			  			
+				  GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 10.0f };
+				  GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+				  GLfloat spec[] = { 0.0f, 1.0f, 0.0f, 1.0f };
 				glEnable(GL_LIGHT2);
 				glLightfv(GL_LIGHT2, GL_POSITION, pos);
-	    		//glLightfv(GL_LIGHT2, GL_AMBIENT, amb); ambient looks wierd
+	    		//glLightfv(GL_LIGHT2, GL_AMBIENT, amb); 
 				glLightfv(GL_LIGHT2, GL_SPECULAR, spec);
 				glLightfv(GL_LIGHT2, GL_DIFFUSE, dif);
 			}
 			if (sunNum=3)
-			{			  				
+			{		
+				  GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 10.0f };
+				  GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+				  GLfloat spec[] = { 0.0f, 0.0f, 1.0f, 1.0f };
 				glEnable(GL_LIGHT3);
 				glLightfv(GL_LIGHT3, GL_POSITION, pos);
-	    		//glLightfv(GL_LIGHT3, GL_AMBIENT, amb); ambient looks wierd
+	    		//glLightfv(GL_LIGHT3, GL_AMBIENT, amb);
 				glLightfv(GL_LIGHT3, GL_SPECULAR, spec);
 				glLightfv(GL_LIGHT3, GL_DIFFUSE, dif);
 			}

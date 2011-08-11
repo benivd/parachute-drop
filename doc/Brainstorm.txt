@@ -4,11 +4,12 @@ Function ~~~ Model
 (glow)		Donut
 (Lighting)	Sun
 (Reflection)	Mirror
-(Textures)	Cube
+(Textures)	Cube (dice)
 (Translation)
-(Rotation)
+(Rotation)	teapot
+(color)		teapot
 (Skew)
-(Scale)
+(Scale)	
 
 
 Features:
@@ -19,3 +20,5 @@ Keyboard Movement control
 Mouse cameraview control
 Pickup bonuses
 Death collision with posible animations
+respawn=flickering duck
+smoke on hit

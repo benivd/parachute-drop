@@ -7,6 +7,7 @@
 #include <cmath>
 #include <stdio.h>
 #include <stdlib.h>
+#include <GL/glut.h>
 
 // Default constructor
 ObstacleList::ObstacleList() 
@@ -137,11 +138,20 @@ void ObstacleList::remove()
 	{
 		int sunNumb = first->getSunNum();
 		if(sunNumb==1)
+		{
 			sun1=false;
+			glDisable(GL_LIGHT1);
+		}
 		if(sunNumb==2)
+		{
 			sun2=false;
+			glDisable(GL_LIGHT2);
+		}
 		if(sunNumb==3)
+		{
 			sun3=false;
+			glDisable(GL_LIGHT3);
+		}
 		first = 0;
 		last = 0;
         current = 0;
@@ -298,9 +308,12 @@ void ObstacleList::drawAll(int level, bool testMode)
 
 void ObstacleList::removeAll()
 {
-	sun1=false;
+	sun1=false;	
 	sun2=false;
 	sun3=false;
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHT2);
+	glDisable(GL_LIGHT3);
     first = 0;
     current = 0;
     last = 0;
