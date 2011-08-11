@@ -226,14 +226,13 @@ void drawWorld()
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
 
-    // Background    
+    // Sun
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
 
     glMatrixMode(GL_MODELVIEW);
-    bgSize = ( GAME_DEPTH / cos(cam.fov/2) )*2;
-    glColor3f(0.0, 0.0, 0.0);
+    
 
     // Light
     glEnable(GL_LIGHTING);
@@ -517,39 +516,41 @@ void moveTimer(int value)
     if (state == LEVEL && !obstacles.isEmpty())
     {
         // Move Obstacles
-        obstacles.moveAll(level);        
+        obstacles.moveAll(level);
+
+        // Test for collision
 		if(obstacles.CollidesAll(player))
-		{            
-			player.addPoints(P_HIT);
-			
+        {
+            player.addPoints(P_HIT);
+
             // Lose health
             if (player.getHealth() > 0)
             {
-				// health -1
+                // health -1
                 player.setHealth(player.getHealth()-1);
             }
             // Lose life
-            else 
-			{
+            else
+            {
                 // reset health
                 player.setHealth(3);
 
                 // Lose life
                 if (player.getLives() > 0)
                 {
-					// Lives -1; reset current level
-				    player.setLives(player.getLives()-1);
+                    // Lives -1; reset current level
+                    player.setLives(player.getLives()-1);
                     switch (level)
                     {
-					    case 1:
-					      setLevel1();
-                          break;
+                        case 1:
+                            setLevel1();
+                        break;
                         case 2:
-                          setLevel2();
-                          break;
+                            setLevel2();
+                        break;
                         case 3:
-                          setLevel3();
-                          break;
+                            setLevel3();
+                        break;
                     }
                 }
                 // Game over
@@ -557,13 +558,9 @@ void moveTimer(int value)
 				{
 					state = GAME_OVER;
                 }
-             }
-                
-         } // Obstacle avoided
-         else 
-		 {
-             player.addPoints(P_AVOID);
-         }
+            }
+        }
+        player.addPoints(P_AVOID);
 
 		// First obstacle out of sight ?
 		if (state == LEVEL && !obstacles.isEmpty() && obstacles.getFirst()->getZPos() > 50)
@@ -571,8 +568,8 @@ void moveTimer(int value)
 			obstacles.remove();
 		}
 
-     glutPostRedisplay();
-	}
+        glutPostRedisplay();
+    }
 
     // Update level counter, and change level
     if (state == LEVEL)
