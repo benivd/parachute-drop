@@ -291,7 +291,7 @@ void ObstacleList::drawAll(int level, bool testMode)
 		{
 			Obstacle * temp = first;
 
-			do{
+			do{			
             temp->draw(level,testMode);
 
 			temp = temp->getNext();

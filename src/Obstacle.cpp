@@ -57,6 +57,7 @@ Obstacle::Obstacle()
 	spinAngle = 0.0;
 	colorGen = rand() % 360;
 	sunNum= 0;
+	objScaler=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -80,6 +81,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	next = nextnode;
 	objtype = TEAPOT;
 	sunNum= 0;
+	objScaler=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -102,6 +104,7 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	next = nextnode;
 	objtype = objT;
 	sunNum= 0;
+	objScaler=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -204,6 +207,11 @@ int Obstacle::getSunNum()
 	return sunNum;
 }
 
+void Obstacle::setLevel(int level)
+{
+	level= level;
+}
+
 void Obstacle::draw(int level, bool testMode)
 {
     glPushMatrix();
@@ -283,7 +291,12 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            //glTranslatef(0.0, 0.0, -objSize);
+			glRotatef(45,1,1,0);
+			objScaler+=.1;
+			float scale=sin(objScaler);
+			glRotatef(abs(scale)*180,1,1,0);
+			setXPos(getXPos()+(scale));
+			setYPos(getYPos()+scale);
             glColor3f(0,1,1);
         	glutWireCube(25);
 			setObjRad(15.0);
@@ -338,10 +351,12 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
+			objScaler+=.01;
+			float scale=abs(cos(objScaler));
 		    glColor3f(0,1,1);
-		    glScalef(10,10,10);
+		    glScalef(scale*10,scale*10,10);
 		    glutSolidCone(1,1,20,20);
-			setObjRad(10.0);
+			setObjRad(scale*10.0);
 			if(testMode)
 				glutWireSphere(1,10,10);
         }
@@ -355,7 +370,9 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            //glTranslatef(0.0, 0.0, -objSize);
+			objScaler+=.1;
+			float scale=sin(objScaler);
+			setXPos(getXPos()+scale);
             glColor3f(0,1,0);
             glutSolidTorus(5,10,30,30);
 			setObjRad(15.0);

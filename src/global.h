@@ -45,9 +45,9 @@
 #define FOGEND_L1       1.0
 #define FOGEND_L2       0.85
 #define FOGEND_L3       0.70
-#define SPAWN_L1        2000
-#define SPAWN_L2        1000
-#define SPAWN_L3        400
+#define SPAWN_L1        1000
+#define SPAWN_L2        500
+#define SPAWN_L3        200
 
 enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of possible objects
 

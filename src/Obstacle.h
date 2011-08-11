@@ -26,6 +26,9 @@ class Obstacle
         bool crash;                             // Whether the object has crashed
         int objSize;                            // Approximate object size for collision detection
 		float objRad;
+		float objScaler;
+
+		int level;
 
 		int sunNum;
 
@@ -61,6 +64,8 @@ class Obstacle
 
         void setCrash(bool);
         bool getCrash();
+
+		void setLevel(int);
 
 		void setSunPos(float,float,float,float);
 
