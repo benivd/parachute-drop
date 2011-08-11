@@ -56,6 +56,7 @@ Obstacle::Obstacle()
 		zAxis = rand() % 2;
 	spinAngle = 0.0;
 	colorGen = rand() % 360;
+	sunNum= 0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -78,6 +79,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = TEAPOT;
+	sunNum= 0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -99,6 +101,7 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	colorGen = rand() % 360;
 	next = nextnode;
 	objtype = objT;
+	sunNum= 0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -191,6 +194,16 @@ float Obstacle::getObjRad()
 	return objRad;
 }
 
+void Obstacle::setSunNum(int sun)
+{
+	sunNum=sun;
+}
+
+int Obstacle::getSunNum()
+{
+	return sunNum;
+}
+
 void Obstacle::draw(int level, bool testMode)
 {
     glPushMatrix();
@@ -200,7 +213,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+           // glTranslatef(0.0, 0.0, -objSize);
 		    glRotatef(spinAngle, xAxis, yAxis, zAxis);
 		    glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI),
                       0.5+0.5*sin(0.05*colorGen+M_PI/2),
@@ -216,26 +229,44 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-		    GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 0.1f };
-		    GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 0.1f };
-		    GLfloat spec[] = { 1.0f, 1.0f, 1.0f, 10.0f };
-
+		    GLfloat amb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+		    GLfloat dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+		    GLfloat spec[] = { 1.0f, 1.0f, 1.0f, 10.0f };		
+						
 		    //Sun position		
-		    GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};
-            
-            glTranslatef(0.0, 0.0, -objSize);
-		    glColor3f(1,1,0);
-		    glEnable(GL_LIGHT1);
-		    glLightfv(GL_LIGHT1, GL_POSITION, pos);
-	    	//glLightfv(GL_LIGHT1, GL_AMBIENT, amb); ambient looks wierd
-		    glLightfv(GL_LIGHT1, GL_SPECULAR, spec);
-		    glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
-		    glDisable(GL_LIGHTING);
-		    glutSolidSphere(10,20,20);
-		    glEnable(GL_LIGHTING);
-			setObjRad(10.0);
-			if(testMode)
-				glutWireSphere(10,10,10);
+		    GLfloat pos[] = {getXPos(),getYPos(), getZPos(), 1.0f};		
+			glColor3f(1,1,0);
+            // glTranslatef(0.0, 0.0, -objSize);
+			if (sunNum=1)
+			{			  				
+				glEnable(GL_LIGHT1);
+				glLightfv(GL_LIGHT1, GL_POSITION, pos);
+	    		//glLightfv(GL_LIGHT1, GL_AMBIENT, amb); ambient looks wierd
+				glLightfv(GL_LIGHT1, GL_SPECULAR, spec);
+				glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
+			}
+			if (sunNum=2)
+			{			  				
+				glEnable(GL_LIGHT2);
+				glLightfv(GL_LIGHT2, GL_POSITION, pos);
+	    		//glLightfv(GL_LIGHT2, GL_AMBIENT, amb); ambient looks wierd
+				glLightfv(GL_LIGHT2, GL_SPECULAR, spec);
+				glLightfv(GL_LIGHT2, GL_DIFFUSE, dif);
+			}
+			if (sunNum=3)
+			{			  				
+				glEnable(GL_LIGHT3);
+				glLightfv(GL_LIGHT3, GL_POSITION, pos);
+	    		//glLightfv(GL_LIGHT3, GL_AMBIENT, amb); ambient looks wierd
+				glLightfv(GL_LIGHT3, GL_SPECULAR, spec);
+				glLightfv(GL_LIGHT3, GL_DIFFUSE, dif);
+			}
+				glDisable(GL_LIGHTING);
+				glutSolidSphere(10,20,20);
+				glEnable(GL_LIGHTING);
+				setObjRad(10.0);
+				if(testMode)
+					glutWireSphere(10,10,10);
         }
         else
         {
@@ -247,7 +278,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+            //glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,1);
         	glutWireCube(25);
 			setObjRad(15.0);
@@ -264,7 +295,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+            //glTranslatef(0.0, 0.0, -objSize);
 			glPushMatrix();
 		    glColor4f(1,0,0,.1);
 		    glScalef(25,25,25);
@@ -285,7 +316,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+            //glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,0,1);
         	glScalef(25,25,25);
 		    glutSolidIcosahedron();
@@ -303,7 +334,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+            //glTranslatef(0.0, 0.0, -objSize);
 		    glColor3f(0,1,1);
 		    glScalef(10,10,10);
 		    glutSolidCone(1,1,20,20);
@@ -321,7 +352,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-            glTranslatef(0.0, 0.0, -objSize);
+            //glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,0);
             glutSolidTorus(5,10,30,30);
 			setObjRad(15.0);

@@ -17,6 +17,7 @@ Player::Player()
     setXPos( GAME_WIDTH  /2 );
     setYPos( GAME_HEIGHT /2 );
 	setZPos( -5);
+	ySpin=0;
 
 }
 
@@ -45,6 +46,7 @@ void Player::draw(bool testMode)
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
 	glRotatef(zLean,0,0,1);
+	glRotatef(ySpin,0,1,0);
     drawmodel();	
 	if(testMode)
 		glutWireSphere(.6,10,10);
@@ -54,7 +56,23 @@ void Player::draw(bool testMode)
 void Player::Move(float stepX, float stepY) {
 	xPos += stepX;
 	yPos += stepY;
+	if(getSpinout())
+	{
+		ySpin=ySpin+1;
+		if(ySpin>=360)
+		{
+			ySpin=0;
+			spinout=false;
+		}
+	}
 }
+
+void Player::explode()
+{
+	setSpinout(true);
+	spintime=36;
+}
+
 
 void Player::Lean() {
 	xLean=xLean*.9;

@@ -1050,7 +1050,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
         facet normal of every triangle this vertex is in */
         node = members[i];
         if (!node)
-            //fprintf(stderr, "glmVertexNormals(): vertex w/o a triangle\n");
+            fprintf(stderr, "glmVertexNormals(): vertex w/o a triangle\n");
         average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
         avg = 0;
         while (node) {

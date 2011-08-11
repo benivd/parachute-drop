@@ -258,11 +258,11 @@ void drawWorld()
 
     // Light
     glEnable(GL_LIGHTING);
-    GLfloat ambientLight[] = { 0.2, 0.2, 0.2, 1 };
+    GLfloat ambientLight[] = { 0.1, 0.1, 0.1, 1 };
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambientLight );
 
     glEnable(GL_LIGHT0);
-    GLfloat lightColor0[] = { .5, 0.2, 0.2 };
+    GLfloat lightColor0[] = { .2, 0.1, 0.1 };
     GLfloat lightPos0[] = { -0.5, 1, 0.25, 0.0 };
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );

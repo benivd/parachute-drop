@@ -27,11 +27,16 @@ class Obstacle
         int objSize;                            // Approximate object size for collision detection
 		float objRad;
 
+		int sunNum;
+
 	public:
 		Obstacle();                                     // Default constructor is added
 		Obstacle(float,float,float,Obstacle*);          // Regular constructor
 		Obstacle(float,float,float,Obstacle*,objType);  // Regular constructor
 		//~Obstacle();                                  // Destructor
+
+		void setSunNum(int);
+		int getSunNum();
 
 		void setXPos(float);
 		float getXPos();

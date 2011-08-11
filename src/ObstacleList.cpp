@@ -67,14 +67,39 @@ int ObstacleList::size()
 
 }
 
+int ObstacleList::getSunNumb()
+{
+	if(sun1==false){
+		sun1=true;
+		return 1;
+	}
+	else if(sun2==false){
+		sun2=true;
+		return 2;
+	}
+	else if(sun3==false)
+	{
+		sun3=true;
+		return 3;
+	}
+	else 
+		return 0;
+}
+
 // Insert an element at the end of the ObstacleList 
 void ObstacleList::insert(float xPos, float yPos, float zPos)
 {
+	int sunsauce;
 	int randObj = rand() % 7;	
 	Obstacle* MyNode = new Obstacle(xPos, yPos, zPos, NULL);
 	if (randObj==0)
 	{
-		MyNode->setObjType(SUN);
+		sunsauce = getSunNumb();
+		if (sunsauce!=0)
+		{
+			MyNode->setSunNum(sunsauce);
+			MyNode->setObjType(SUN);
+		}
 	}
 	if (randObj==1)
 		MyNode->setObjType(CUBE);
@@ -110,6 +135,13 @@ void ObstacleList::remove()
     }
     else if (first == last)
 	{
+		int sunNumb = first->getSunNum();
+		if(sunNumb==1)
+			sun1=false;
+		if(sunNumb==2)
+			sun2=false;
+		if(sunNumb==3)
+			sun3=false;
 		first = 0;
 		last = 0;
         current = 0;
@@ -118,6 +150,13 @@ void ObstacleList::remove()
 	{
 		//if (current == first) 
 		//current = first->getNext();
+		int sunNumb = first->getSunNum();
+		if(sunNumb==1)
+			sun1=false;
+		if(sunNumb==2)
+			sun2=false;
+		if(sunNumb==3)
+			sun3=false;
         first = first->getNext();
     }
 }
@@ -178,6 +217,7 @@ bool ObstacleList::CollidesAll(Player player)
                 player.getRad() + first->getObjRad() )
             {
 				first->explode();
+				player.explode();
 				return true;
 			}
 		}
@@ -197,6 +237,7 @@ bool ObstacleList::CollidesAll(Player player)
 					{
 						//obstacle reacts
 						temp->explode();
+						player.explode();
 						return true;
 					}
        				temp = temp->getNext();
@@ -215,6 +256,7 @@ bool ObstacleList::CollidesAll(Player player)
 				{
 					//obstacle reacts
 					last->explode();
+					player.explode();
 					return true;
 				}
 		}
@@ -240,7 +282,8 @@ void ObstacleList::drawAll(int level, bool testMode)
 			Obstacle * temp = first;
 
 			do{
-                temp->draw(level,testMode);
+            temp->draw(level,testMode);
+
 			temp = temp->getNext();
 
 			}while(temp!= last);
@@ -255,6 +298,9 @@ void ObstacleList::drawAll(int level, bool testMode)
 
 void ObstacleList::removeAll()
 {
+	sun1=false;
+	sun2=false;
+	sun3=false;
     first = 0;
     current = 0;
     last = 0;

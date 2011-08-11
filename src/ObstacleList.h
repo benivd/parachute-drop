@@ -22,6 +22,10 @@ class ObstacleList
 		Obstacle* last;
         Obstacle* current;
 
+		bool sun1;
+		bool sun2;
+		bool sun3;
+
 	public:
 		ObstacleList();       //Default constructor
 		//~ObstacleList();
@@ -29,6 +33,8 @@ class ObstacleList
         Obstacle* getFirst();
         Obstacle* getCurrent();
         void setCurrent(Obstacle* obstacle);
+
+		int getSunNumb();
 		
         // Returns true if this list contains no elements.
 		bool isEmpty();
