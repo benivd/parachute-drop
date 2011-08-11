@@ -40,12 +40,15 @@
 #define FOGEND_L1       1.0
 #define FOGEND_L2       0.85
 #define FOGEND_L3       0.70
+#define SPAWN_L1        1000
+#define SPAWN_L2        500
+#define SPAWN_L3        200
 
 enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of possible objects
 
 // Player
 #define PLAYER_SIZE     5
-#define PLAYER_STEP     3
+#define PLAYER_STEP     2.5
 #define LEAN_DECELL		5
 
 // Points

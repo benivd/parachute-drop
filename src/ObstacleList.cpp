@@ -183,6 +183,7 @@ void ObstacleList::drawAll(int level)
 
 void ObstacleList::removeAll()
 {
-    for (int i = 0; i < size(); i++)
-        remove();
+    first = 0;
+    current = 0;
+    last = 0;
 }

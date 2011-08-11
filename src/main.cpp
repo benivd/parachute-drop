@@ -86,7 +86,7 @@ void setLevel1()
     fogStart = -(GAME_DEPTH) * FOGEND_L1*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L1;
 
-    speedCreate = 3000;
+    speedCreate = SPAWN_L1;
 
     // Clear level
     obstacles.removeAll();
@@ -104,7 +104,7 @@ void setLevel2()
     fogStart = -(GAME_DEPTH) * FOGEND_L2*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L2;
 
-    speedCreate = 2000;
+    speedCreate = SPAWN_L2;
     
     // Clear level
     obstacles.removeAll();
@@ -121,7 +121,7 @@ void setLevel3()
     fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
-    speedCreate = 1000;
+    speedCreate = SPAWN_L3;
     
     // Clear level
     obstacles.removeAll();
@@ -252,34 +252,46 @@ void drawWorld()
 
 void drawPanels()
 {
+    /*
+    GLfloat ambient[] = {0.22, 0.33, 0.44, 0.5};
+    GLfloat diffuse[] = {0.11, 0.55, 0.77, 0.5};
+    GLfloat specular[] = {0.90, 0.95, 1.00, 1.0};
+    GLfloat shininess = 30;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+    */
+
     // Top Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + 1, GAME_DEPTH/2 + 50);
-    glScalef(GAME_WIDTH, 1.0, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + PLAYER_SIZE/2 + 0.5, GAME_DEPTH/2 + 50);
+    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, GAME_DEPTH);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Bottom Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, -1, GAME_DEPTH/2 + 50);
-    glScalef(GAME_WIDTH, 1.0, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH/2, -(PLAYER_SIZE/2 + 0.5), GAME_DEPTH/2 + 50);
+    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, GAME_DEPTH);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Left Panel:
     glPushMatrix();
-    glTranslatef(-1, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
-    glScalef(1.0, GAME_HEIGHT, GAME_DEPTH);
+    glTranslatef(-(PLAYER_SIZE/2 + 0.5), GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, GAME_DEPTH);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Top panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH + 1, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
-    glScalef(1.0, GAME_HEIGHT, GAME_DEPTH);
+    glTranslatef(GAME_WIDTH + PLAYER_SIZE/2 + 0.5, GAME_HEIGHT/2, GAME_DEPTH/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, GAME_DEPTH);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
@@ -368,7 +380,7 @@ void display(void)
             // Set camera view
 			cam.view();
             
-            // Rotate view based on mouse input
+            // Rotate view based on mouse input around player
             glTranslatef(player.getXPos(), player.getYPos(), cam.dz+5.0);
             glRotatef(xRot*sensitivity, 1.0, 0.0, 0.0);
             glRotatef(yRot*sensitivity, 0.0, 1.0, 0.0);
@@ -498,6 +510,9 @@ void moveTimer(int value)
             {
                 obstacles.getCurrent()->explode();
                 player.addPoints(P_HIT);
+                
+                // Set next obstacle as current
+                obstacles.setCurrent(obstacles.getCurrent()->getNext());
 
                 // Lose health
                 if (player.getHealth() > 0)
@@ -537,9 +552,10 @@ void moveTimer(int value)
             } // Obstacle avoided
             else {
                 player.addPoints(P_AVOID);
+
+                // Set next obstacle as current
+                obstacles.setCurrent(obstacles.getCurrent()->getNext());
             }
-            // Set next obstacle as current
-            obstacles.setCurrent(obstacles.getCurrent()->getNext());
 
         } // First obstacle out of sight ?
         else if (obstacles.getFirst()->getZPos() > 50)
@@ -597,16 +613,18 @@ void init(void)
     glShadeModel(GL_SMOOTH);
 
     glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
-
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_BLEND);
-    glBlendFunc(  GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
 	//Load Mask texture
 	Obstacle::LoadVMask();

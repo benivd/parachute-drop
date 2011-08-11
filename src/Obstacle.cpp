@@ -195,6 +195,7 @@ void Obstacle::draw(int level)
 		    glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI),
                       0.5+0.5*sin(0.05*colorGen+M_PI/2),
                       0.5+0.5*sin(0.05*colorGen));
+            glMaterialf(GL_FRONT, GL_DIFFUSE, 1.0);
 		    glutSolidTeapot(25);
         }
 	}
