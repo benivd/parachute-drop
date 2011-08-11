@@ -168,8 +168,15 @@ bool ObstacleList::CollidesAll(Player player)
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-			if((!first->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),first->getXPos(),first->getYPos(),first->getZPos())<player.getRad()+first->getObjRad())
-			{
+			if( (!first->getCrash()) &&
+                distance(player.getXPos(),
+                         player.getYPos(),
+                         player.getZPos(),
+                         first->getXPos(),
+                         first->getYPos(),
+                         first->getZPos()) <
+                player.getRad() + first->getObjRad() )
+            {
 				first->explode();
 				return true;
 			}
@@ -179,7 +186,14 @@ bool ObstacleList::CollidesAll(Player player)
 			Obstacle * temp = first;
 
 			 do{
-				 if((!temp->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),temp->getXPos(),temp->getYPos(),temp->getZPos())<player.getRad()+temp->getObjRad())
+				 if( (!temp->getCrash()) &&
+                     distance(player.getXPos(),
+                              player.getYPos(),
+                              player.getZPos(),
+                              temp->getXPos(),
+                              temp->getYPos(),
+                              temp->getZPos()) <
+                     player.getRad() + temp->getObjRad() )
 					{
 						//obstacle reacts
 						temp->explode();
@@ -189,8 +203,15 @@ bool ObstacleList::CollidesAll(Player player)
 
 				}while(temp!= last);
 
-				//last obj			   
-				if((!last->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),last->getXPos(),last->getYPos(),last->getZPos())<player.getRad()+last->getObjRad())
+				//last obj
+				if( (!last->getCrash()) &&
+                    distance(player.getXPos(),
+                             player.getYPos(),
+                             player.getZPos(),
+                             last->getXPos(),
+                             last->getYPos(),
+                             last->getZPos()) <
+                    player.getRad()+last->getObjRad())
 				{
 					//obstacle reacts
 					last->explode();

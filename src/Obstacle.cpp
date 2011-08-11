@@ -342,10 +342,12 @@ void Obstacle::move(int level)
     zPos += MOVE_BY*level;
 }
 
+/*
 bool Obstacle::collide(int xDiff, int yDiff)
 {
     return (xDiff < objSize/2 + PLAYER_SIZE && yDiff < objSize/2 + PLAYER_SIZE);
 }
+*/
 
 void Obstacle::explode()
 {
