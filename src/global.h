@@ -36,7 +36,7 @@
 #define FOV             25
 
 // Sky
-#define SUN_SIZE        40
+#define SUN_SIZE        100
 #define NUM_STARS       200
 #define STAR_SPREAD     5
 
@@ -45,9 +45,9 @@
 #define FOGEND_L1       1.0
 #define FOGEND_L2       0.85
 #define FOGEND_L3       0.70
-#define SPAWN_L1        1000
-#define SPAWN_L2        500
-#define SPAWN_L3        200
+#define SPAWN_L1        2000
+#define SPAWN_L2        1000
+#define SPAWN_L3        400
 
 enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of possible objects
 

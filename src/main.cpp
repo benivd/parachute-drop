@@ -91,7 +91,6 @@ void setLevel1()
 
     // Clear level
     obstacles.removeAll();
-   // glDisable(GL_LIGHT1);
 }
 
 // Game values for Level 2
@@ -109,7 +108,6 @@ void setLevel2()
     
     // Clear level
     obstacles.removeAll();
-   // glDisable(GL_LIGHT1);
 }
 
 void setLevel3()
@@ -126,7 +124,6 @@ void setLevel3()
     
     // Clear level
     obstacles.removeAll();
-   // glDisable(GL_LIGHT1);
 }
 
 // Print a single char array
@@ -210,7 +207,7 @@ void drawStars()
     // Sun (at GAME_DEPTH, above the glass panels)
     glPushMatrix();
     glColor3f(0.7, 0.5, 0.0);
-    glTranslatef( 0.0, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
+    glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
     glutSolidSphere(SUN_SIZE, SUN_SIZE, SUN_SIZE);
     glPopMatrix();
 }
@@ -257,13 +254,14 @@ void drawWorld()
     drawStars();
 
     // Light
+    glPushMatrix();
     glEnable(GL_LIGHTING);
     GLfloat ambientLight[] = { 0.1, 0.1, 0.1, 1 };
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambientLight );
 
     glEnable(GL_LIGHT0);
-    GLfloat lightColor0[] = { .2, 0.1, 0.1 };
-    GLfloat lightPos0[] = { -0.5, 1, 0.25, 0.0 };
+    GLfloat lightColor0[] = { 0.6, 0.5, 0.1 };
+    GLfloat lightPos0[] = { -((GAME_WIDTH/2) - (-GAME_WIDTH/3)), -((GAME_HEIGHT/2) - (GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE)), GAME_DEPTH/3, 0.0 };
     glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
     
@@ -274,6 +272,7 @@ void drawWorld()
     glFogi( GL_FOG_MODE, GL_LINEAR);
     glFogi( GL_FOG_START, fogStart);
     glFogi( GL_FOG_END, fogEnd);
+    glPopMatrix();
 }
 
 void drawPanels()
