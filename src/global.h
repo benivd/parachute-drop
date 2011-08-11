@@ -53,6 +53,6 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of pos
 
 // Points
 #define P_HIT          -100
-#define P_AVOID         100
+#define P_AVOID         5
 
 #endif

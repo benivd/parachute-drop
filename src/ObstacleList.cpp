@@ -1,6 +1,7 @@
 #include "ObstacleList.h"
 #include "Obstacle.h"
 
+
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -115,7 +116,8 @@ void ObstacleList::remove()
 	}
 	else
 	{
-		if (current == first) current = first->getNext();
+		//if (current == first) 
+		//current = first->getNext();
         first = first->getNext();
     }
 }
@@ -151,7 +153,56 @@ void ObstacleList::moveAll(int level)
 
 }
 
-void ObstacleList::drawAll(int level)
+float ObstacleList::distance(float x, float y, float z, float x2, float y2, float z2)
+{
+	return sqrtf((x2-x)*(x2-x)+(y2-y)*(y2-y)+(z2-z)*(z2-z));
+}
+
+
+
+bool ObstacleList::CollidesAll(Player player)
+{
+    if (isEmpty()) return false;
+	if (first!=0)			//Verify first if the link list is not empty
+	{
+
+		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
+		{
+			if((!first->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),first->getXPos(),first->getYPos(),first->getZPos())<player.getRad()+first->getObjRad())
+			{
+				first->explode();
+				return true;
+			}
+		}
+		else						//If multiple obstacle in the link List then loop through the link list		
+		{
+			Obstacle * temp = first;
+
+			 do{
+				 if((!temp->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),temp->getXPos(),temp->getYPos(),temp->getZPos())<player.getRad()+temp->getObjRad())
+					{
+						//obstacle reacts
+						temp->explode();
+						return true;
+					}
+       				temp = temp->getNext();
+
+				}while(temp!= last);
+
+				//last obj			   
+				if((!last->getCrash())&&distance(player.getXPos(),player.getYPos(),player.getZPos(),last->getXPos(),last->getYPos(),last->getZPos())<player.getRad()+last->getObjRad())
+				{
+					//obstacle reacts
+					last->explode();
+					return true;
+				}
+		}
+
+	}
+	return false;
+}
+
+void ObstacleList::drawAll(int level, bool testMode)
 {
     
 
@@ -161,20 +212,20 @@ void ObstacleList::drawAll(int level)
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-            first->draw(level);
+            first->draw(level,testMode);
 		}
 		else						//If multiple obstacle in the link List then loop through the link list		
 		{
 			Obstacle * temp = first;
 
 			do{
-                temp->draw(level);
+                temp->draw(level,testMode);
 			temp = temp->getNext();
 
 			}while(temp!= last);
 
 			//For the last node in the link list
-            last->draw(level);
+            last->draw(level,testMode);
 
 		}
 	}

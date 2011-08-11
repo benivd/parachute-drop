@@ -16,6 +16,7 @@ Player::Player()
     setPoints(0);
     setXPos( GAME_WIDTH  /2 );
     setYPos( GAME_HEIGHT /2 );
+	setZPos( -5);
 
 }
 
@@ -37,14 +38,16 @@ void drawmodel(void)
 	glEnable(GL_COLOR_MATERIAL);
 }
 
-void Player::draw()
+void Player::draw(bool testMode)
 {
     glPushMatrix();
-	glTranslated(xPos, yPos,-5);
+	glTranslated(xPos, yPos,zPos);
 	glRotatef(180,0,1,0);
 	glRotatef(xLean,1,0,0);
 	glRotatef(zLean,0,0,1);
     drawmodel();	
+	if(testMode)
+		glutWireSphere(.6,10,10);
     glPopMatrix();
 }
 

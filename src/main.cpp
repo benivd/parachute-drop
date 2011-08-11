@@ -30,6 +30,8 @@
 
 #include "imageloader.h"  // BMP loader for textures
 
+ bool testMode = false;
+
 int width  = WIDTH;       // Current window width
 int height = HEIGHT;      // Current window height
 
@@ -217,6 +219,10 @@ void drawWorld()
     sprintf(buffer, "Lives: %i", player.getLives());
     printString(buffer);
 
+	
+    sprintf(buffer, "Health: %i", player.getHealth());
+    printString(buffer);
+
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
 
@@ -352,6 +358,16 @@ void keyOperations (void)
                    player.setZLean(player.getZLean()-3);
            }
 	   }  
+	   if (keyStates['1']) 
+	   {
+           testMode = true;
+	   } 
+
+	   if (keyStates['2']) 
+	   {
+           testMode = false;
+	   } 
+
 	   if(keyStates[27])
 	   {
 		    exit(0);
@@ -393,10 +409,14 @@ void display(void)
             drawPanels();
 
             // Draw obstacles
-            obstacles.drawAll(level);
+            obstacles.drawAll(level, testMode);
             
             // Draw player
-			player.draw();
+			player.draw(testMode);
+
+
+			glEnd();
+			
             
         break;
         case GAME_OVER:
@@ -497,74 +517,62 @@ void moveTimer(int value)
     if (state == LEVEL && !obstacles.isEmpty())
     {
         // Move Obstacles
-        obstacles.moveAll(level);
-        
-        // Current obstacle reaches z = 0 ?
-        if (obstacles.getCurrent()->getZPos() > 0)
-        {
-            float xDiff = player.getXPos() - (obstacles.getCurrent())->getXPos();
-            float yDiff = player.getYPos() - (obstacles.getCurrent())->getYPos();
-            
-            // Obstacle collides?
-            if (obstacles.getCurrent()->collide(xDiff, yDiff))
+        obstacles.moveAll(level);        
+		if(obstacles.CollidesAll(player))
+		{            
+			player.addPoints(P_HIT);
+			
+            // Lose health
+            if (player.getHealth() > 0)
             {
-                obstacles.getCurrent()->explode();
-                player.addPoints(P_HIT);
-                
-                // Set next obstacle as current
-                obstacles.setCurrent(obstacles.getCurrent()->getNext());
-
-                // Lose health
-                if (player.getHealth() > 0)
-                {
-                    // health -1
-                    player.setHealth(player.getHealth()-1);
-                }
-                // Lose life
-                else {
-                    // reset health
-                    player.setHealth(3);
-
-                    // Lose life
-                    if (player.getLives() > 0)
-                    {
-                        // Lives -1; reset current level
-                        player.setLives(player.getLives()-1);
-                        switch (level)
-                        {
-                            case 1:
-                                setLevel1();
-                            break;
-                            case 2:
-                                setLevel2();
-                            break;
-                            case 3:
-                                setLevel3();
-                            break;
-                        }
-                    }
-                    // Game over
-                    else {
-                        state = GAME_OVER;
-                    }
-                }
-                
-            } // Obstacle avoided
-            else {
-                player.addPoints(P_AVOID);
-
-                // Set next obstacle as current
-                obstacles.setCurrent(obstacles.getCurrent()->getNext());
+				// health -1
+                player.setHealth(player.getHealth()-1);
             }
+            // Lose life
+            else 
+			{
+                // reset health
+                player.setHealth(3);
 
-        } // First obstacle out of sight ?
-        else if (obstacles.getFirst()->getZPos() > 50)
-        {
-            obstacles.remove();
-        }
+                // Lose life
+                if (player.getLives() > 0)
+                {
+					// Lives -1; reset current level
+				    player.setLives(player.getLives()-1);
+                    switch (level)
+                    {
+					    case 1:
+					      setLevel1();
+                          break;
+                        case 2:
+                          setLevel2();
+                          break;
+                        case 3:
+                          setLevel3();
+                          break;
+                    }
+                }
+                // Game over
+                else 
+				{
+					state = GAME_OVER;
+                }
+             }
+                
+         } // Obstacle avoided
+         else 
+		 {
+             player.addPoints(P_AVOID);
+         }
 
-        glutPostRedisplay();
-    }
+		// First obstacle out of sight ?
+		if (state == LEVEL && !obstacles.isEmpty() && obstacles.getFirst()->getZPos() > 50)
+		{
+			obstacles.remove();
+		}
+
+     glutPostRedisplay();
+	}
 
     // Update level counter, and change level
     if (state == LEVEL)

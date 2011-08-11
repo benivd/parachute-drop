@@ -21,9 +21,12 @@ class Player
         int points;
         float xPos;
         float yPos;
+		float zPos;
 
 		float xLean;
 		float zLean;
+
+		float rad;
 
     public:
         Player();
@@ -35,19 +38,23 @@ class Player
         void addPoints(int points) { this->points += points; }
         void setXPos(float xPos)   { this->xPos    = xPos; }
         void setYPos(float yPos)   { this->yPos    = yPos; }
+		void setZPos(float zPos)   { this->zPos    = zPos; }
 		void setXLean(float xLean) { this->xLean   = xLean; }
 		void setZLean(float zLean) { this->zLean   = zLean; }
+		void setRad(float rad)	   {this->rad		= rad; }
 
         int getLives()  { return this->lives; }
         int getHealth() { return this->health; }
         int getPoints() { return this->points; }
         float getXPos() { return this->xPos; }
         float getYPos() { return this->yPos; }
+		float getZPos() { return this->zPos; }
 	    float getXLean() { return this->xLean; }
         float getZLean() { return this->zLean; }
+		float getRad()	{return this->rad;	}
 
 
-        void draw();
+        void draw(bool testMode);
 		void Move(float stepX, float stepY);
 		void Lean();
 };

@@ -181,7 +181,17 @@ int Obstacle::getObjSize()
     return objSize;
 }
 
-void Obstacle::draw(int level)
+void Obstacle::setObjRad(float rad)
+{
+	objRad= rad;
+}
+
+float Obstacle::getObjRad()
+{
+	return objRad;
+}
+
+void Obstacle::draw(int level, bool testMode)
 {
     glPushMatrix();
     
@@ -197,6 +207,9 @@ void Obstacle::draw(int level)
                       0.5+0.5*sin(0.05*colorGen));
             glMaterialf(GL_FRONT, GL_DIFFUSE, 1.0);
 		    glutSolidTeapot(25);
+			setObjRad(25.0);
+			if(testMode)
+				glutWireSphere(25,10,10);
         }
 	}
 	if (objtype==SUN)
@@ -220,6 +233,9 @@ void Obstacle::draw(int level)
 		    glDisable(GL_LIGHTING);
 		    glutSolidSphere(10,20,20);
 		    glEnable(GL_LIGHTING);
+			setObjRad(10.0);
+			if(testMode)
+				glutWireSphere(10,10,10);
         }
         else
         {
@@ -234,6 +250,9 @@ void Obstacle::draw(int level)
             glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,1);
         	glutWireCube(25);
+			setObjRad(15.0);
+			if(testMode)
+				glutWireSphere(15,10,10);
         }
         else
         {
@@ -246,9 +265,15 @@ void Obstacle::draw(int level)
         if (!crash)
         {
             glTranslatef(0.0, 0.0, -objSize);
+			glPushMatrix();
 		    glColor4f(1,0,0,.1);
 		    glScalef(25,25,25);
 		    drawVMask();
+			glPopMatrix();
+			glColor4f(1,0,1,1);
+			setObjRad(25.0);
+			if(testMode)
+				glutWireSphere(25,10,10);
 		}
         else
         {
@@ -264,6 +289,9 @@ void Obstacle::draw(int level)
             glColor3f(0,0,1);
         	glScalef(25,25,25);
 		    glutSolidIcosahedron();
+			setObjRad(25.0);
+			if(testMode)	
+				glutWireSphere(1,10,10);
         }
         else
         {
@@ -278,7 +306,10 @@ void Obstacle::draw(int level)
             glTranslatef(0.0, 0.0, -objSize);
 		    glColor3f(0,1,1);
 		    glScalef(10,10,10);
-		    glutSolidCone(10,10,20,20);
+		    glutSolidCone(1,1,20,20);
+			setObjRad(10.0);
+			if(testMode)
+				glutWireSphere(1,10,10);
         }
 		else 
         {
@@ -293,6 +324,9 @@ void Obstacle::draw(int level)
             glTranslatef(0.0, 0.0, -objSize);
             glColor3f(0,1,0);
             glutSolidTorus(5,10,30,30);
+			setObjRad(15.0);
+			if(testMode)
+				glutWireSphere(15,10,10);
         }
         else 
         {

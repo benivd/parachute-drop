@@ -13,6 +13,7 @@
 #define OBSTACLE_LIST_H
 
 #include "Obstacle.h"
+#include "Player.h"
 
 class ObstacleList
 {
@@ -37,13 +38,17 @@ class ObstacleList
 
 		// Insert new element at the end of this LList
 		void insert(float xPos, float yPos, float zPos);
+
+		float distance(float,float,float,float,float,float);
+
+		bool CollidesAll(Player player);
 		
         // Remove the first element in this LList
         void remove();
 			
 		void moveAll(int level);
 
-        void drawAll(int level);
+        void drawAll(int level, bool testMode);
         void removeAll();
 };
 

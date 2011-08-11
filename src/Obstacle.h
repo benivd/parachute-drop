@@ -25,6 +25,7 @@ class Obstacle
 		objType objtype;						// type of 'this' object
         bool crash;                             // Whether the object has crashed
         int objSize;                            // Approximate object size for collision detection
+		float objRad;
 
 	public:
 		Obstacle();                                     // Default constructor is added
@@ -50,13 +51,16 @@ class Obstacle
         void setObjSize(int size);
         int getObjSize();
 
+		void setObjRad(float rad);
+        float getObjRad();
+
         void setCrash(bool);
         bool getCrash();
 
 		void setSunPos(float,float,float,float);
 
 		static void LoadVMask(void);
-        void draw(int level);
+        void draw(int level, bool testMode);
         void move(int level);
 
         bool collide(int xDiff, int yDiff);
