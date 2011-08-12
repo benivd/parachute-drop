@@ -12,6 +12,7 @@
 //model
 GLMmodel* pmodel2;
 GLMmodel* pmodel3;
+GLMmodel* pmodel4;
 
 //texture
 static GLuint MaskTexId;
@@ -66,6 +67,22 @@ void drawBroc(void)
     }
     
     glmDraw(pmodel3, GLM_SMOOTH | GLM_MATERIAL );
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
+void drawSkull(void)
+{
+	//glBindTexture( GL_TEXTURE_2D, ballTexId );
+    if (!pmodel4) {
+        pmodel4 = glmReadOBJ("obj/skull.obj");
+        if (!pmodel4) exit(0);
+        glmUnitize(pmodel4);
+        glmFacetNormals(pmodel4);
+        glmVertexNormals(pmodel4, 90.0);
+    }
+    
+    glmDraw(pmodel4, GLM_SMOOTH  | GLM_MATERIAL );
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 }
@@ -402,11 +419,13 @@ void Obstacle::draw(int level, bool testMode)
 			if (level != 0) objScaler+=.1;
 			float scale=sin(objScaler);
 			setXPos(getXPos()+scale);
-            glColor3f(0,1,0);
-            glutSolidTorus(5,10,30,30);
-			setObjRad(15.0);
+            glColor3f(1,1,1);
+			glRotatef(-90,1,0,0);
+			glScalef(10,10,10);
+            drawSkull();
+			setObjRad(10.0);
 			if(testMode)
-				glutWireSphere(15,10,10);
+				glutWireSphere(1,10,10);
         }
         else 
         {

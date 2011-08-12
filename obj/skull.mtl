@@ -1,0 +1,15 @@
+#
+#  Ducky.mtl
+#
+
+mtllib skull.mtl
+
+newmtl firstpart
+Ka .8 .8 .8
+Ks .8 .8 .8
+Kd .8 .8 .8
+
+newmtl secondpart
+Ka .8 .8 .8
+Ks .8 .8 .8
+Kd .8 .8 .8

@@ -286,8 +286,9 @@ void drawWorld()
 
     glEnable(GL_LIGHT0);
     GLfloat lightColor0[] = { 0.6, 0.5, 0.1 };
-    GLfloat lightPos0[] = { -((GAME_WIDTH/2) - (-GAME_WIDTH/3)), -((GAME_HEIGHT/2) - (GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE)), GAME_DEPTH/3, 0.0 };
-    glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
+    //GLfloat lightPos0[] = { -((GAME_WIDTH/2) - (-GAME_WIDTH/3)), -((GAME_HEIGHT/2) - (GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE)), GAME_DEPTH/3, 0.0 };
+    GLfloat lightPos0[] = { 0,-.25,1, 0.0 };
+	glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
     
     // Fog
