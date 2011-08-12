@@ -196,6 +196,9 @@ void drawGameOver()
 
 void drawStars()
 {
+    glDisable(GL_LIGHTING);
+    glDisable(GL_FOG);
+
     // Stars
     for (int i = 0; i < NUM_STARS; i++)
     {
@@ -226,59 +229,14 @@ void drawStars()
 	gluSphere(sphere, SUN_SIZE, 100, 100);
 	glDisable(GL_TEXTURE_2D);
     glPopMatrix();
+
+    glEnable(GL_FOG);
+    glEnable(GL_LIGHTING);
 }
 
-// Print game statistics and enable fog & light0
-void drawWorld()
+// Enable ambient and directed light
+void drawLight()
 {
-    glPushMatrix();
-
-    glDisable(GL_FOG);
-    glDisable(GL_LIGHTING);
-
-    // Statistics
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, width, 0, height);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2i(0, height-24);
-
-    char buffer[20];
-    sprintf(buffer, "Level %i", level);
-    printString(buffer);
-
-    if (titleCounter != 0)
-    {
-        glColor3f(1,1,1);
-        glRasterPos2i(width/2-40, height/2-12);
-        sprintf(buffer, "Level %i", level);
-        printString(buffer);
-        titleCounter -= 1;
-    }
-    
-    glRasterPos2i(0,0);
- 
-    sprintf(buffer, "Lives: %i", player.getLives());
-    printString(buffer);
-
-    sprintf(buffer, "    Health: %i", player.getHealth());
-    printString(buffer);
-
-    sprintf(buffer, "    Score: %i", player.getPoints());
-    printString(buffer);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
-    glMatrixMode(GL_MODELVIEW);
-
-    glPopMatrix();
-
-    drawStars();
-
-    // Light
     glPushMatrix();
     glEnable(GL_LIGHTING);
     GLfloat ambientLight[] = { 0.1, 0.1, 0.1, 1 };
@@ -290,8 +248,10 @@ void drawWorld()
     GLfloat lightPos0[] = { 0,-.25,1, 0.0 };
 	glLightfv( GL_LIGHT0, GL_DIFFUSE, lightColor0 );
     glLightfv( GL_LIGHT0, GL_POSITION, lightPos0 );
-    
-    // Fog
+}
+
+void drawFog()
+{
     GLfloat fogColor[3] = { 0.0, 0.0, 0.0 };
     glEnable(GL_FOG);
     glFogfv( GL_FOG_COLOR, fogColor);
@@ -348,6 +308,57 @@ void drawPanels()
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
+}
+
+void drawStats()
+{
+    glDisable(GL_LIGHTING);
+    glDisable(GL_FOG);
+
+    glPushMatrix();
+
+    // Statistics
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
+    glRasterPos2i(0, height-24);
+
+    char buffer[20];
+    sprintf(buffer, "Level %i", level);
+    printString(buffer);
+
+    if (titleCounter != 0)
+    {
+        glColor3f(1,1,1);
+        glRasterPos2i(width/2-40, height/2-12);
+        sprintf(buffer, "Level %i", level);
+        printString(buffer);
+        titleCounter -= 1;
+    }
+    
+    glRasterPos2i(0,0);
+ 
+    sprintf(buffer, "Lives: %i", player.getLives());
+    printString(buffer);
+
+    sprintf(buffer, "    Health: %i", player.getHealth());
+    printString(buffer);
+
+    sprintf(buffer, "    Score: %i", player.getPoints());
+    printString(buffer);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective( cam.fov, width/height, cam.zNear, cam.zFar );
+    glMatrixMode(GL_MODELVIEW);
+
+    glPopMatrix();
+
+    glEnable(GL_FOG);
+    glEnable(GL_LIGHTING);
 }
     
 void keyOperations (void) 
@@ -455,12 +466,16 @@ void display(void)
             glRotatef(yRot*SENSITIVITY, 0.0, 1.0, 0.0);
             glTranslatef(-player.getXPos(), -player.getYPos(), -(cam.dz+5.0));
 
-            // Draw background and effects
-            drawWorld();
+            // Enable ambient and directed lights
+            drawLight();
+
+            // Enable fog
+            drawFog();
 
             // Draw sun and stars
-            //drawStars();
+            drawStars();
 
+            // Draw obstacles before panels
             glDisable(GL_DEPTH_TEST);
             obstacles.drawAll(0, testMode);
             glEnable(GL_DEPTH_TEST);
@@ -468,11 +483,14 @@ void display(void)
             // Draw glass boundaries
             drawPanels();
             
-            // Draw obstacles
+            // Draw obstacles after panels
             obstacles.drawAll(level, testMode);
             
             // Draw player
             player.draw(testMode);
+
+            // Draw statisitics
+            drawStats();
 
 			glEnd();
 			
