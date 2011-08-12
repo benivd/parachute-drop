@@ -1,0 +1,63 @@
+Features:
+
+(Modelling Transformation)
+
+Imported OBJ models and glut primitives (sphere, cube...)
+QUAD particles (stars)
+Bitmap fonts
+
+
+(Trivial Rejections)
+
+Back culling
+
+
+(Illumination)
+
+Up to 5 light sources:
+- Orange light coming from big sun. (Directed source)
+- Ambient light
+- Up to 3 additional suns as obstacles (Point source)
+
+Diffuse and specular illumination.
+
+
+(Viewing Transformation)
+
+Basic tranformations (translate, rotate, scale)
+
+
+(Clipping)
+
+The depth buffer to display obstacles correctly
+
+
+(Projection)
+
+orthogonal view for the title screen, the statistics and the game over screen
+perspective for the rest
+
+
+(Rasterisation)
+
+Antialiasing (using GL_LINE_SMOOTH)
+Texture mapping for obstacles, and the title & game over screens
+Mipmapping textures for obstacles
+Alpha blending for glass panels
+Fog
+
+
+(Display)
+
+The game adapts to the display size.
+
+
+(Other Game Features)
+
+3 levels of difficulty (increased obstacle spawn rate, obstacles move faster and fog is closer)
+Player animations (rotates when duck gets hit, and flashes when he looses a life)
+Obstacles animations (cubes/torus move, cones scale, (Marc may implement more)
+Collision detection using bounding sphere intersection.
+Linked list as data structure for obstacles (I still think it's a feature even if TA disagrees...)
+Use of random number generator for obstacle creation, and stars
+(Unsure: Explosions, particle effects, ???)
