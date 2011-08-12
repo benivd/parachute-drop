@@ -679,7 +679,7 @@ void createTimer(int value)
     if (state == LEVEL)
     {
         // Create an obstacle at a random location
-        obstacles.insert( rand() % GAME_WIDTH, rand() % GAME_HEIGHT, GAME_DEPTH );
+        obstacles.insert( rand() % GAME_WIDTH, rand() % GAME_HEIGHT, GAME_DEPTH, level );
     }
     glutTimerFunc(speedCreate, createTimer, 0);
 }
@@ -708,8 +708,8 @@ void init(void)
 	//Load Mask texture
 	Obstacle::LoadVMask();
 
-	//Load ball text
-	//Obstacle::LoadBall();
+	//Load Bug text
+	//Obstacle::LoadBug();
 
     // Load menu texture
     Image* image = loadBMP("tex/ducksinspace.bmp");

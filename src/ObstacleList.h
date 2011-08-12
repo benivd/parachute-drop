@@ -43,7 +43,7 @@ class ObstacleList
 		int size();
 
 		// Insert new element at the end of this LList
-		void insert(float xPos, float yPos, float zPos);
+		void insert(float xPos, float yPos, float zPos,int level);
 
 		float distance(float,float,float,float,float,float);
 

@@ -13,10 +13,12 @@
 GLMmodel* pmodel2;
 GLMmodel* pmodel3;
 GLMmodel* pmodel4;
+GLMmodel* pmodel5;
+GLMmodel* pmodel6;
 
 //texture
 static GLuint MaskTexId;
-static GLuint ballTexId;
+static GLuint BUGTexId;
 
 
 void Obstacle::LoadVMask(void)
@@ -28,12 +30,12 @@ void Obstacle::LoadVMask(void)
 	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 }
 
-void Obstacle::LoadBall(void)
+void Obstacle::LoadBug(void)
 {
 	// Load menu texture
-	Image* image = loadBMP("tex/Broccoli2.bmp");
-	glGenTextures( 1, &ballTexId );
-	glBindTexture( GL_TEXTURE_2D, ballTexId );
+	Image* image = loadBMP("tex/color.bmp");
+	glGenTextures( 1, &BUGTexId );
+	glBindTexture( GL_TEXTURE_2D, BUGTexId );
 	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 }
 
@@ -55,9 +57,9 @@ void drawVMask(void)
 	glEnable(GL_COLOR_MATERIAL);
 }
 
-void drawBroc(void)
+void drawBug(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, ballTexId );
+	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
     if (!pmodel3) {
         pmodel3 = glmReadOBJ("obj/ladybird.obj");
         if (!pmodel3) exit(0);
@@ -71,9 +73,42 @@ void drawBroc(void)
 	glEnable(GL_COLOR_MATERIAL);
 }
 
+void drawGlove(void)
+{
+	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+    if (!pmodel5) {
+        pmodel5 = glmReadOBJ("obj/gloveLow_poly.obj");
+        if (!pmodel5) exit(0);
+        glmUnitize(pmodel5);
+        glmFacetNormals(pmodel5);
+        glmVertexNormals(pmodel5, 90.0);
+    }
+    
+    glmDraw(pmodel5, GLM_SMOOTH | GLM_MATERIAL );
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
+void drawSword(void)
+{
+	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+    if (!pmodel6) {
+        pmodel6 = glmReadOBJ("obj/rzr.obj");
+        if (!pmodel6) exit(0);
+        glmUnitize(pmodel6);
+        glmFacetNormals(pmodel6);
+        glmVertexNormals(pmodel6, 90.0);
+    }
+    
+    glmDraw(pmodel6, GLM_SMOOTH );
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
+
 void drawSkull(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, ballTexId );
+	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
     if (!pmodel4) {
         pmodel4 = glmReadOBJ("obj/skull.obj");
         if (!pmodel4) exit(0);
@@ -323,9 +358,9 @@ void Obstacle::draw(int level, bool testMode)
 				float scale=abs(cos(objScaler));
 				glutSolidSphere((scale*2)+10,20,20);
 				glEnable(GL_LIGHTING);
-				setObjRad(10.0);
+				setObjRad((scale*2)+10.0);
 				if(testMode)
-					glutWireSphere(10,10,10);
+					glutWireSphere((scale*2)+10,10,10);
         }
         else
         {
@@ -361,6 +396,9 @@ void Obstacle::draw(int level, bool testMode)
         {
             //glTranslatef(0.0, 0.0, -objSize);
 			glPushMatrix();
+			if (level != 0) objScaler+=.1;
+			float scale=sin(objScaler);
+			glRotatef(scale*20,0,0,1);
 		    glColor4f(1,0,0,.1);
 		    glScalef(25,25,25);
 		    drawVMask();
@@ -376,7 +414,7 @@ void Obstacle::draw(int level, bool testMode)
         }
 	}
 
-	if(objtype==BALL)
+	if(objtype==BUG)
 	{
         if (!crash)
         {
@@ -384,7 +422,7 @@ void Obstacle::draw(int level, bool testMode)
 			glRotatef(180,0,1,0);
 			objScaler+=5;
 			glRotatef(objScaler,1,0,0);
-           	drawBroc();
+           	drawBug();
 			setObjRad(9.0);
 			if(testMode)	
 				glutWireSphere(.9,10,10);
@@ -401,7 +439,7 @@ void Obstacle::draw(int level, bool testMode)
         {
 			if (level != 0) objScaler+=.01;
 			float scale=abs(cos(objScaler));
-		    glColor3f(0,1,1);
+		    glColor3f(scale,(1-scale),0);
 		    glScalef(scale*10,scale*10,10);
 		    glutSolidCone(1,1,20,20);
 			setObjRad(scale*10.0);
@@ -414,7 +452,7 @@ void Obstacle::draw(int level, bool testMode)
         }
 	}
 
-	if(objtype==TORUS)
+	if(objtype==SKULL)
 	{
         if (!crash)
         {
@@ -434,6 +472,66 @@ void Obstacle::draw(int level, bool testMode)
 
         }
 	}
+
+	if(objtype==GLOVE)
+	{
+        if (!crash)
+        {
+            //glTranslatef(0.0, 0.0, -objSize);
+			glPushMatrix();
+			if (level != 0) objScaler+=.1;
+			float scale=sin(objScaler);
+			setZPos(getZPos()+scale*10);
+			glRotatef(objScaler*50,0,0,1);
+			glRotatef(-90,1,0,0);
+		    glScalef(25,25,25);
+		    drawGlove();
+			glPopMatrix();
+			glColor4f(1,0,1,1);
+			setObjRad(20.0);
+			if(testMode)
+				glutWireSphere(20,10,10);
+		}
+        else
+        {
+
+        }
+	}
+
+	if(objtype==SWORD)
+	{
+        if (!crash)
+        {
+            //glTranslatef(0.0, 0.0, -objSize);
+			if (level != 0) objScaler+=.1;
+			float scale=sin(objScaler);
+			float scale2=cos(objScaler);
+			glColor3f((rand() % 10) /10.0,(rand() % 10) /10.0,(rand() % 10)/10.0);
+			setYPos(getYPos()+scale*2);
+			setXPos(getXPos()+scale2*2);			
+			glPushMatrix();
+			glRotatef(objScaler*150,0,0,1);
+			glRotatef(-90,1,0,0);		    
+			glScalef(35,35,35);
+		    drawSword();
+			glPopMatrix();
+			glPushMatrix();		
+			glRotatef(objScaler*150+90,0,0,1);
+			glRotatef(-90,1,0,0);
+			glScalef(35,35,35);
+		    drawSword();
+			glPopMatrix();
+			glColor4f(1,0,1,1);
+			setObjRad(35.0);
+			if(testMode)
+				glutWireSphere(35,10,10);
+		}
+        else
+        {
+
+        }
+	}
+
     glPopMatrix();
 	if (level != 0) spinAngle += 5.0;  
 }

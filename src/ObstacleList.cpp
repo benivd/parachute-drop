@@ -88,10 +88,14 @@ int ObstacleList::getSunNumb()
 }
 
 // Insert an element at the end of the ObstacleList 
-void ObstacleList::insert(float xPos, float yPos, float zPos)
+void ObstacleList::insert(float xPos, float yPos, float zPos, int level)
 {
 	int sunsauce;
-	int randObj = rand() % 7;	
+	int randObj;
+	if(level==1)randObj= rand() % 7;
+	if(level==2)randObj= rand() % 8;
+	if(level==3)randObj= rand() % 9;
+	
 	Obstacle* MyNode = new Obstacle(xPos, yPos, zPos, NULL);
 	if (randObj==0)
 	{
@@ -107,11 +111,15 @@ void ObstacleList::insert(float xPos, float yPos, float zPos)
 	if (randObj==2)
 		MyNode->setObjType(VMASK);
 	if (randObj==3)
-		MyNode->setObjType(BALL);
+		MyNode->setObjType(BUG);
 	if (randObj==4)
 		MyNode->setObjType(CONE);
 	if (randObj==5)
-		MyNode->setObjType(TORUS);
+		MyNode->setObjType(SKULL);
+	if(randObj==7)
+		MyNode->setObjType(GLOVE);
+	if(randObj==8)
+		MyNode->setObjType(SWORD);
 
 	if(last != 0)
 	{
