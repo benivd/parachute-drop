@@ -726,6 +726,7 @@ void init(void)
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 
 	// Load sun texture
+	http://www.turbosquid.com/FullPreview/Index.cfm/ID/557319
     image = loadBMP("tex/Sun.bmp");
     glGenTextures( 1, &sunTexId );
     glBindTexture( GL_TEXTURE_2D, sunTexId );

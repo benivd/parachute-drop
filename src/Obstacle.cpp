@@ -76,6 +76,7 @@ void drawBug(void)
 void drawGlove(void)
 {
 	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/223158
     if (!pmodel5) {
         pmodel5 = glmReadOBJ("obj/gloveLow_poly.obj");
         if (!pmodel5) exit(0);
@@ -92,6 +93,7 @@ void drawGlove(void)
 void drawSword(void)
 {
 	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/362147
     if (!pmodel6) {
         pmodel6 = glmReadOBJ("obj/rzr.obj");
         if (!pmodel6) exit(0);
@@ -109,6 +111,7 @@ void drawSword(void)
 void drawSkull(void)
 {
 	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/269706
     if (!pmodel4) {
         pmodel4 = glmReadOBJ("obj/skull.obj");
         if (!pmodel4) exit(0);
@@ -418,12 +421,12 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			glScalef(10,10,10);
+			glScalef(20,20,20);
 			glRotatef(180,0,1,0);
 			objScaler+=5;
 			glRotatef(objScaler,1,0,0);
            	drawBug();
-			setObjRad(9.0);
+			setObjRad(18.0);
 			if(testMode)	
 				glutWireSphere(.9,10,10);
         }
@@ -437,12 +440,12 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			if (level != 0) objScaler+=.01;
+			if (level != 0) objScaler+=.1;
 			float scale=abs(cos(objScaler));
 		    glColor3f(scale,(1-scale),0);
-		    glScalef(scale*10,scale*10,10);
+		    glScalef(scale*20,scale*20,10);
 		    glutSolidCone(1,1,20,20);
-			setObjRad(scale*10.0);
+			setObjRad(scale*20.0);
 			if(testMode)
 				glutWireSphere(1,10,10);
         }
@@ -461,9 +464,9 @@ void Obstacle::draw(int level, bool testMode)
 			setXPos(getXPos()+scale);
             glColor3f(1,1,1);
 			glRotatef(-90,1,0,0);
-			glScalef(10,10,10);
+			glScalef(20,20,20);
             drawSkull();
-			setObjRad(10.0);
+			setObjRad(20.0);
 			if(testMode)
 				glutWireSphere(1,10,10);
         }
