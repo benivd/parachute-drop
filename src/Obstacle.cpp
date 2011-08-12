@@ -319,7 +319,9 @@ void Obstacle::draw(int level, bool testMode)
 				glLightfv(GL_LIGHT3, GL_DIFFUSE, dif);
 			}
 				glDisable(GL_LIGHTING);
-				glutSolidSphere(10,20,20);
+				objScaler+=1;
+				float scale=abs(cos(objScaler));
+				glutSolidSphere((scale*2)+10,20,20);
 				glEnable(GL_LIGHTING);
 				setObjRad(10.0);
 				if(testMode)
