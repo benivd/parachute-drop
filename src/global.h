@@ -27,6 +27,7 @@
 #define HEIGHT          600
 
 #define LEVEL_TIME      60000 // 1 minute/level
+#define TITLE_TIME      50
 
 // Game World
 #define GAME_WIDTH      200     // X

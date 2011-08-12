@@ -41,6 +41,7 @@ gameState state = MENU;
 
 int level = 0;
 int levelCounter = LEVEL_TIME;
+int titleCounter = TITLE_TIME;
 
 // Obstacles
 GLfloat position[] = {0,0,0,0};
@@ -82,6 +83,7 @@ void setLevel1()
     state = LEVEL;
     level = 1;
     levelCounter = LEVEL_TIME;
+    titleCounter = TITLE_TIME;
     
     // Start fog at 1/2 of play field for Level 1
     fogStart = -(GAME_DEPTH) * FOGEND_L1*0.50;
@@ -99,6 +101,7 @@ void setLevel2()
     state = LEVEL;
     level = 2;
     levelCounter = LEVEL_TIME;
+    titleCounter = TITLE_TIME;
     
     // Start fog at 1/2 of play field for Level 2
     fogStart = -(GAME_DEPTH) * FOGEND_L2*0.50;
@@ -115,6 +118,7 @@ void setLevel3()
     state = LEVEL;
     level = 3;
     levelCounter = LEVEL_TIME;
+    titleCounter = TITLE_TIME;
 
     // Start fog at 1/2 of play field for Level 3
     fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
@@ -232,6 +236,15 @@ void drawWorld()
     char buffer[20];
     sprintf(buffer, "Level %i", level);
     printString(buffer);
+
+    if (titleCounter != 0)
+    {
+        glColor3f(1,1,1);
+        glRasterPos2i(width/2-40, height/2-12);
+        sprintf(buffer, "Level %i", level);
+        printString(buffer);
+        titleCounter -= 1;
+    }
     
     glRasterPos2i(0,0);
  
@@ -434,6 +447,10 @@ void display(void)
 
             // Draw sun and stars
             //drawStars();
+
+            glDisable(GL_DEPTH_TEST);
+            obstacles.drawAll(0, testMode);
+            glEnable(GL_DEPTH_TEST);
 
             // Draw glass boundaries
             drawPanels();

@@ -292,7 +292,7 @@ void Obstacle::draw(int level, bool testMode)
         if (!crash)
         {
 			glRotatef(45,1,1,0);
-			objScaler+=.1;
+            if (level != 0) objScaler+=.1;
 			float scale=sin(objScaler);
 			glRotatef(abs(scale)*180,1,1,0);
 			setXPos(getXPos()+(scale));
@@ -351,7 +351,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			objScaler+=.01;
+			if (level != 0) objScaler+=.01;
 			float scale=abs(cos(objScaler));
 		    glColor3f(0,1,1);
 		    glScalef(scale*10,scale*10,10);
@@ -370,7 +370,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			objScaler+=.1;
+			if (level != 0) objScaler+=.1;
 			float scale=sin(objScaler);
 			setXPos(getXPos()+scale);
             glColor3f(0,1,0);
@@ -385,7 +385,7 @@ void Obstacle::draw(int level, bool testMode)
         }
 	}
     glPopMatrix();
-	spinAngle += 5.0;  
+	if (level != 0) spinAngle += 5.0;  
 }
 
 void Obstacle::move(int level)
