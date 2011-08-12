@@ -70,6 +70,7 @@ class Obstacle
 		void setSunPos(float,float,float,float);
 
 		static void LoadVMask(void);
+		static void LoadBall(void);
         void draw(int level, bool testMode);
         void move(int level);
 

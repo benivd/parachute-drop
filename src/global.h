@@ -50,7 +50,7 @@
 #define SPAWN_L2        500
 #define SPAWN_L3        200
 
-enum objType { SUN, TEAPOT, CUBE, VMASK, ICOSA, CONE, TORUS };			// least of possible objects
+enum objType { SUN, TEAPOT, CUBE, VMASK, BALL, CONE, TORUS };			// least of possible objects
 
 // Player
 #define PLAYER_SIZE     5

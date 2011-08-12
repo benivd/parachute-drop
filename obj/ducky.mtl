@@ -4,17 +4,15 @@
 
 newmtl DBody
 Ka 1 1 0.2
-Ks 1 1 .2
+Ks 1 1 0.1
 Kd 1 1 0.1
 
 newmtl DBill
 Ka .4 0.1 0.1
-Ks 1 .4 .2
 Kd 1 .4 0.1
 
 newmtl DWhite
 Ka  1 1 1
-Ks 1 1 1
 Kd 1 1 1
 
 newmtl DBlack

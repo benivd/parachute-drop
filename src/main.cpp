@@ -62,11 +62,13 @@ float xRot = 0.0;
 float yRot = 0.0;
 float xPrev = width/2;
 float yPrev = height/2;
+float planetAngle = 0;
 
 // Texture
 GLuint worldTexId;
 GLuint menuTexId;
 GLuint gameoverTexId;
+GLuint sunTexId;
 
 // Keyboard
 bool* keyStates = new bool[256];
@@ -207,12 +209,22 @@ void drawStars()
         glEnd();
         glPopMatrix();
     }
-    
+	    
     // Sun (at GAME_DEPTH, above the glass panels)
     glPushMatrix();
-    glColor3f(0.7, 0.5, 0.0);
-    glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
-    glutSolidSphere(SUN_SIZE, SUN_SIZE, SUN_SIZE);
+	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
+    GLUquadricObj *sphere=NULL;
+	sphere = gluNewQuadric();
+	gluQuadricDrawStyle(sphere, GLU_FILL);
+	gluQuadricTexture(sphere, GL_TRUE);
+	gluQuadricNormals(sphere, GLU_SMOOTH);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,sunTexId);
+	glRotatef(planetAngle,0,1,0);
+	glRotatef(-90,1,0,0);
+	glColor3f(.5,.5,0.5);
+	gluSphere(sphere, SUN_SIZE, 100, 100);
+	glDisable(GL_TEXTURE_2D);
     glPopMatrix();
 }
 
@@ -560,6 +572,7 @@ void click(int button, int stat, int x, int y)
 // GLUT Timer Function for obstacles
 void moveTimer(int value)
 {
+	planetAngle+=.5;
     if (state == LEVEL && !obstacles.isEmpty())
     {
         // Move Obstacles
@@ -676,6 +689,9 @@ void init(void)
 	//Load Mask texture
 	Obstacle::LoadVMask();
 
+	//Load ball text
+	//Obstacle::LoadBall();
+
     // Load menu texture
     Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
@@ -687,6 +703,13 @@ void init(void)
     image = loadBMP("tex/gameover.bmp");
     glGenTextures( 1, &gameoverTexId );
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load sun texture
+    image = loadBMP("tex/Sun.bmp");
+    glGenTextures( 1, &sunTexId );
+    glBindTexture( GL_TEXTURE_2D, sunTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
     delete image;

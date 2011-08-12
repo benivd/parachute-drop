@@ -20,6 +20,7 @@ Player::Player()
 	setZPos( -5);
 	setSpinout(false);
 	ySpin=0;
+	setRad(.6);
 
 }
 

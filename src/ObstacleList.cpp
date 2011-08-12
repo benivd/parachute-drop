@@ -107,7 +107,7 @@ void ObstacleList::insert(float xPos, float yPos, float zPos)
 	if (randObj==2)
 		MyNode->setObjType(VMASK);
 	if (randObj==3)
-		MyNode->setObjType(ICOSA);
+		MyNode->setObjType(BALL);
 	if (randObj==4)
 		MyNode->setObjType(CONE);
 	if (randObj==5)

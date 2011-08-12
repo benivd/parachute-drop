@@ -11,9 +11,11 @@
 
 //model
 GLMmodel* pmodel2;
+GLMmodel* pmodel3;
 
 //texture
 static GLuint MaskTexId;
+static GLuint ballTexId;
 
 
 void Obstacle::LoadVMask(void)
@@ -22,6 +24,15 @@ void Obstacle::LoadVMask(void)
 	Image* image = loadBMP("tex/VMaskCol.bmp");
 	glGenTextures( 1, &MaskTexId );
 	glBindTexture( GL_TEXTURE_2D, MaskTexId );
+	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+}
+
+void Obstacle::LoadBall(void)
+{
+	// Load menu texture
+	Image* image = loadBMP("tex/Broccoli2.bmp");
+	glGenTextures( 1, &ballTexId );
+	glBindTexture( GL_TEXTURE_2D, ballTexId );
 	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 }
 
@@ -39,6 +50,22 @@ void drawVMask(void)
     }
     
     glmDraw(pmodel2, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE );
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+}
+
+void drawBroc(void)
+{
+	//glBindTexture( GL_TEXTURE_2D, ballTexId );
+    if (!pmodel3) {
+        pmodel3 = glmReadOBJ("obj/ladybird.obj");
+        if (!pmodel3) exit(0);
+        glmUnitize(pmodel3);
+        glmFacetNormals(pmodel3);
+        glmVertexNormals(pmodel3, 90.0);
+    }
+    
+    glmDraw(pmodel3, GLM_SMOOTH | GLM_MATERIAL );
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 }
@@ -330,16 +357,18 @@ void Obstacle::draw(int level, bool testMode)
         }
 	}
 
-	if(objtype==ICOSA)
+	if(objtype==BALL)
 	{
         if (!crash)
         {
-            glColor3f(0,0,1);
-        	glScalef(25,25,25);
-		    glutSolidIcosahedron();
-			setObjRad(25.0);
+			glScalef(10,10,10);
+			glRotatef(180,0,1,0);
+			objScaler+=5;
+			glRotatef(objScaler,1,0,0);
+           	drawBroc();
+			setObjRad(9.0);
 			if(testMode)	
-				glutWireSphere(1,10,10);
+				glutWireSphere(.9,10,10);
         }
         else
         {
