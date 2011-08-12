@@ -3,7 +3,7 @@
 # object Lebka01 to come ...
 #
 
-mtllib skull.obj
+mtllib skull.mtl
 
 g firstpart
 v  0.000000000000 55.365844726563 -127.665451049805

@@ -2,8 +2,6 @@
 #  Ducky.mtl
 #
 
-mtllib skull.mtl
-
 newmtl firstpart
 Ka .8 .8 .8
 Ks .8 .8 .8
