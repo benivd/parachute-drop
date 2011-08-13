@@ -26,15 +26,21 @@
 #define WIDTH           800
 #define HEIGHT          600
 
-#define LEVEL_TIME      60000 // 1 minute/level
-#define TITLE_TIME      50
-
-// Game World
+// Window
 #define GAME_WIDTH      200     // X
 #define GAME_HEIGHT     200     // Y
 #define GAME_DEPTH     -1000    // Z
 
+// Camera
 #define FOV             25
+
+
+// Level
+#define LEVEL_TIME      60000 // 1 minute/level
+#define TITLE_TIME      50
+
+// Panels
+#define MARGIN          50
 
 // Sky
 #define SUN_SIZE        100
@@ -59,6 +65,7 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, BUG, CONE, SKULL, GLOVE, SWORD };			// 
 #define SENSITIVITY     20
 
 // Points
+#define TEXT_SIZE       32
 #define P_HIT          -100
 #define P_AVOID         5
 

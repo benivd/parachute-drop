@@ -47,9 +47,6 @@ int titleCounter = TITLE_TIME;
 int starPos[NUM_STARS][2];
 int tunnelSize = ( -GAME_DEPTH )*2;
 
-// Glass Panels
-int margin = 25;
-
 // Fog
 float fogStart = 0.0;
 float fogEnd   = 0.0;
@@ -139,9 +136,12 @@ void setLevel3()
 // Print a single char array
 void printString(char* s)
 {
+    glPushMatrix();
+    glScalef(TEXT_SIZE/18, TEXT_SIZE/18, 1);
     char* p;
     for (p = s; *p; p++)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
+    glPopMatrix();
 }
 
 // Draw text for title screen
@@ -219,7 +219,7 @@ void drawStars()
 	    
     // Sun (at GAME_DEPTH, above the glass panels)
     glPushMatrix();
-	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + margin + SUN_SIZE, GAME_DEPTH);
+	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + MARGIN + SUN_SIZE, GAME_DEPTH);
     GLUquadricObj *sphere=NULL;
 	sphere = gluNewQuadric();
 	gluQuadricDrawStyle(sphere, GLU_FILL);
@@ -281,32 +281,32 @@ void drawPanels()
 
     // Top Panel:
     glPushMatrix();
-    glTranslatef( GAME_WIDTH/2, GAME_HEIGHT + margin, -tunnelSize/2 + 50 );
-    glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+    glTranslatef( GAME_WIDTH/2, GAME_HEIGHT + MARGIN, -tunnelSize/2 + 50 );
+    glScalef( GAME_WIDTH + MARGIN*2, 1.0, tunnelSize );
     glColor4f( 0.9, 0.95, 1.0, 0.2 );
     glutSolidCube(1);
     glPopMatrix();
 
     // Bottom Panel:
     glPushMatrix();
-    glTranslatef( GAME_WIDTH/2, -margin, -tunnelSize/2 + 50 );
-    glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+    glTranslatef( GAME_WIDTH/2, -MARGIN, -tunnelSize/2 + 50 );
+    glScalef( GAME_WIDTH + MARGIN*2, 1.0, tunnelSize );
     glColor4f( 0.9, 0.95, 1.0, 0.2 );
     glutSolidCube(1);
     glPopMatrix();
 
     // Left Panel:
     glPushMatrix();
-    glTranslatef( -margin, GAME_HEIGHT/2, -tunnelSize/2 + 50 );
-    glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
+    glTranslatef( -MARGIN, GAME_HEIGHT/2, -tunnelSize/2 + 50 );
+    glScalef(1.0, GAME_HEIGHT + MARGIN*2, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
     // Right Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH + margin, GAME_HEIGHT/2, -tunnelSize/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
+    glTranslatef(GAME_WIDTH + MARGIN, GAME_HEIGHT/2, -tunnelSize/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + MARGIN*2, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
@@ -326,7 +326,7 @@ void drawStats()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2i(0, height-24);
+    glRasterPos2i( TEXT_SIZE/2, height-TEXT_SIZE);
 
     char buffer[20];
     sprintf(buffer, "Level %i", level);
@@ -335,13 +335,13 @@ void drawStats()
     if (titleCounter != 0)
     {
         glColor3f(1,1,1);
-        glRasterPos2i(width/2-40, height/2-12);
+        glRasterPos2i(width/2 - TEXT_SIZE*2, height/2 - TEXT_SIZE/2);
         sprintf(buffer, "Level %i", level);
         printString(buffer);
         titleCounter -= 1;
     }
     
-    glRasterPos2i(0,0);
+    glRasterPos2i( TEXT_SIZE/2, TEXT_SIZE/2);
  
     sprintf(buffer, "Lives: %i", player.getLives());
     printString(buffer);
