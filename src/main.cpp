@@ -696,6 +696,11 @@ void createTimer(int value)
 // OpenGL Initialisation
 void init(void)
 {
+	// Initialise global variables
+	for(int key =0; key!=256; key++){
+		keyStates[key] = false; // Set the state of the current key to not pressed  
+	}
+
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
     glShadeModel(GL_SMOOTH);
@@ -746,12 +751,7 @@ void init(void)
 
 int main(int argc, char** argv)
 {
-    srand( time(NULL) );
-
-    // Initialise global variables
-	for(int key =0; key!=256; key++){
-		keyStates[key] = false; // Set the state of the current key to not pressed  
-	}
+    srand( time(NULL) );	
     
     for (int i = 0; i < NUM_STARS; i++)
     {

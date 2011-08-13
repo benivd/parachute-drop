@@ -296,7 +296,7 @@ void Obstacle::setLevel(int level)
 
 void Obstacle::draw(int level, bool testMode)
 {
-	objScaler+=1;
+	if(level!=0)objScaler+=1;
     glPushMatrix();
     
     glTranslatef( getXPos(), getYPos(), getZPos() );
