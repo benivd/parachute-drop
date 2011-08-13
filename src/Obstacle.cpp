@@ -140,6 +140,7 @@ Obstacle::Obstacle()
 	colorGen = rand() % 360;
 	sunNum= 0;
 	objScaler= rand() %100;
+	objRad=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -164,6 +165,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	objtype = TEAPOT;
 	sunNum= 0;
 	objScaler= rand() %100;
+	objRad=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -187,6 +189,7 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	objtype = objT;
 	sunNum= 0;
 	objScaler= rand() %100;
+	objRad=0;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -294,12 +297,25 @@ void Obstacle::setLevel(int level)
 	level= level;
 }
 
+void Obstacle::putOut()
+{
+	if(xPos>205-objRad)
+		xPos=205-objRad;
+	if(xPos<-5+objRad)
+		xPos=objRad-5;
+	if(yPos<-5+objRad)
+		yPos=objRad-5;
+	if(yPos>205-objRad)
+		yPos=205-objRad;
+}
+
 void Obstacle::draw(int level, bool testMode)
 {
 	if(level!=0)objScaler+=1;
     glPushMatrix();
     
     glTranslatef( getXPos(), getYPos(), getZPos() );
+	if(objRad!=0) putOut();
 	if (objtype==TEAPOT)
 	{
         if (!crash)

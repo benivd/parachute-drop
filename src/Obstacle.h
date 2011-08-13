@@ -38,6 +38,8 @@ class Obstacle
 		Obstacle(float,float,float,Obstacle*,objType);  // Regular constructor
 		//~Obstacle();                                  // Destructor
 
+		void putOut();
+
 		void setSunNum(int);
 		int getSunNum();
 

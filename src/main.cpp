@@ -479,6 +479,7 @@ void keyOperations (void)
 	{
 	    exit(0);
 	}
+
 } 
  
 // GLUT Display Function

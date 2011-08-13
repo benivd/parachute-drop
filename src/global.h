@@ -40,7 +40,7 @@
 #define TITLE_TIME      50
 
 // Panels
-#define MARGIN          75
+#define MARGIN          5
 #define MESH_SIZE       40// should be a factor of GAME_WIDTH and GAME_HEIGHT
 
 // Sky
