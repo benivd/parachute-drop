@@ -309,7 +309,17 @@ void Obstacle::draw(int level, bool testMode)
 		    glColor3f(0.5+0.5*sin(0.05*colorGen+M_PI),
                       0.5+0.5*sin(0.05*colorGen+M_PI/2),
                       0.5+0.5*sin(0.05*colorGen));
-            glMaterialf(GL_FRONT, GL_DIFFUSE, 1.0);
+            
+            GLfloat ambient[] = {0.33, 0.22, 0.03, 1.0};
+            GLfloat diffuse[] = {0.78, 0.57, 0.11, 1.0};
+            GLfloat specular[] = {0.99, 0.91, 0.81, 1.0};
+            GLfloat shininess = 27.8;
+
+    		glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+	    	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+		    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+		    glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+            
 		    glutSolidTeapot(25);
 			setObjRad(25.0);
 			if(testMode)

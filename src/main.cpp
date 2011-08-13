@@ -51,6 +51,10 @@ int tunnelSize = ( -GAME_DEPTH )*2;
 float fogStart = 0.0;
 float fogEnd   = 0.0;
 
+// Panels
+bool mesh = false;
+int margin = MARGIN;
+
 // Obstacles
 GLfloat position[] = {0,0,0,0};
         
@@ -218,7 +222,7 @@ void drawStars()
 	    
     // Sun (at GAME_DEPTH, above the glass panels)
     glPushMatrix();
-	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + MARGIN + SUN_SIZE, GAME_DEPTH);
+	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + margin + SUN_SIZE, GAME_DEPTH);
     GLUquadricObj *sphere=NULL;
 	sphere = gluNewQuadric();
 	gluQuadricDrawStyle(sphere, GLU_FILL);
@@ -278,37 +282,44 @@ void drawPanels()
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     */
 
-    // Top Panel:
-    glPushMatrix();
-    glTranslatef( GAME_WIDTH/2, GAME_HEIGHT + MARGIN, -tunnelSize/2 + 50 );
-    glScalef( GAME_WIDTH + MARGIN*2, 1.0, tunnelSize );
-    glColor4f( 0.9, 0.95, 1.0, 0.2 );
-    glutSolidCube(1);
-    glPopMatrix();
+    if (mesh)
+    {
+        margin = PLAYER_SIZE + 5;
+    }
+    else // Resizable glass panels
+    {
+        // Top Panel:
+        glPushMatrix();
+        glTranslatef( GAME_WIDTH/2, GAME_HEIGHT + margin, -tunnelSize/2 + 50 );
+        glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+        glColor4f( 0.9, 0.95, 1.0, 0.2 );
+        glutSolidCube(1);
+        glPopMatrix();
 
-    // Bottom Panel:
-    glPushMatrix();
-    glTranslatef( GAME_WIDTH/2, -MARGIN, -tunnelSize/2 + 50 );
-    glScalef( GAME_WIDTH + MARGIN*2, 1.0, tunnelSize );
-    glColor4f( 0.9, 0.95, 1.0, 0.2 );
-    glutSolidCube(1);
-    glPopMatrix();
+        // Bottom Panel:
+        glPushMatrix();
+        glTranslatef( GAME_WIDTH/2, -margin, -tunnelSize/2 + 50 );
+        glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+        glColor4f( 0.9, 0.95, 1.0, 0.2 );
+        glutSolidCube(1);
+        glPopMatrix();
 
-    // Left Panel:
-    glPushMatrix();
-    glTranslatef( -MARGIN, GAME_HEIGHT/2, -tunnelSize/2 + 50 );
-    glScalef(1.0, GAME_HEIGHT + MARGIN*2, tunnelSize);
-    glColor4f(0.9, 0.95, 1.0, 0.2);
-    glutSolidCube(1);
-    glPopMatrix();
+        // Left Panel:
+        glPushMatrix();
+        glTranslatef( -margin, GAME_HEIGHT/2, -tunnelSize/2 + 50 );
+        glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
+        glColor4f(0.9, 0.95, 1.0, 0.2);
+        glutSolidCube(1);
+        glPopMatrix();
 
-    // Right Panel:
-    glPushMatrix();
-    glTranslatef(GAME_WIDTH + MARGIN, GAME_HEIGHT/2, -tunnelSize/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + MARGIN*2, tunnelSize);
-    glColor4f(0.9, 0.95, 1.0, 0.2);
-    glutSolidCube(1);
-    glPopMatrix();
+        // Right Panel:
+        glPushMatrix();
+        glTranslatef(GAME_WIDTH + margin, GAME_HEIGHT/2, -tunnelSize/2 + 50);
+        glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
+        glColor4f(0.9, 0.95, 1.0, 0.2);
+        glutSolidCube(1);
+        glPopMatrix();
+    }
 }
 
 void drawStats()
@@ -361,10 +372,10 @@ void drawStats()
     
 void keyOperations (void) 
 {  
-    //if the 's' key has been pressed  
+    // s: move down
     if (keyStates['s']) 
 	{
-        if (player.getYPos() > 0.0)
+        if (player.getYPos() > -margin + PLAYER_SIZE)
         {
             player.Move(0,-PLAYER_STEP);   
             cam.translate(0,-PLAYER_STEP,0);
@@ -375,15 +386,10 @@ void keyOperations (void)
         }
 
     } 
-    // If the 's' key has been pressed  
-    if (keyStates['r']) 
-	{
-	   player.setYspin(player.getYSpin()+5);
-	}
-    // If the 'w' key has been pressed   
+    // w: move up
   	if (keyStates['w']) 
 	{
-        if (player.getYPos() < GAME_HEIGHT)
+        if (player.getYPos() < GAME_HEIGHT + margin - PLAYER_SIZE)
         {
             player.Move(0,PLAYER_STEP); 
             cam.translate(0,PLAYER_STEP,0);
@@ -393,10 +399,10 @@ void keyOperations (void)
                 player.setXLean(player.getXLean()-3);
         }  
     }
-    // If the 'd' key has been pressed  
+    // d: move right
 	if (keyStates['d']) 
 	{
-        if (player.getXPos() < GAME_WIDTH)
+        if (player.getXPos() < GAME_WIDTH + margin - PLAYER_SIZE)
         {
             player.Move(PLAYER_STEP,0); 
             cam.translate(PLAYER_STEP,0,0);
@@ -406,10 +412,10 @@ void keyOperations (void)
                 player.setZLean(player.getZLean()+3);
         }
 	}
-    // If the 'a' key has been pressed
+    // a: move left
 	if (keyStates['a']) 
 	{ 
-        if (player.getXPos() > 0.0)
+        if (player.getXPos() > -margin + PLAYER_SIZE)
         {
             player.Move(-PLAYER_STEP,0); 
             cam.translate(-PLAYER_STEP,0,0);
@@ -421,15 +427,43 @@ void keyOperations (void)
 	}  
     player.Lean();
 
+    // r: Rotate duck  
+    if (keyStates['r']) 
+	{
+	   player.setYspin(player.getYSpin()+5);
+	}
+
+    // Enable 'bounding' spheres used for collision
 	if (keyStates['1']) 
 	{
         testMode = true;
-	} 
+	}
 
+    // Enable 'bounding' spheres used for collision
 	if (keyStates['2']) 
 	{
         testMode = false;
+	} 
+
+    // Extend the play area
+	if (keyStates['3']) 
+	{
+        static bool increasing = true;
+        if (increasing && margin < 100)                     // max size
+            margin += 5;
+        else if (!increasing && margin > (PLAYER_SIZE + 5)) // min size
+            margin -= 5;
+        else if (increasing)
+            increasing = false;
+        else
+            increasing = true;
 	}
+
+    // Select glass or mesh panel
+    if (keyStates['4'])
+    {
+        mesh = !mesh;
+    }
 
     if (keyStates['+'])
     {

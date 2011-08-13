@@ -40,7 +40,8 @@
 #define TITLE_TIME      50
 
 // Panels
-#define MARGIN          50
+#define MARGIN          75
+#define MESH_SIZE       40// should be a factor of GAME_WIDTH and GAME_HEIGHT
 
 // Sky
 #define SUN_SIZE        100
@@ -65,7 +66,6 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, BUG, CONE, SKULL, GLOVE, SWORD };			// 
 #define SENSITIVITY     20
 
 // Points
-#define TEXT_SIZE       48
 #define P_HIT          -100
 #define P_AVOID         5
 
