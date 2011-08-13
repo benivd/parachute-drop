@@ -43,16 +43,20 @@ int level = 0;
 int levelCounter = LEVEL_TIME;
 int titleCounter = TITLE_TIME;
 
-// Obstacles
-GLfloat position[] = {0,0,0,0};
-        
-// World
+// Stars
 int starPos[NUM_STARS][2];
+int tunnelSize = ( -GAME_DEPTH )*2;
+
+// Glass Panels
+int margin = 25;
 
 // Fog
 float fogStart = 0.0;
 float fogEnd   = 0.0;
 
+// Obstacles
+GLfloat position[] = {0,0,0,0};
+        
 // Game speed (milliseconds)
 int speedMove   = 100;
 int speedCreate = 1000;
@@ -215,7 +219,7 @@ void drawStars()
 	    
     // Sun (at GAME_DEPTH, above the glass panels)
     glPushMatrix();
-	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + PLAYER_SIZE + SUN_SIZE, GAME_DEPTH);
+	glTranslatef( -GAME_WIDTH/3, GAME_HEIGHT + margin + SUN_SIZE, GAME_DEPTH);
     GLUquadricObj *sphere=NULL;
 	sphere = gluNewQuadric();
 	gluQuadricDrawStyle(sphere, GLU_FILL);
@@ -275,36 +279,34 @@ void drawPanels()
     glMaterialf(GL_FRONT, GL_SHININESS, shininess);
     */
 
-    int tunnelSize = ( -GAME_DEPTH )*2;
-
     // Top Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, GAME_HEIGHT + PLAYER_SIZE/2 + 0.5, -tunnelSize/2 + 50);
-    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, tunnelSize);
-    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glTranslatef( GAME_WIDTH/2, GAME_HEIGHT + margin, -tunnelSize/2 + 50 );
+    glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+    glColor4f( 0.9, 0.95, 1.0, 0.2 );
     glutSolidCube(1);
     glPopMatrix();
 
     // Bottom Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH/2, -(PLAYER_SIZE/2 + 0.5), -tunnelSize/2 + 50);
-    glScalef(GAME_WIDTH + PLAYER_SIZE, 1.0, tunnelSize);
-    glColor4f(0.9, 0.95, 1.0, 0.2);
+    glTranslatef( GAME_WIDTH/2, -margin, -tunnelSize/2 + 50 );
+    glScalef( GAME_WIDTH + margin*2, 1.0, tunnelSize );
+    glColor4f( 0.9, 0.95, 1.0, 0.2 );
     glutSolidCube(1);
     glPopMatrix();
 
     // Left Panel:
     glPushMatrix();
-    glTranslatef(-(PLAYER_SIZE/2 + 0.5), GAME_HEIGHT/2, -tunnelSize/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, tunnelSize);
+    glTranslatef( -margin, GAME_HEIGHT/2, -tunnelSize/2 + 50 );
+    glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
-    // Top panel:
+    // Right Panel:
     glPushMatrix();
-    glTranslatef(GAME_WIDTH + PLAYER_SIZE/2 + 0.5, GAME_HEIGHT/2, -tunnelSize/2 + 50);
-    glScalef(1.0, GAME_HEIGHT + PLAYER_SIZE, tunnelSize);
+    glTranslatef(GAME_WIDTH + margin, GAME_HEIGHT/2, -tunnelSize/2 + 50);
+    glScalef(1.0, GAME_HEIGHT + margin*2, tunnelSize);
     glColor4f(0.9, 0.95, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
@@ -362,81 +364,92 @@ void drawStats()
 }
     
 void keyOperations (void) 
-	{  
-       // If the 's' key has been pressed  
-	   if (keyStates['s']) 
-	   {
-           if (player.getYPos() > 0.0)
-           {
-               player.Move(0,-PLAYER_STEP);   
-               cam.translate(0,-PLAYER_STEP,0);
-               if(player.getXLean()>=35)
-                   player.setXLean(35);
-               else
-                   player.setXLean(player.getXLean()+3);
-           }
+{  
+    //if the 's' key has been pressed  
+    if (keyStates['s']) 
+	{
+        if (player.getYPos() > 0.0)
+        {
+            player.Move(0,-PLAYER_STEP);   
+            cam.translate(0,-PLAYER_STEP,0);
+            if(player.getXLean()>=35)
+                player.setXLean(35);
+            else
+                player.setXLean(player.getXLean()+3);
+        }
 
-	   } 
-       // If the 's' key has been pressed  
-	   if (keyStates['r']) 
-	   {
-		   player.setYspin(player.getYSpin()+5);
-	   }
-       // If the 'w' key has been pressed   
-  	   if (keyStates['w']) 
-	   {
-           if (player.getYPos() < GAME_HEIGHT)
-           {
-               player.Move(0,PLAYER_STEP); 
-               cam.translate(0,PLAYER_STEP,0);
-               if(player.getXLean()<=-35)
-                   player.setXLean(-35);
-               else
-                   player.setXLean(player.getXLean()-3);
-           }  
-       }
-       // If the 'd' key has been pressed  
-	   if (keyStates['d']) 
-	   {
-           if (player.getXPos() < GAME_WIDTH)
-           {
-               player.Move(PLAYER_STEP,0); 
-               cam.translate(PLAYER_STEP,0,0);
-               if(player.getZLean()>=55)
-                   player.setZLean(55);
-               else
-                   player.setZLean(player.getZLean()+3);
-           }
-	   }
-       // If the 'a' key has been pressed
-	   if (keyStates['a']) 
-	   { 
-           if (player.getXPos() > 0.0)
-           {
-               player.Move(-PLAYER_STEP,0); 
-               cam.translate(-PLAYER_STEP,0,0);
-               if(player.getZLean()<=-55)
-                   player.setZLean(-55);
-               else
-                   player.setZLean(player.getZLean()-3);
-           }
-	   }  
-	   if (keyStates['1']) 
-	   {
-           testMode = true;
-	   } 
+    } 
+    // If the 's' key has been pressed  
+    if (keyStates['r']) 
+	{
+	   player.setYspin(player.getYSpin()+5);
+	}
+    // If the 'w' key has been pressed   
+  	if (keyStates['w']) 
+	{
+        if (player.getYPos() < GAME_HEIGHT)
+        {
+            player.Move(0,PLAYER_STEP); 
+            cam.translate(0,PLAYER_STEP,0);
+            if(player.getXLean()<=-35)
+                player.setXLean(-35);
+            else
+                player.setXLean(player.getXLean()-3);
+        }  
+    }
+    // If the 'd' key has been pressed  
+	if (keyStates['d']) 
+	{
+        if (player.getXPos() < GAME_WIDTH)
+        {
+            player.Move(PLAYER_STEP,0); 
+            cam.translate(PLAYER_STEP,0,0);
+            if(player.getZLean()>=55)
+                player.setZLean(55);
+            else
+                player.setZLean(player.getZLean()+3);
+        }
+	}
+    // If the 'a' key has been pressed
+	if (keyStates['a']) 
+	{ 
+        if (player.getXPos() > 0.0)
+        {
+            player.Move(-PLAYER_STEP,0); 
+            cam.translate(-PLAYER_STEP,0,0);
+            if(player.getZLean()<=-55)
+                player.setZLean(-55);
+            else
+                player.setZLean(player.getZLean()-3);
+        }
+	}  
+    player.Lean();
 
-	   if (keyStates['2']) 
-	   {
-           testMode = false;
-	   } 
+	if (keyStates['1']) 
+	{
+        testMode = true;
+	} 
 
-	   if(keyStates[27])
-	   {
-		    exit(0);
-	   }
-	player.Lean();
-   } 
+	if (keyStates['2']) 
+	{
+        testMode = false;
+	}
+
+    if (keyStates['+'])
+    {
+        if (cam.cz > -6) cam.translate(0.0, 0.0,-1.0);
+    }
+
+    if (keyStates['-'])
+    {
+        if (cam.cz < 20) cam.translate(0.0, 0.0, 1.0);
+    }
+
+	if(keyStates[27])
+	{
+	    exit(0);
+	}
+} 
  
 // GLUT Display Function
 void display(void)
@@ -475,11 +488,11 @@ void display(void)
             // Draw sun and stars
             drawStars();
 
-            // Draw obstacles before panels
+/*            // Draw obstacles before panels
             glDisable(GL_DEPTH_TEST);
             obstacles.drawAll(0, testMode);
             glEnable(GL_DEPTH_TEST);
-
+*/
             // Draw glass boundaries
             drawPanels();
             
