@@ -139,7 +139,7 @@ Obstacle::Obstacle()
 	spinAngle = 0.0;
 	colorGen = rand() % 360;
 	sunNum= 0;
-	objScaler=0;
+	objScaler= rand() %100;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -163,7 +163,7 @@ Obstacle::Obstacle(float x, float y, float z , Obstacle* nextnode)
 	next = nextnode;
 	objtype = TEAPOT;
 	sunNum= 0;
-	objScaler=0;
+	objScaler= rand() %100;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -186,7 +186,7 @@ Obstacle::Obstacle(float x,float y,float z,Obstacle* nextnode, objType objT)
 	next = nextnode;
 	objtype = objT;
 	sunNum= 0;
-	objScaler=0;
+	objScaler= rand() %100;
 
     // TODO: define a size for each object
     objSize = 10.0;
@@ -296,6 +296,7 @@ void Obstacle::setLevel(int level)
 
 void Obstacle::draw(int level, bool testMode)
 {
+	objScaler+=1;
     glPushMatrix();
     
     glTranslatef( getXPos(), getYPos(), getZPos() );
@@ -357,7 +358,6 @@ void Obstacle::draw(int level, bool testMode)
 				glLightfv(GL_LIGHT3, GL_DIFFUSE, dif);
 			}
 				glDisable(GL_LIGHTING);
-				objScaler+=1;
 				float scale=abs(cos(objScaler));
 				glutSolidSphere((scale*2)+10,20,20);
 				glEnable(GL_LIGHTING);
@@ -376,8 +376,7 @@ void Obstacle::draw(int level, bool testMode)
         if (!crash)
         {
 			glRotatef(45,1,1,0);
-            if (level != 0) objScaler+=.1;
-			float scale=sin(objScaler);
+			float scale=sin(objScaler/10);
 			glRotatef(abs(scale)*180,1,1,0);
 			setXPos(getXPos()+(scale));
 			setYPos(getYPos()+scale);
@@ -399,8 +398,7 @@ void Obstacle::draw(int level, bool testMode)
         {
             //glTranslatef(0.0, 0.0, -objSize);
 			glPushMatrix();
-			if (level != 0) objScaler+=.1;
-			float scale=sin(objScaler);
+			float scale=sin(objScaler/10);
 			glRotatef(scale*20,0,0,1);
 		    glColor4f(1,0,0,.1);
 		    glScalef(25,25,25);
@@ -423,7 +421,7 @@ void Obstacle::draw(int level, bool testMode)
         {
 			glScalef(20,20,20);
 			glRotatef(180,0,1,0);
-			objScaler+=5;
+			objScaler+=4;
 			glRotatef(objScaler,1,0,0);
            	drawBug();
 			setObjRad(18.0);
@@ -440,8 +438,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			if (level != 0) objScaler+=.1;
-			float scale=abs(cos(objScaler));
+			float scale=abs(cos(objScaler/10));
 		    glColor3f(scale,(1-scale),0);
 		    glScalef(scale*20,scale*20,10);
 		    glutSolidCone(1,1,20,20);
@@ -459,8 +456,7 @@ void Obstacle::draw(int level, bool testMode)
 	{
         if (!crash)
         {
-			if (level != 0) objScaler+=.1;
-			float scale=sin(objScaler);
+			float scale=sin(objScaler/10);
 			setXPos(getXPos()+scale);
             glColor3f(1,1,1);
 			glRotatef(-90,1,0,0);
@@ -482,10 +478,9 @@ void Obstacle::draw(int level, bool testMode)
         {
             //glTranslatef(0.0, 0.0, -objSize);
 			glPushMatrix();
-			if (level != 0) objScaler+=.1;
-			float scale=sin(objScaler);
-			setZPos(getZPos()+scale*10);
-			glRotatef(objScaler*50,0,0,1);
+			float scale=sin(objScaler/10);
+			setZPos(getZPos()+scale*12);
+			glRotatef(objScaler*5,0,0,1);
 			glRotatef(-90,1,0,0);
 		    glScalef(25,25,25);
 		    drawGlove();
@@ -506,9 +501,8 @@ void Obstacle::draw(int level, bool testMode)
         if (!crash)
         {
             //glTranslatef(0.0, 0.0, -objSize);
-			if (level != 0) objScaler+=.1;
-			float scale=sin(objScaler);
-			float scale2=cos(objScaler);
+			float scale=sin(objScaler/10);
+			float scale2=cos(objScaler/10);
 			glColor3f((rand() % 10) /10.0,(rand() % 10) /10.0,(rand() % 10)/10.0);
 			setYPos(getYPos()+scale*2);
 			setXPos(getXPos()+scale2*2);			
