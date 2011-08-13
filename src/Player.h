@@ -31,6 +31,7 @@ class Player
 		int flashcount;
 		bool flash;
 		bool spinout;
+		bool hittable;
 		int spintime;
 		float ySpin;
 
@@ -64,6 +65,7 @@ class Player
 		bool getSpinout() {return this->spinout; }
 		int getSpinTime() {return this->spintime; }
 		float getYSpin() {return this->ySpin; }
+		bool getHittable() {return this->hittable; }
 
 
 		void explode();

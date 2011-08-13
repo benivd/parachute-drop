@@ -137,6 +137,37 @@ void setLevel3()
     obstacles.removeAll();
 }
 
+void setLevel3Plus()
+{
+	state= LEVEL;
+	level = level+1;
+	levelCounter= LEVEL_TIME;
+	titleCounter = TITLE_TIME;
+
+	//fog constant
+	fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
+    fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
+
+	speedCreate = SPAWN_L3/(level);
+
+	// Clear level
+    obstacles.removeAll();
+}
+
+void resetLevel3Plus()
+{
+	state= LEVEL;
+	level = level;
+	levelCounter= LEVEL_TIME;
+	titleCounter = TITLE_TIME;
+
+	//fog constant
+	fogStart = -(GAME_DEPTH) * FOGEND_L3*0.50;
+    fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
+
+	speedCreate = SPAWN_L3/(level);
+}
+
 // Print a single char array
 void printString(char* s)
 {
@@ -673,6 +704,8 @@ void moveTimer(int value)
                         break;
                         case 3:
                             setLevel3();
+						default:
+							resetLevel3Plus();
                         break;
                     }
                 }
@@ -708,8 +741,8 @@ void moveTimer(int value)
                 case 2:
                     setLevel3();
                 break;
-                case 3:
-                    state = GAME_OVER;
+				default:
+					setLevel3Plus();
                 break;
             }
         }

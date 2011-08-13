@@ -21,7 +21,7 @@ Player::Player()
 	setSpinout(false);
 	ySpin=0;
 	setRad(.6);
-
+	hittable=true;
 }
 
 // Player::~Player(); // Using default
@@ -44,12 +44,14 @@ void drawmodel(void)
 
 void Player::explode()
 {
+
 	if(health!=0)
 		setSpinout(true);
 	else
 	{
 		flash=true;
 		flashcount=10;
+		hittable=false;
 	}
 }
 
@@ -74,7 +76,10 @@ void Player::draw(bool testMode)
 	{
 		flashcount=flashcount-1;
 		if(flashcount==0)
+		{
 			flash=false;
+			hittable=true;
+		}
 	}
 	if(flashcount%2==0)
 		drawmodel();	

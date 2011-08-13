@@ -94,7 +94,7 @@ void ObstacleList::insert(float xPos, float yPos, float zPos, int level)
 	int randObj;
 	if(level==1)randObj= rand() % 7;
 	if(level==2)randObj= rand() % 8;
-	if(level==3)randObj= rand() % 9;
+	if(level>=3)randObj= rand() % 9;
 	
 	Obstacle* MyNode = new Obstacle(xPos, yPos, zPos, NULL);
 	if (randObj==0)
@@ -225,7 +225,7 @@ bool ObstacleList::CollidesAll(Player* player)
 
 		if(first ==last)	//If only one obstacle in the link List, set its Z coordinates
 		{
-			if( (!first->getCrash()) &&
+			if((player->getHittable()) && (!first->getCrash()) &&
                 distance(player->getXPos(),
                          player->getYPos(),
                          player->getZPos(),
@@ -244,7 +244,7 @@ bool ObstacleList::CollidesAll(Player* player)
 			Obstacle * temp = first;
 
 			 do{
-				 if( (!temp->getCrash()) &&
+				 if((player->getHittable()) && (!temp->getCrash()) &&
                      distance(player->getXPos(),
                               player->getYPos(),
                               player->getZPos(),
@@ -263,7 +263,7 @@ bool ObstacleList::CollidesAll(Player* player)
 				}while(temp!= last);
 
 				//last obj
-				if( (!last->getCrash()) &&
+				if((player->getHittable()) && (!last->getCrash()) &&
                     distance(player->getXPos(),
                              player->getYPos(),
                              player->getZPos(),
