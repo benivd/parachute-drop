@@ -65,7 +65,7 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, BUG, CONE, SKULL, GLOVE, SWORD };			// 
 #define SENSITIVITY     20
 
 // Points
-#define TEXT_SIZE       32
+#define TEXT_SIZE       48
 #define P_HIT          -100
 #define P_AVOID         5
 

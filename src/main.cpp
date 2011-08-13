@@ -137,7 +137,6 @@ void setLevel3()
 void printString(char* s)
 {
     glPushMatrix();
-    glScalef(TEXT_SIZE/18, TEXT_SIZE/18, 1);
     char* p;
     for (p = s; *p; p++)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *p);
@@ -181,7 +180,7 @@ void drawGameOver()
 
     // Points
     glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2i(width/2-40, height/2-12);
+    glRasterPos2i(width/2 - 40, height/2 - 18/2);
     char buffer[20];
     sprintf(buffer, "Score: %i", player.getPoints());
     printString(buffer);
@@ -319,36 +318,33 @@ void drawStats()
 
     glPushMatrix();
 
-    // Statistics
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
-    glRasterPos2i( TEXT_SIZE/2, height-TEXT_SIZE);
 
+    // Level
     char buffer[20];
+    glRasterPos2i( 1, height - 18);
     sprintf(buffer, "Level %i", level);
     printString(buffer);
 
     if (titleCounter != 0)
     {
         glColor3f(1,1,1);
-        glRasterPos2i(width/2 - TEXT_SIZE*2, height/2 - TEXT_SIZE/2);
-        sprintf(buffer, "Level %i", level);
+        glRasterPos2i(width/2 - 40, height/2 - 18);
         printString(buffer);
         titleCounter -= 1;
     }
     
-    glRasterPos2i( TEXT_SIZE/2, TEXT_SIZE/2);
- 
+    // Lives, Health & Score
+    glRasterPos2i( 1, 1);
     sprintf(buffer, "Lives: %i", player.getLives());
     printString(buffer);
-
     sprintf(buffer, "    Health: %i", player.getHealth());
     printString(buffer);
-
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
 
