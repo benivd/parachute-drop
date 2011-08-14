@@ -205,6 +205,7 @@ void drawMenu()
 // Draw text for game over screen
 void drawGameOver()
 {
+	PlaySound(L"snd/game_over.wav", NULL, SND_FILENAME | SND_ASYNC);
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
     
