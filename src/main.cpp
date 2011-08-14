@@ -21,6 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <Windows.h>      // for PlaySound()
 #include <GL/glut.h>
 
 #include "global.h"       // Global variables and constants
@@ -646,7 +647,10 @@ void click(int button, int stat, int x, int y)
 {
     if (button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
     {
-        if (state == MENU) setLevel1();
+        if (state == MENU) {
+			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+			setLevel1();
+		}
         else if (state == GAME_OVER) state = MENU;
     }
 
@@ -848,6 +852,9 @@ int main(int argc, char** argv)
     
     glutTimerFunc(speedMove, moveTimer, 0);
     glutTimerFunc(speedCreate, createTimer, 0);
+
+	// Background Music
+	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
 
     glutMainLoop();
 
