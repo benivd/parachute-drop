@@ -21,7 +21,11 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include <Windows.h>      // for PlaySound()
+
+#if defined _WIN32
+# include <Windows.h>
+#endif
+
 #include <GL/glut.h>
 
 #include "global.h"       // Global variables and constants
@@ -205,7 +209,9 @@ void drawMenu()
 // Draw text for game over screen
 void drawGameOver()
 {
+#if defined _WIN32
 	PlaySound(L"snd/game_over.wav", NULL, SND_FILENAME | SND_ASYNC);
+#endif
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
     
@@ -649,7 +655,9 @@ void click(int button, int stat, int x, int y)
     if (button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
     {
         if (state == MENU) {
-			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+#if defined _WIN32
+            PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+#endif
 			setLevel1();
 		}
         else if (state == GAME_OVER) state = MENU;
@@ -855,7 +863,9 @@ int main(int argc, char** argv)
     glutTimerFunc(speedCreate, createTimer, 0);
 
 	// Background Music
+#if defined _WIN32
 	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+#endif
 
     glutMainLoop();
 

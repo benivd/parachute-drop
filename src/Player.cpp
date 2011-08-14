@@ -1,9 +1,14 @@
 #include "Player.h"
 
 #include <cstdlib>
-#include <GL/glut.h>
 #include <iostream>
-#include <Windows.h>
+
+#if defined _WIN32
+# include <Windows.h>
+#endif
+
+#include <GL/glut.h>
+
 #include "objLoader/glm.c"
 
 
@@ -44,7 +49,9 @@ void drawmodel(void)
 
 void Player::explode()
 {
+#if defined _WIN32
 	PlaySound(L"snd/cardboard_box_impact_hard1.wav", NULL, SND_FILENAME | SND_ASYNC);
+#endif
 	if(health!=0) {
 		setSpinout(true);
 	}
