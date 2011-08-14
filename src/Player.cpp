@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <GL/glut.h>
 #include <iostream>
-
+#include <Windows.h>
 #include "objLoader/glm.c"
 
 
@@ -44,9 +44,10 @@ void drawmodel(void)
 
 void Player::explode()
 {
-
-	if(health!=0)
+	PlaySound(L"snd/cardboard_box_impact_hard1.wav", NULL, SND_FILENAME | SND_ASYNC);
+	if(health!=0) {
 		setSpinout(true);
+	}
 	else
 	{
 		flash=true;
