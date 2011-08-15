@@ -23,24 +23,17 @@ static GLuint BUGTexId;
 
 void Obstacle::LoadVMask(void)
 {
-	// Load menu texture
+	// Load mask texture
+	//http://www.3dvia.com/content/63BF85596B7D4F61
 	Image* image = loadBMP("tex/VMaskCol.bmp");
 	glGenTextures( 1, &MaskTexId );
 	glBindTexture( GL_TEXTURE_2D, MaskTexId );
 	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 }
 
-void Obstacle::LoadBug(void)
-{
-	// Load menu texture
-	Image* image = loadBMP("tex/color.bmp");
-	glGenTextures( 1, &BUGTexId );
-	glBindTexture( GL_TEXTURE_2D, BUGTexId );
-	gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-}
-
 void drawVMask(void)
 {
+	//http://www.3dvia.com/content/63BF85596B7D4F61
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture( GL_TEXTURE_2D, MaskTexId );
@@ -59,7 +52,9 @@ void drawVMask(void)
 
 void drawBug(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
+	
+	//glBindTexture( GL_TEXTURE_2D, BUGTexId 
+	http://www.oyonale.com/modeles.php?lang=en&page=55
     if (!pmodel3) {
         pmodel3 = glmReadOBJ("obj/ladybird.obj");
         if (!pmodel3) exit(0);
@@ -75,7 +70,6 @@ void drawBug(void)
 
 void drawGlove(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
 	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/223158
     if (!pmodel5) {
         pmodel5 = glmReadOBJ("obj/gloveLow_poly.obj");
@@ -92,7 +86,6 @@ void drawGlove(void)
 
 void drawSword(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
 	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/362147
     if (!pmodel6) {
         pmodel6 = glmReadOBJ("obj/rzr.obj");
@@ -110,7 +103,6 @@ void drawSword(void)
 
 void drawSkull(void)
 {
-	//glBindTexture( GL_TEXTURE_2D, BUGTexId );
 	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/269706
     if (!pmodel4) {
         pmodel4 = glmReadOBJ("obj/skull.obj");

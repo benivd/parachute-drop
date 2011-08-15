@@ -3,7 +3,7 @@
  *
  * Description:
  * Main program file including GLUT Functions for the OpenGL game
- * 'Parachute Drop'.
+ * 'Ducks in space'.
  *
  * Last Modified:   11/07/19
  * Changelog:       11/07/19 - Basic GLUT functions
@@ -986,9 +986,6 @@ void init(void)
 	//Load Mask texture
 	Obstacle::LoadVMask();
 
-	//Load Bug text
-	//Obstacle::LoadBug();
-
     // Load menu texture
     Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
@@ -1087,13 +1084,6 @@ int main(int argc, char** argv)
     
     glutTimerFunc(speedMove, moveTimer, 0);
     glutTimerFunc(speedCreate, createTimer, 0);
-
-	// Background Music
-//#if defined _WIN32
-//	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
-//#endif
-
-
 
     glutMainLoop();
 
