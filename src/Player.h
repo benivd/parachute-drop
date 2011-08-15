@@ -66,6 +66,7 @@ class Player
 		int getSpinTime() {return this->spintime; }
 		float getYSpin() {return this->ySpin; }
 		bool getHittable() {return this->hittable; }
+		int getFlashCount() {return this->flashcount; }
 
 
 		void explode();

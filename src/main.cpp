@@ -80,6 +80,7 @@ GLuint worldTexId;
 GLuint menuTexId;
 GLuint gameoverTexId;
 GLuint sunTexId;
+GLuint playTexId;
 
 // Keyboard
 bool* keyStates = new bool[256];
@@ -209,16 +210,26 @@ void drawMenu()
     gluOrtho2D(0, width, 0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(1.0, 1.0, 1.0);	
 
     glEnable(GL_TEXTURE_2D);
+
+	glBindTexture( GL_TEXTURE_2D, playTexId );
+	glBegin(GL_QUADS);
+		glTexCoord2f( 0, 0 ); glVertex2f( 100, 25);
+		glTexCoord2f( 1, 0 ); glVertex2f( 300, 25);
+		glTexCoord2f( 1, 1 ); glVertex2f( 300, 150);
+		glTexCoord2f( 0, 1 ); glVertex2f( 100, 150);
+    glEnd();
+	
     glBindTexture( GL_TEXTURE_2D, menuTexId );
     glBegin(GL_QUADS);
-    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
-    glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
-    glTexCoord2f( 1, 1 ); glVertex2f( width, height);
-    glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
+		glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
+		glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
+		glTexCoord2f( 1, 1 ); glVertex2f( width, height);
+		glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
     glEnd();
+
     glDisable(GL_TEXTURE_2D);
 }
 
@@ -401,6 +412,12 @@ void drawStats()
         printString(buffer);
         titleCounter -= 1;
     }
+	if(titleCounter == 1)
+	{
+		#if defined _WIN32
+		PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+		#endif
+	}
     
     // Lives, Health & Score
     glRasterPos2i( 1, 1);
@@ -538,6 +555,13 @@ void keyOperations (void)
 void display(void)
 {
 	keyOperations(); 
+	if(player.getYSpin()>325)
+	{
+		#if defined _WIN32
+		PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+		#endif
+	}
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0,0,0,0);
     glPushMatrix();
@@ -592,9 +616,9 @@ void display(void)
 			
 			// Sound to indicate beginning of level
 			if (beginSnd) {
-#if defined _WIN32
+			#if defined _WIN32
 			PlaySound(L"snd/squeak.wav", NULL, SND_FILENAME | SND_ASYNC);
-#endif
+			#endif
 			beginSnd = false;
 			}
             
@@ -676,13 +700,13 @@ void mouse(int x, int y)
 // GLUT mouse click Function
 void click(int button, int stat, int x, int y)
 {
-    if (button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+    if (x>100&&x<300&&y<575&&y>450&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
     {
         if (state == MENU) {
 			// Menu Click sound
-#if defined _WIN32
-            PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
-#endif
+			#if defined _WIN32
+			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+			#endif			
 			setLevel1();
 		}
         else if (state == GAME_OVER) state = MENU;
@@ -716,7 +740,7 @@ void moveTimer(int value)
             player.addPoints(P_HIT);
 
             // Lose health
-            if (player.getHealth() > 0)
+            if (player.getHealth() > 1)
             {
                 // health -1
                 player.setHealth(player.getHealth()-1);
@@ -844,7 +868,14 @@ void init(void)
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+    // Load game over texture
+    image = loadBMP("tex/Button1.bmp");
+    glGenTextures( 1, &playTexId );
+    glBindTexture( GL_TEXTURE_2D, playTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 
+	
 	// Load sun texture
 	http://www.turbosquid.com/FullPreview/Index.cfm/ID/557319
     image = loadBMP("tex/Sun.bmp");
@@ -891,6 +922,8 @@ int main(int argc, char** argv)
 //#if defined _WIN32
 //	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
 //#endif
+
+
 
     glutMainLoop();
 
