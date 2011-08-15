@@ -98,7 +98,7 @@ void Player::createParticles (void)
     smokeMaskId = LoadTextureRAW("tex/particle_mask.raw",256,256);
     smokeTexId = LoadTextureRAW("tex/particle.raw",256,256);
 
-    for (int i = 1; i < count; i++)
+    for (int i = 0; i < count; i++)
     {
         particle[i].xPos = 0;
         particle[i].yPos = -5;
@@ -115,9 +115,8 @@ void Player::createParticles (void)
 
 void updateParticles()
 {
-    for (int i = 1; i < count; i++)
+    for (int i = 0; i < count; i++)
     {
-        glColor3f (1, 1, 1);
         particle[i].yPos = particle[i].yPos + particle[i].accel - particle[i].decel;
         particle[i].decel = particle[i].decel + 0.0025;
         particle[i].xPos = particle[i].xPos + particle[i].xMov;
@@ -142,10 +141,9 @@ void drawParticles()
     {
         glPushMatrix();
         glColor4f(1,1,1,0.3);
+        glScalef(partSize, partSize, 1);
         glTranslatef( particle[i].xPos, particle[i].yPos, particle[i].zPos );
         glRotatef( particle[i].dir - 90, 0, 0, 1 );
-        
-        glScalef(partSize, partSize, 1);
         
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);

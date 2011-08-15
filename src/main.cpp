@@ -989,6 +989,7 @@ void init(void)
 	Obstacle::LoadVMask();
 
     // Load menu texture
+    // http://www.budproduct.com/collections/80s-pop-culture/ducks-in-space-mini-duck-set-2/ducks-in-space-mini-duck-set/
     Image* image = loadBMP("tex/ducksinspace.bmp");
     glGenTextures( 1, &menuTexId );
     glBindTexture( GL_TEXTURE_2D, menuTexId );
@@ -996,6 +997,7 @@ void init(void)
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
     
     // Load game over texture
+    //
     image = loadBMP("tex/gameover.bmp");
     glGenTextures( 1, &gameoverTexId );
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
@@ -1046,7 +1048,7 @@ void init(void)
 
 	
 	// Load sun texture
-	http://www.turbosquid.com/FullPreview/Index.cfm/ID/557319
+	//http://www.turbosquid.com/FullPreview/Index.cfm/ID/557319
     image = loadBMP("tex/Sun.bmp");
     glGenTextures( 1, &sunTexId );
     glBindTexture( GL_TEXTURE_2D, sunTexId );

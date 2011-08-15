@@ -55,7 +55,7 @@
 #define FOGEND_L3       0.70
 #define SPAWN_L1        1000
 #define SPAWN_L2        500
-#define SPAWN_L3        200
+#define SPAWN_L3        4000
 
 enum objType { SUN, TEAPOT, CUBE, VMASK, BUG, CONE, SKULL, GLOVE, SWORD };			// least of possible objects
 
