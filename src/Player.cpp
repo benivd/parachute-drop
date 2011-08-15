@@ -52,7 +52,7 @@ void Player::explode()
 #if defined _WIN32
 	PlaySound(L"snd/cardboard_box_impact_hard1.wav", NULL, SND_FILENAME | SND_ASYNC);
 #endif
-	if(health!=0) {
+	if(health!=1) {
 		setSpinout(true);
 	}
 	else

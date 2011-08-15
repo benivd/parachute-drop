@@ -42,7 +42,7 @@ int width  = WIDTH;       // Current window width
 int height = HEIGHT;      // Current window height
 
 // Game info
-enum gameState { MENU, LEVEL, GAME_OVER };
+enum gameState { MENU, LEVEL, GAME_OVER, INSTRUCTIONS, CREDITS };
 gameState state = MENU;
 
 int level = 0;
@@ -81,6 +81,11 @@ GLuint menuTexId;
 GLuint gameoverTexId;
 GLuint sunTexId;
 GLuint playTexId;
+GLuint instructionTexId;
+GLuint creditsTexId;
+GLuint mainMenuTexId;
+GLuint instructionsTexId;
+GLuint creditsSTexId;
 
 // Keyboard
 bool* keyStates = new bool[256];
@@ -216,10 +221,26 @@ void drawMenu()
 
 	glBindTexture( GL_TEXTURE_2D, playTexId );
 	glBegin(GL_QUADS);
-		glTexCoord2f( 0, 0 ); glVertex2f( 100, 25);
-		glTexCoord2f( 1, 0 ); glVertex2f( 300, 25);
-		glTexCoord2f( 1, 1 ); glVertex2f( 300, 150);
-		glTexCoord2f( 0, 1 ); glVertex2f( 100, 150);
+		glTexCoord2f( 0, 0 ); glVertex2f( width*.1, height*.05);
+		glTexCoord2f( 1, 0 ); glVertex2f( width*.35, height*.05);
+		glTexCoord2f( 1, 1 ); glVertex2f( width*.35, height*.25);
+		glTexCoord2f( 0, 1 ); glVertex2f( width*.1, height*.25);
+    glEnd();
+
+	glBindTexture( GL_TEXTURE_2D, instructionTexId );
+	glBegin(GL_QUADS);
+		glTexCoord2f( 0, 0 ); glVertex2f( width*.375, height*.05);
+		glTexCoord2f( 1, 0 ); glVertex2f( width*.625, height*.05);
+		glTexCoord2f( 1, 1 ); glVertex2f( width*.625, height*.25);
+		glTexCoord2f( 0, 1 ); glVertex2f( width*.375, height*.25);
+    glEnd();
+
+	glBindTexture( GL_TEXTURE_2D, creditsTexId );
+	glBegin(GL_QUADS);
+		glTexCoord2f( 0, 0 ); glVertex2f( width*.65, height*.05);
+		glTexCoord2f( 1, 0 ); glVertex2f( width*.9, height*.05);
+		glTexCoord2f( 1, 1 ); glVertex2f( width*.9, height*.25);
+		glTexCoord2f( 0, 1 ); glVertex2f( width*.65, height*.25);
     glEnd();
 	
     glBindTexture( GL_TEXTURE_2D, menuTexId );
@@ -254,13 +275,71 @@ void drawGameOver()
 
     // Game Over Screen
     glEnable(GL_TEXTURE_2D);
-    glBindTexture( GL_TEXTURE_2D, gameoverTexId );
+
+	    glBindTexture( GL_TEXTURE_2D, mainMenuTexId );
+		glBegin(GL_QUADS);
+		glTexCoord3f( 0, 0, -5 ); glVertex2f( width*.375, height*.15);
+		glTexCoord3f( 1, 0, -5 ); glVertex2f( width*.625, height*.15);
+		glTexCoord3f( 1, 1, -5 ); glVertex2f( width*.625, height*.35);
+		glTexCoord3f( 0, 1, -5 ); glVertex2f( width*.375, height*.35);
+		glEnd();
+
+		glBindTexture( GL_TEXTURE_2D, gameoverTexId );
+		glBegin(GL_QUADS);
+		glTexCoord3f( 0, 0, -5 ); glVertex2f( 0, 0);
+		glTexCoord3f( 1, 0, -5 ); glVertex2f( width, 0);
+		glTexCoord3f( 1, 1, -5 ); glVertex2f( width, height);
+		glTexCoord3f( 0, 1, -5 ); glVertex2f( 0, height);
+		glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+// Draw text for instruction screen
+void drawInstructions()
+{
+	glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);	
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, instructionsTexId );
     glBegin(GL_QUADS);
-    glTexCoord3f( 0, 0, -5 ); glVertex2f( 0, 0);
-    glTexCoord3f( 1, 0, -5 ); glVertex2f( width, 0);
-    glTexCoord3f( 1, 1, -5 ); glVertex2f( width, height);
-    glTexCoord3f( 0, 1, -5 ); glVertex2f( 0, height);
+		glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
+		glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
+		glTexCoord2f( 1, 1 ); glVertex2f( width, height);
+		glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
     glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+// Draw text for credits screen
+void drawCredits()
+{
+	glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, 0, height);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);	
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, creditsSTexId );
+    glBegin(GL_QUADS);
+		glTexCoord2f( 0, 0 ); glVertex2f( 0, 0);
+		glTexCoord2f( 1, 0 ); glVertex2f( width, 0);
+		glTexCoord2f( 1, 1 ); glVertex2f( width, height);
+		glTexCoord2f( 0, 1 ); glVertex2f( 0, height);
+    glEnd();
+
     glDisable(GL_TEXTURE_2D);
 }
 
@@ -576,6 +655,19 @@ void display(void)
             drawMenu();            
 
         break;
+
+		case INSTRUCTIONS:			
+
+			drawInstructions();
+
+		break;
+
+		case CREDITS:
+
+			drawCredits();
+
+		break;
+
         case LEVEL:
             // Set camera view
 			cam.view();
@@ -625,9 +717,9 @@ void display(void)
         break;
         case GAME_OVER:
 			// Game over sound
-#if defined _WIN32
+			#if defined _WIN32
 			PlaySound(L"snd/game_over.wav", NULL, SND_FILENAME | SND_ASYNC);
-#endif
+			#endif
             drawGameOver();
 
         break;
@@ -700,17 +792,59 @@ void mouse(int x, int y)
 // GLUT mouse click Function
 void click(int button, int stat, int x, int y)
 {
-    if (x>100&&x<300&&y<575&&y>450&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
-    {
-        if (state == MENU) {
+
+	if (state == MENU)
+	{
+		if (x>width*.1&&x<width*.35&&y<height*.95&&y>height*.75&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+		{       
 			// Menu Click sound
 			#if defined _WIN32
 			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
 			#endif			
 			setLevel1();
 		}
-        else if (state == GAME_OVER) state = MENU;
-    }
+
+		if (x>width*.375&&x<width*.625&&y<height*.95&&y>height*.75&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+		{   
+			// Menu Click sound
+			#if defined _WIN32
+			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+			#endif			
+			state=INSTRUCTIONS;
+		}    
+
+		if (x>width*.65&&x<width*.9&&y<height*.95&&y>height*.75&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+		{   
+			// Menu Click sound
+			#if defined _WIN32
+			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+			#endif			
+			state=CREDITS;
+		}
+	}
+	else if (state == GAME_OVER) 
+	{
+		if(x>width*.375&&x<width*.625&&y<height*.85&&y>height*.65&&button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+		{   
+			// Menu Click sound
+			#if defined _WIN32
+			PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
+			#endif			
+			state=MENU;
+		}
+	}
+
+	else if (state == INSTRUCTIONS)
+	{
+		if(button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+			state=MENU;
+	}
+
+	else if (state == CREDITS)
+	{
+		if(button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
+			state=MENU;
+	}
 
     // Wheel down - Zoom in
     if (button == 4)
@@ -868,10 +1002,46 @@ void init(void)
     glBindTexture( GL_TEXTURE_2D, gameoverTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
-    // Load game over texture
+   
+	// Load play game texture
     image = loadBMP("tex/Button1.bmp");
     glGenTextures( 1, &playTexId );
     glBindTexture( GL_TEXTURE_2D, playTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load instruction texture
+    image = loadBMP("tex/Button2.bmp");
+    glGenTextures( 1, &instructionTexId );
+    glBindTexture( GL_TEXTURE_2D, instructionTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load credits texture
+    image = loadBMP("tex/Button3.bmp");
+    glGenTextures( 1, &creditsTexId );
+    glBindTexture( GL_TEXTURE_2D, creditsTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load MainMenu texture
+    image = loadBMP("tex/Button4.bmp");
+    glGenTextures( 1, &mainMenuTexId );
+    glBindTexture( GL_TEXTURE_2D, mainMenuTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load instructions page texture
+    image = loadBMP("tex/Instructions.bmp");
+    glGenTextures( 1, &instructionsTexId );
+    glBindTexture( GL_TEXTURE_2D, instructionsTexId );
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
+                       GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
+
+	// Load credits page texture
+    image = loadBMP("tex/creditsS.bmp");
+    glGenTextures( 1, &creditsSTexId );
+    glBindTexture( GL_TEXTURE_2D, creditsSTexId );
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, image->width, image->height,
                        GL_RGB, GL_UNSIGNED_BYTE, image->pixels );
 
