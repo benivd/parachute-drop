@@ -964,6 +964,8 @@ void init(void)
 	for(int key =0; key!=256; key++){
 		keyStates[key] = false; // Set the state of the current key to not pressed  
 	}
+    
+    Player::createParticles();
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
@@ -1055,8 +1057,8 @@ void init(void)
 
 int main(int argc, char** argv)
 {
-    srand( time(NULL) );	
-    
+    srand( time(NULL) );
+
     for (int i = 0; i < NUM_STARS; i++)
     {
         starPos[i][0] = rand() % (STAR_SPREAD*GAME_WIDTH)  -
