@@ -73,6 +73,8 @@ class Player
         void draw(bool testMode);
 		void Move(float stepX, float stepY);
 		void Lean();
+
+        static void createParticles();
 };
 
 #endif

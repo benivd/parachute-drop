@@ -64,6 +64,7 @@ enum objType { SUN, TEAPOT, CUBE, VMASK, BUG, CONE, SKULL, GLOVE, SWORD };			// 
 #define PLAYER_STEP     2.5
 #define LEAN_DECELL		5
 #define SENSITIVITY     20
+#define PARTICLE_COUNT  50
 
 // Points
 #define P_HIT          -100
