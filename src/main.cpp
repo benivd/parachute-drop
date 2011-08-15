@@ -36,6 +36,7 @@
 #include "imageloader.h"  // BMP loader for textures
 
 bool testMode = false;
+bool beginSnd = false;    // used for Start Sound
 
 int width  = WIDTH;       // Current window width
 int height = HEIGHT;      // Current window height
@@ -105,6 +106,9 @@ void setLevel1()
 
     // Clear level
     obstacles.removeAll();
+
+	// Reset Initial Sound
+	beginSnd = true;
 }
 
 // Game values for Level 2
@@ -123,6 +127,9 @@ void setLevel2()
     
     // Clear level
     obstacles.removeAll();
+
+	// Reset Initial Sound
+	beginSnd = true;
 }
 
 void setLevel3()
@@ -140,6 +147,9 @@ void setLevel3()
     
     // Clear level
     obstacles.removeAll();
+
+	// Reset Initial Sound
+	beginSnd = true;
 }
 
 void setLevel3Plus()
@@ -157,6 +167,9 @@ void setLevel3Plus()
 
 	// Clear level
     obstacles.removeAll();
+
+	// Reset Initial Sound
+	beginSnd = true;
 }
 
 void resetLevel3Plus()
@@ -171,6 +184,9 @@ void resetLevel3Plus()
     fogEnd   = -(GAME_DEPTH) * FOGEND_L3;
 
 	speedCreate = SPAWN_L3/(level);
+
+	// Reset Initial Sound
+	beginSnd = true;
 }
 
 // Print a single char array
@@ -209,9 +225,6 @@ void drawMenu()
 // Draw text for game over screen
 void drawGameOver()
 {
-#if defined _WIN32
-	PlaySound(L"snd/game_over.wav", NULL, SND_FILENAME | SND_ASYNC);
-#endif
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
     
@@ -577,9 +590,20 @@ void display(void)
 
 			glEnd();
 			
+			// Sound to indicate beginning of level
+			if (beginSnd) {
+#if defined _WIN32
+			PlaySound(L"snd/squeak.wav", NULL, SND_FILENAME | SND_ASYNC);
+#endif
+			beginSnd = false;
+			}
             
         break;
         case GAME_OVER:
+			// Game over sound
+#if defined _WIN32
+			PlaySound(L"snd/game_over.wav", NULL, SND_FILENAME | SND_ASYNC);
+#endif
             drawGameOver();
 
         break;
@@ -655,6 +679,7 @@ void click(int button, int stat, int x, int y)
     if (button == GLUT_LEFT_BUTTON && stat == GLUT_UP)
     {
         if (state == MENU) {
+			// Menu Click sound
 #if defined _WIN32
             PlaySound(L"snd/blip1.wav", NULL, SND_FILENAME | SND_ASYNC);
 #endif
@@ -863,9 +888,9 @@ int main(int argc, char** argv)
     glutTimerFunc(speedCreate, createTimer, 0);
 
 	// Background Music
-#if defined _WIN32
-	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
-#endif
+//#if defined _WIN32
+//	PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+//#endif
 
     glutMainLoop();
 
