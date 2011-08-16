@@ -17,6 +17,7 @@
 //model
 GLMmodel* pmodel;
 
+/*
 // Particles
 int count = PARTICLE_COUNT;
 float partSize = 0.1;
@@ -36,7 +37,7 @@ typedef struct
 } Particles;
 
 Particles particle[PARTICLE_COUNT];
-
+*/
 
 Player::Player()
 {
@@ -92,7 +93,7 @@ GLuint LoadTextureRAW( const char * filename, int width, int height)
     free(data);
     return texture;
 }
-
+/*
 void Player::createParticles (void)
 {
     smokeMaskId = LoadTextureRAW("tex/particle_mask.raw",256,256);
@@ -199,7 +200,7 @@ void drawFire(int amount)
         glPopMatrix();
     }
 }
-
+*/
 void Player::explode()
 {
 	#if defined _WIN32
@@ -250,7 +251,7 @@ void Player::draw(bool testMode)
 		glutWireSphere(.6,10,10);
 
     glPopMatrix();
-    drawFire(3-health);
+    // drawFire(3-health);
 
     glPopMatrix();
 }

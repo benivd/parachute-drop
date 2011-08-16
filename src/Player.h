@@ -74,7 +74,7 @@ class Player
 		void Move(float stepX, float stepY);
 		void Lean();
 
-        static void createParticles();
+//        static void createParticles();
 };
 
 #endif

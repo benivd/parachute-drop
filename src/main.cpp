@@ -35,6 +35,7 @@
 
 #include "imageloader.h"  // BMP loader for textures
 
+bool boundSphere = false;
 bool testMode = false;
 bool beginSnd = false;    // used for Start Sound
 
@@ -497,7 +498,7 @@ void drawStats()
 		PlaySound(L"snd/bgm.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
 		#endif
 	}
-    
+
     // Lives, Health & Score
     glRasterPos2i( 1, 1);
     sprintf(buffer, "Lives: %i", player.getLives());
@@ -506,6 +507,13 @@ void drawStats()
     printString(buffer);
     sprintf(buffer, "    Score: %i", player.getPoints());
     printString(buffer);
+    
+    if (testMode)
+    {
+        glRasterPos2i( width/2 - 10, 0);
+        sprintf(buffer, "TEST MODE");
+        printString(buffer);
+    }
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -575,6 +583,8 @@ void keyOperations (void)
 	}  
     player.Lean();
 
+  if (testMode)
+  {
     // r: Rotate duck  
     if (keyStates['r']) 
 	{
@@ -584,13 +594,13 @@ void keyOperations (void)
     // Enable 'bounding' spheres used for collision
 	if (keyStates['1']) 
 	{
-        testMode = true;
+        boundSphere = true;
 	}
 
     // Enable 'bounding' spheres used for collision
 	if (keyStates['2']) 
 	{
-        testMode = false;
+        boundSphere = false;
 	} 
 
     // Extend the play area
@@ -612,6 +622,7 @@ void keyOperations (void)
     {
         mesh = !mesh;
     }
+  }
 
     if (keyStates['+'])
     {
@@ -621,6 +632,11 @@ void keyOperations (void)
     if (keyStates['-'])
     {
         if (cam.cz < 20) cam.translate(0.0, 0.0, 1.0);
+    }
+    
+    if (keyStates['~'])
+    {
+        testMode = !testMode;
     }
 
 	if(keyStates[27])
@@ -689,17 +705,17 @@ void display(void)
 
 /*            // Draw obstacles before panels
             glDisable(GL_DEPTH_TEST);
-            obstacles.drawAll(0, testMode);
+            obstacles.drawAll(0, boundSphere);
             glEnable(GL_DEPTH_TEST);
 */
             // Draw glass boundaries
             drawPanels();
             
             // Draw obstacles after panels
-            obstacles.drawAll(level, testMode);
+            obstacles.drawAll(level, boundSphere);
             
             // Draw player
-            player.draw(testMode);
+            player.draw(boundSphere);
 
             // Draw statisitics
             drawStats();
@@ -965,7 +981,7 @@ void init(void)
 		keyStates[key] = false; // Set the state of the current key to not pressed  
 	}
     
-    Player::createParticles();
+    //Player::createParticles();
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
 
