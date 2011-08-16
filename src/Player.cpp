@@ -103,10 +103,10 @@ void Player::createParticles (void)
         particle[i].xPos = 0;
         particle[i].yPos = -5;
         particle[i].zPos = -5;
-        particle[i].xMov = (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.005) -
-                           (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.005);
-        particle[i].zMov = (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.005) -
-                           (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.005);
+        particle[i].xMov = (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.0005) -
+                           (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.0005);
+        particle[i].zMov = (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.0005) -
+                           (((((((2 - 1 + 1) * rand()%11) + 1) - 1 + 1) * rand()%11) + 1) * 0.0005);
         particle[i].dir  = rand() % 90;
         particle[i].accel= ((((((8 - 5 + 2) * rand()%11) + 5) - 1 + 1) * rand()%11) + 1) * 0.02;
         particle[i].decel= 0.0025;
@@ -128,7 +128,7 @@ void updateParticles()
             particle[i].yPos = -5;
             particle[i].zPos = -5;
             particle[i].dir = 0;
-            particle[i].accel = ((((((8 - 5 + 2) * rand()%11) + 5) - 1 + 1) * rand()%11) + 1) * 0.02;
+            particle[i].accel = ((((((8 - 5 + 2) * rand()%11) + 5) - 1 + 1) * rand()%11) + 1) * 0.002;
             particle[i].decel = 0.0025;
         }
     }
@@ -202,9 +202,9 @@ void drawFire(int amount)
 
 void Player::explode()
 {
-#if defined _WIN32
+	#if defined _WIN32
 	PlaySound(L"snd/cardboard_box_impact_hard1.wav", NULL, SND_FILENAME | SND_ASYNC);
-#endif
+	#endif
 	if(health!=1) {
 		setSpinout(true);
 	}
